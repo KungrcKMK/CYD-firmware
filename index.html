@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PEPSI Firmware Installer</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #12141c; color: #e8ecf2;
+         max-width: 720px; margin: 0 auto; padding: 24px; }
+  h1 { color: #05c7f2; }
+  .card { background: #1a2230; border: 1px solid #2a3550; border-radius: 12px;
+          padding: 20px 24px; margin: 18px 0; }
+  .card h2 { margin-top: 0; }
+  .vario h2 { color: #07e86a; }
+  .lap h2 { color: #f2b705; }
+  ol li { margin: 6px 0; }
+  esp-web-install-button { --esp-tools-button-color: #05c7f2; }
+  .muted { color: #8a93a8; font-size: 0.9em; }
+  code { background: #0d121c; padding: 2px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>🛠️ PEPSI Firmware Installer</h1>
+<p>ติดตั้งเฟิร์มแวร์ลงบอร์ด <b>ESP32-2432S028R (CYD)</b> ผ่านเบราว์เซอร์ — ไม่ต้องลงโปรแกรมอะไรเลย</p>
+
+<div class="card">
+  <b>วิธีใช้</b>
+  <ol>
+    <li>เปิดหน้านี้ด้วย <b>Chrome</b> หรือ <b>Edge</b> บนคอมพิวเตอร์ (มือถือใช้ไม่ได้)</li>
+    <li>เสียบบอร์ดกับคอมด้วยสาย USB <b>ที่ส่งข้อมูลได้</b> (สายชาร์จอย่างเดียวใช้ไม่ได้!)</li>
+    <li>กดปุ่ม INSTALL ของโปรแกรมที่ต้องการ → เลือกพอร์ต (CH340/USB Serial) → รอจนเสร็จ</li>
+    <li>ถ้าเชื่อมต่อไม่ติด: กดปุ่ม <code>BOOT</code> บนบอร์ดค้างไว้ตอนกด INSTALL</li>
+  </ol>
+</div>
+
+<div class="card vario">
+  <h2>🪂 VARIOMETER by PEPSI</h2>
+  <p>เครื่องวัดอัตราไต่ระดับสำหรับร่มร่อน/พารามอเตอร์ — Buddy Link, XCTrack (BLE),
+     พยากรณ์ฝน, บันทึกเที่ยวบิน GPX/KML, OTA</p>
+  <esp-web-install-button manifest="manifest_vario.json"></esp-web-install-button>
+  <p class="muted">เซ็นเซอร์: BMP280+AHT20 ที่ CN1 · GPS ที่ P3 · ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ</p>
+</div>
+
+<div class="card lap">
+  <h2>🏁 GPS LAP TIMER</h2>
+  <p>จับเวลาต่อรอบด้วยประตู GPS — Live Delta, Race Mode, Sector times,
+     แผนที่ไลน์, แข่งกัน 2 บอร์ด (Rivals), Web Dashboard, OTA</p>
+  <esp-web-install-button manifest="manifest_laptimer.json"></esp-web-install-button>
+  <p class="muted">GPS ที่ P3 (TX→IO35) · ต่อ IO22→GPS RX เพิ่มเพื่อโหมด 10Hz · ไม่มี GPS = โหมด DEMO</p>
+</div>
+
+<p class="muted">หลังติดตั้งครั้งแรก: ตั้ง WiFi ในหน้า Settings ของเครื่อง แล้วรับอัปเดตรุ่นถัดไปผ่านปุ่ม
+OTA/CHECK UPDATE บนจอได้เลย ไม่ต้องกลับมาหน้านี้อีก ·
+<a style="color:#05c7f2" href="https://github.com/KungrcKMK/variometer-firmware">GitHub</a></p>
+</body>
+</html>

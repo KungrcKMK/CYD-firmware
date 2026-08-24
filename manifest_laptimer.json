@@ -1,0 +1,1 @@
+{"name":"GPS LAP TIMER","version":"2.0.2","new_install_prompt_erase":true,"builds":[{"chipFamily":"ESP32","parts":[{"path":"web_laptimer.bin","offset":0}]}]}

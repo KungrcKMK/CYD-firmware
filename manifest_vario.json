@@ -1,0 +1,1 @@
+{"name":"VARIOMETER by PEPSI","version":"1.4.0","new_install_prompt_erase":true,"builds":[{"chipFamily":"ESP32","parts":[{"path":"web_vario.bin","offset":0}]}]}
