@@ -69,6 +69,22 @@
     <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (เป็น backlight จอ) · สาย Grove ของเซ็นเซอร์อาจเรียงขาไม่ตรง CN1 — ไล่สายเทียบซิลค์ก่อนเสียบ</p>
   </details>
 
+  <details>
+    <summary><b>📖 วิธีใช้งาน (Variometer)</b></summary>
+    <p><b>เริ่มครั้งแรก:</b></p>
+    <ol>
+      <li>เปิดเครื่อง → หน้า Settings → <b>CALIBRATE</b> แตะ 4 มุมตามจุดที่ขึ้น (ทำครั้งเดียว)</li>
+      <li>ตั้ง <b>ชื่อนักบิน</b> (โชว์หน้าบูต By ...) และ <b>WiFi</b> บ้าน → กด CHECK UPDATE รับเฟิร์มแวร์ล่าสุด</li>
+      <li>ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ · มีเซ็นเซอร์แล้วกดปุ่ม <b>DATA</b> สลับเป็นข้อมูลจริง</li>
+    </ol>
+    <p><b>ใช้งานประจำ:</b> ปุ่ม <b>&lt; / &gt;</b> เปลี่ยนหน้า — Vario (เข็ม+เสียงไต่/จม, ปรับระดับเสียงได้),
+      Altitude (ตั้งเตือนความสูง MAX/MIN), GPS, <b>Back to Takeoff</b> (ลูกศรชี้กลับจุดปล่อยตัว),
+      <b>Buddy</b> (เปิดสองเครื่องเห็นตำแหน่ง+THERMAL ของเพื่อนเอง), Weather (แนวโน้มฝน),
+      Logger (บันทึกเที่ยวบินลง SD — เลือก AUTO/MANUAL ทั้งเริ่มและหยุด แปลงเป็น GPX/KML ได้),
+      Settings (<b>BLE</b> ส่งค่าเข้า XCTrack แบบ LK8EX1 — เปิดแล้วรีสตาร์ท, BL ปรับแสงจอ)</p>
+    <p class="muted">Buddy กับ BLE ใช้พร้อมกันไม่ได้ (เครื่องสลับให้เอง) · เสียง vario ปิดได้ที่ปุ่ม VOL</p>
+  </details>
+
 </div>
 
 <div class="card lap">
@@ -89,6 +105,23 @@
       <tr><td>ลำโพง 8Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
     </table>
     <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (backlight จอ) · ไม่ต่อ GPS = เครื่องเข้าโหมด DEMO ให้ทดลองเล่นได้</p>
+  </details>
+
+  <details>
+    <summary><b>📖 วิธีใช้งาน (Lap Timer)</b></summary>
+    <p><b>เริ่มครั้งแรก:</b></p>
+    <ol>
+      <li>หน้า Settings (กลุ่ม SETUP) → ตั้ง <b>WiFi + ชื่อนักขับ</b> → CHECK UPDATE</li>
+      <li>หน้า Course → เลือกช่องสนาม 1-3 → ไปจอดที่<b>ทุ่นซ้าย</b>ของประตู กด SAVE L →
+        ไป<b>ทุ่นขวา</b> กด SAVE R (ประตูเป็นเส้น 2 จุด ต้องลอดกลาง — กันตัดทุ่น)</li>
+      <li><b>GATE 1 = จุด Start/Finish</b> · ตั้งได้สูงสุด 8 ประตู = sector times อัตโนมัติ</li>
+    </ol>
+    <p><b>ใช้งานประจำ:</b> หน้าแบ่ง 3 กลุ่มตามสีหัวจอ — <b style="color:#f95867">RACE</b>: Lap (เวลาสด + Live Delta เทียบรอบดีสุด),
+      Sectors, Speed, Map (เส้นทางวิ่ง) · <b style="color:#f2b705">RESULT</b>: History (10 รอบล่าสุด เก็บถาวร), Rivals
+      (2 เครื่องแข่งกันผ่านคลื่นวิทยุ เห็นเวลากันสด) · <b style="color:#05c7f2">SETUP</b>: Course, GPS, Settings
+      (ตั้ง<b>จำนวนรอบแข่ง</b> — ครบแล้วสรุปให้เอง)</p>
+    <p class="muted">Web Dashboard: เปิด AP แล้วมือถือต่อ WiFi "LapTimer-ชื่อ" ดูเวลาสดบนเบราว์เซอร์ ·
+      ต่อสาย IO22→GPS RX จะได้ GPS 10Hz จับเวลาแม่นขึ้น ~10 เท่า · ใส่ SD = บันทึกทุกรอบเป็นไฟล์</p>
   </details>
 
 </div>
@@ -122,6 +155,30 @@
     <p class="muted">⚠ IO1/IO3 ใช้กับวิทยุ — ห้ามเปิด Serial Monitor ระหว่างใช้งานจริง ·
       โหมด SINGLE: PCA CH0 = หางเสือ, CH1 = ESC · โหมด DUAL: CH0/CH1 = มอเตอร์ซ้าย/ขวา ·
       GY-87 เสียบแล้วตรวจพบเอง (รองรับทั้ง HMC5883L และ QMC5883L)</p>
+  </details>
+
+  <details>
+    <summary><b>📖 วิธีใช้งาน (Autopilot)</b></summary>
+    <p><b>เริ่มครั้งแรก:</b></p>
+    <ol>
+      <li>หน้า Vehicle (หน้าสุดท้าย) → เลือก <b>PLATFORM</b> BOAT/CAR/MOWER และ <b>DRIVE</b>
+        (SERVO+ESC หรือ 2 มอเตอร์) — โหมดที่ใช้ได้จะกรองตามแพลตฟอร์มเอง</li>
+      <li>หน้า Sensors → <b>CAL COMPASS</b> หมุนตัวเรือ/รถช้า ๆ เป็นวงกลม 20 วิ →
+        หันหัวไปทิศเหนือจริงแล้วกด <b>ALIGN BOW</b></li>
+      <li>หน้า RC Monitor → เลือก <b>RC:SBUS/CRSF</b> ตามวิทยุ, <b>CH5:3POS/6POS</b>
+        (6POS = หมุน knob เลือกครบทุกโหมด ค้าง 3 วิยืนยัน), <b>FS:</b> เลือกท่าตอนสัญญาณขาด (RTH/ANCHOR/STOP/CONT)</li>
+      <li>ก่อนออกทุกครั้ง: รอ GPS ติด แล้วกดปุ่ม <b>HOME</b> (แถบล่าง) ตั้งจุดกลับบ้าน — สีฟ้า = ตั้งแล้ว</li>
+    </ol>
+    <p><b>โหมดขับ (ปุ่ม MODE หรือสวิตช์ CH5):</b> MANUAL บังคับเอง · <b>GOTO</b> วิ่งไปจุดที่เลือกแล้วหยุดรอ ·
+      <b>MISSION</b> ไล่ทุกจุดตามลำดับ จุดที่ติ๊ก DROP เปิดกระบะเหยื่อ 3 วิ เสร็จกลับบ้านเอง ·
+      <b>FIELD</b> (ตัดหญ้า) SPOT1-4 = สี่มุมแปลง วิ่งซิกแซกเต็มแปลงตามหน้ากว้าง SWATH ·
+      CIRCLE วนรอบจุด · ANCHOR ล็อกตำแหน่งสู้ลม/กระแสน้ำ · RTH กลับบ้าน</p>
+    <p><b>จุดตกปลา:</b> หน้า Spots — ถึงหมายแล้วกด <b>SAVE</b> เก็บพิกัด, แตะชื่อ = เลือกเป้า GOTO, ปุ่ม DROP = จุดปล่อยเหยื่อ ·
+      <b>PID:</b> Settings → <b>AUTO TUNE</b> ในที่โล่งน้ำนิ่ง (นับถอยหลัง 10 วิ เรือจะแกว่งเองแล้วคำนวณค่าให้) หรือ TUNE PID แก้มือ</p>
+    <p class="muted"><b>Web Dashboard:</b> Settings → WEB DASHBOARD → มือถือต่อ WiFi "KungRC-AUTOPILOT"
+      (รหัส 12345678) เปิด 192.168.4.1 = แผนที่สด + สั่งโหมด/เลือกจุด/ตั้ง HOME จากมือถือ ·
+      <b>SD Card:</b> บันทึกเที่ยว (trip) อัตโนมัติ, คลังหมายไม่จำกัด spots.csv, แผนภารกิจ mission.csv
+      (บรรทัดละ lat,lon,GO/DROP/HOLD,วินาที), สำรอง config · ELRS ได้ telemetry ขึ้นจอวิทยุ</p>
   </details>
 
 </div>
