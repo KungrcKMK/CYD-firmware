@@ -18,6 +18,11 @@
   esp-web-install-button { --esp-tools-button-color: #05c7f2; }
   .muted { color: #8a93a8; font-size: 0.9em; }
   code { background: #0d121c; padding: 2px 6px; border-radius: 4px; }
+  details { margin-top: 10px; }
+  summary { cursor: pointer; color: #05c7f2; }
+  .pin td, .pin th { border: 1px solid #2a3550; padding: 5px 8px; font-size: 0.9em; }
+  .pin { border-collapse: collapse; margin-top: 8px; }
+  .pin th { background: #232e42; color: #8a93a8; text-align: left; }
 </style>
 </head>
 <body>
@@ -45,6 +50,24 @@
      พยากรณ์ฝน, บันทึกเที่ยวบิน GPX/KML, OTA</p>
   <esp-web-install-button manifest="manifest_vario.json"></esp-web-install-button>
   <p class="muted">เซ็นเซอร์: BMP280+AHT20 ที่ CN1 · GPS ที่ P3 · ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ</p>
+  <details>
+    <summary><b>📌 การต่อสาย (Variometer)</b></summary>
+    <table class="pin">
+      <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
+      <tr><td rowspan="4">AHT20+BMP280<br>(คอนเนกเตอร์ CN1)</td>
+          <td>VCC</td><td>3.3V</td></tr>
+      <tr><td>GND</td><td>GND</td></tr>
+      <tr><td>SDA</td><td>IO27</td></tr>
+      <tr><td>SCL</td><td>IO22</td></tr>
+      <tr><td rowspan="3">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
+          <td>TX</td><td>IO35</td></tr>
+      <tr><td>GND</td><td>GND</td></tr>
+      <tr><td>VCC</td><td>3.3V (แยกสายจาก CN1)</td></tr>
+      <tr><td>ลำโพง 8Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
+    </table>
+    <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (เป็น backlight จอ) · สาย Grove ของเซ็นเซอร์อาจเรียงขาไม่ตรง CN1 — ไล่สายเทียบซิลค์ก่อนเสียบ</p>
+  </details>
+
 </div>
 
 <div class="card lap">
@@ -53,6 +76,20 @@
      แผนที่ไลน์, แข่งกัน 2 บอร์ด (Rivals), Web Dashboard, OTA</p>
   <esp-web-install-button manifest="manifest_laptimer.json"></esp-web-install-button>
   <p class="muted">GPS ที่ P3 (TX→IO35) · ต่อ IO22→GPS RX เพิ่มเพื่อโหมด 10Hz · ไม่มี GPS = โหมด DEMO</p>
+  <details>
+    <summary><b>📌 การต่อสาย (Lap Timer)</b></summary>
+    <table class="pin">
+      <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
+      <tr><td rowspan="4">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
+          <td>TX</td><td>IO35</td></tr>
+      <tr><td>RX</td><td>IO22 <span class="muted">(ไม่บังคับ — ต่อแล้วได้โหมด 10Hz แม่นขึ้น ~10 เท่า)</span></td></tr>
+      <tr><td>GND</td><td>GND</td></tr>
+      <tr><td>VCC</td><td>3.3V</td></tr>
+      <tr><td>ลำโพง 8Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
+    </table>
+    <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (backlight จอ) · ไม่ต่อ GPS = เครื่องเข้าโหมด DEMO ให้ทดลองเล่นได้</p>
+  </details>
+
 </div>
 
 <div class="card">
