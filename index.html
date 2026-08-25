@@ -14,6 +14,7 @@
   .card h2 { margin-top: 0; }
   .vario h2 { color: #07e86a; }
   .lap h2 { color: #f2b705; }
+  .boat h2 { color: #37e6c9; }
   ol li { margin: 6px 0; }
   esp-web-install-button { --esp-tools-button-color: #05c7f2; }
   .muted { color: #8a93a8; font-size: 0.9em; }
@@ -92,6 +93,39 @@
 
 </div>
 
+<div class="card boat">
+  <h2>🚤 KungRC AUTOPILOT</h2>
+  <p>ระบบนำร่อง GPS สำหรับเรือตกปลา / รถ / รถตัดหญ้า — GOTO, MISSION ปล่อยเหยื่อ,
+     FIELD วิ่งแถวตัดหญ้า, ANCHOR, RTH, PID + AUTO TUNE, Web Dashboard บนมือถือ,
+     Mission Planner จาก SD, ELRS/CRSF telemetry, OTA</p>
+  <esp-web-install-button manifest="manifest_boat.json"></esp-web-install-button>
+  <p class="muted">รับวิทยุ SBUS หรือ CRSF/ELRS · ขับ Servo/ESC ผ่าน PCA9685 · ไม่มี GPS = โหมด DEMO จำลองเรือ</p>
+  <details>
+    <summary><b>📌 การต่อสาย (Autopilot)</b></summary>
+    <table class="pin">
+      <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
+      <tr><td rowspan="4">PCA9685 (ขับ Servo/ESC)<br>+ เข็มทิศ GY-87 หรือ QMC5883L<br>(I²C ร่วมกันที่ CN1)</td>
+          <td>VCC</td><td>3.3V</td></tr>
+      <tr><td>GND</td><td>GND</td></tr>
+      <tr><td>SDA</td><td>IO27</td></tr>
+      <tr><td>SCL</td><td>IO22</td></tr>
+      <tr><td>PCA9685 V+ (ไฟ servo)</td><td>V+</td><td>BEC 5V (ห้ามใช้ไฟบอร์ด!)</td></tr>
+      <tr><td rowspan="2">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
+          <td>TX</td><td>IO35</td></tr>
+      <tr><td>VCC / GND</td><td>3.3V / GND</td></tr>
+      <tr><td>รีซีฟเวอร์ SBUS</td><td>SBUS out</td><td>IO3 (P1-RX) · ไฟจาก BEC 5V</td></tr>
+      <tr><td rowspan="2">รีซีฟเวอร์ ELRS/CRSF</td><td>TX</td><td>IO3 (P1-RX)</td></tr>
+      <tr><td>RX</td><td>IO1 (P1-TX) — ได้ telemetry ขึ้นจอวิทยุ</td></tr>
+      <tr><td>Servo เปิดกระบะเหยื่อ</td><td>สัญญาณ</td><td>PCA9685 CH2</td></tr>
+      <tr><td>ลำโพง 8Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
+    </table>
+    <p class="muted">⚠ IO1/IO3 ใช้กับวิทยุ — ห้ามเปิด Serial Monitor ระหว่างใช้งานจริง ·
+      โหมด SINGLE: PCA CH0 = หางเสือ, CH1 = ESC · โหมด DUAL: CH0/CH1 = มอเตอร์ซ้าย/ขวา ·
+      GY-87 เสียบแล้วตรวจพบเอง (รองรับทั้ง HMC5883L และ QMC5883L)</p>
+  </details>
+
+</div>
+
 <div class="card">
   <h2 style="color:#05c7f2">🛒 อุปกรณ์ที่ใช้ (ลิงก์ร้านแนะนำ)</h2>
   <table style="width:100%;border-collapse:collapse">
@@ -101,14 +135,14 @@
     <tr style="border-top:1px solid #2a3550">
       <td style="padding:8px 4px"><b>บอร์ด ESP32 CYD 2.8" จอสัมผัส TFT</b><br>
         <span class="muted">ตัวเครื่องหลัก — ต้องมี</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁</td>
+      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
       <td><a style="color:#07e86a" href="https://s.shopee.co.th/5foDlJPUiU?share_channel_code=6"
         target="_blank"><b>Shopee &rarr;</b></a></td>
     </tr>
     <tr style="border-top:1px solid #2a3550">
       <td style="padding:8px 4px"><b>GPS ATGM336H (GPS+BeiDou) พร้อม EEPROM</b><br>
-        <span class="muted">ต่อที่ P3: TX→IO35 · จำเป็นสำหรับ Lap Timer / เสริมให้ Variometer</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁</td>
+        <span class="muted">ต่อที่ P3: TX→IO35 · จำเป็นสำหรับ Lap Timer และ Autopilot / เสริมให้ Variometer</span></td>
+      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
       <td><a style="color:#07e86a" href="https://s.shopee.co.th/2qU2NIbutt?share_channel_code=6"
         target="_blank"><b>Shopee &rarr;</b></a></td>
     </tr>
@@ -121,27 +155,27 @@
     </tr>
     <tr style="border-top:1px solid #2a3550">
       <td style="padding:8px 4px"><b>ลำโพงจิ๋ว 8Ω 2W (16×35mm)</b><br>
-        <span class="muted">เสียง vario / เสียงตัดรอบ · ต่อช่อง SPEAK</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁</td>
+        <span class="muted">เสียง vario / เสียงตัดรอบ / เสียงแจ้งโหมด · ต่อช่อง SPEAK</span></td>
+      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
       <td><a style="color:#07e86a" href="https://s.shopee.co.th/3LQJ3a8T1j?share_channel_code=6"
         target="_blank"><b>Shopee &rarr;</b></a></td>
     </tr>
     <tr style="border-top:1px solid #2a3550">
       <td style="padding:8px 4px"><b>สาย Molex MX1.25 2P ยาว 100mm</b><br>
         <span class="muted">สายต่อลำโพงเข้าช่อง SPEAK</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁</td>
+      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
       <td><a style="color:#07e86a" href="https://s.shopee.co.th/8plFbdmxAY?share_channel_code=6"
         target="_blank"><b>Shopee &rarr;</b></a></td>
     </tr>
     <tr style="border-top:1px solid #2a3550">
       <td style="padding:8px 4px"><b>สาย JST 1.25mm ตัวผู้-เมีย 4P ยาว 15ซม. (5 คู่)</b><br>
         <span class="muted">ต่อเซ็นเซอร์ที่ CN1 และ GPS ที่ P3</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁</td>
+      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
       <td><a style="color:#07e86a" href="https://s.shopee.co.th/3g39RUrmBv?share_channel_code=6"
         target="_blank"><b>Shopee &rarr;</b></a></td>
     </tr>
   </table>
-  <p class="muted">🪂 = Variometer · 🏁 = Lap Timer · ซื้อครบตามตารางนี้ = ประกอบได้ทั้งสองโปรเจกต์</p>
+  <p class="muted">🪂 = Variometer · 🏁 = Lap Timer · 🚤 = Autopilot · Autopilot ต้องหาเพิ่ม: PCA9685, GY-87 (เข็มทิศ+IMU), BEC 5V, สาย servo</p>
 </div>
 
 <p class="muted">หลังติดตั้งครั้งแรก: ตั้ง WiFi ในหน้า Settings ของเครื่อง แล้วรับอัปเดตรุ่นถัดไปผ่านปุ่ม
