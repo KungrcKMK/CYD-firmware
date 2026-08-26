@@ -24,6 +24,12 @@
   .pin td, .pin th { border: 1px solid #2a3550; padding: 5px 8px; font-size: 0.9em; }
   .pin { border-collapse: collapse; margin-top: 8px; }
   .pin th { background: #232e42; color: #8a93a8; text-align: left; }
+  .installwrap { position: relative; display: inline-block; }
+  .lockoverlay { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center;
+                 gap: 6px; justify-content: center; cursor: pointer; border-radius: 8px;
+                 background: rgba(10,14,20,0.72); color: #e8ecf2; font-size: 13px; font-weight: 600;
+                 border: 1px solid #2a3550; }
+  .lockoverlay:hover { background: rgba(10,14,20,0.85); }
 </style>
 </head>
 <body>
@@ -56,7 +62,10 @@
   <h2>🪂 KungRC VARIOMETER</h2>
   <p>เครื่องวัดอัตราไต่ระดับสำหรับร่มร่อน/พารามอเตอร์ — Buddy Link, XCTrack (BLE),
      พยากรณ์ฝน, บันทึกเที่ยวบิน GPX/KML, OTA</p>
-  <esp-web-install-button manifest="manifest_vario.json"></esp-web-install-button>
+  <div class="installwrap">
+    <esp-web-install-button manifest="manifest_vario.json"></esp-web-install-button>
+    <div class="lockoverlay" id="varioLock" onclick="unlockInstall('varioLock')">🔒 ปลดล็อกก่อนติดตั้ง</div>
+  </div>
   <p class="muted">เซ็นเซอร์: BMP280+AHT20 ที่ CN1 · GPS ที่ P3 · ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ</p>
   <details>
     <summary><b>📌 การต่อสาย (Variometer)</b></summary>
@@ -269,5 +278,26 @@
 <p class="muted">หลังติดตั้งครั้งแรก: ตั้ง WiFi ในหน้า Settings ของเครื่อง แล้วรับอัปเดตรุ่นถัดไปผ่านปุ่ม
 OTA/CHECK UPDATE บนจอได้เลย ไม่ต้องกลับมาหน้านี้อีก ·
 <a style="color:#05c7f2" href="https://github.com/KungrcKMK/CYD-firmware">GitHub</a></p>
+<script>
+function unlockInstall(id) {
+  var el = document.getElementById(id);
+  var pw = prompt('รหัสผ่านสำหรับติดตั้งเฟิร์มแวร์นี้:');
+  if (pw === null) return;
+  if (pw === 'forpepsi') {
+    el.style.display = 'none';
+    try { localStorage.setItem('kungrc_' + id, '1'); } catch (e) {}
+  } else {
+    alert('รหัสผ่านไม่ถูกต้อง');
+  }
+}
+(function () {
+  try {
+    if (localStorage.getItem('kungrc_varioLock') === '1') {
+      var el = document.getElementById('varioLock');
+      if (el) el.style.display = 'none';
+    }
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
