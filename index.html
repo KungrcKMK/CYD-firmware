@@ -30,6 +30,10 @@
                  background: rgba(10,14,20,0.72); color: #e8ecf2; font-size: 13px; font-weight: 600;
                  border: 1px solid #2a3550; }
   .lockoverlay:hover { background: rgba(10,14,20,0.85); }
+  .meta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+          margin: 8px 0 2px; font-size: 0.85em; color: #8a93a8; }
+  .meta b { color: #e8ecf2; }
+  .meta img { vertical-align: middle; height: 18px; }
 </style>
 </head>
 <body>
@@ -63,8 +67,13 @@
   <p>เครื่องวัดอัตราไต่ระดับสำหรับร่มร่อน/พารามอเตอร์ — Buddy Link, XCTrack (BLE),
      พยากรณ์ฝน, บันทึกเที่ยวบิน GPX/KML, OTA</p>
   <div class="installwrap">
-    <esp-web-install-button manifest="manifest_vario.json"></esp-web-install-button>
+    <esp-web-install-button id="varioBtn" manifest="manifest_vario.json"></esp-web-install-button>
     <div class="lockoverlay" id="varioLock" onclick="unlockInstall('varioLock')">🔒 ปลดล็อกก่อนติดตั้ง</div>
+  </div>
+  <div class="meta">
+    <span><b id="varioVer">v…</b></span>
+    <span id="varioDate">อัปเดตล่าสุด: …</span>
+    <span><img id="varioHits" alt="click count" src=""></span>
   </div>
   <p class="muted">เซ็นเซอร์: BMP280+AHT20 ที่ CN1 · GPS ที่ P3 · ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ</p>
   <details>
@@ -107,7 +116,12 @@
   <h2>🏁 KungRC GPS LAP TIMER</h2>
   <p>จับเวลาต่อรอบด้วยประตู GPS — Live Delta, Race Mode, Sector times,
      แผนที่ไลน์, แข่งกัน 2 บอร์ด (Rivals), Web Dashboard, OTA</p>
-  <esp-web-install-button manifest="manifest_laptimer.json"></esp-web-install-button>
+  <esp-web-install-button id="lapBtn" manifest="manifest_laptimer.json"></esp-web-install-button>
+  <div class="meta">
+    <span><b id="lapVer">v…</b></span>
+    <span id="lapDate">อัปเดตล่าสุด: …</span>
+    <span><img id="lapHits" alt="click count" src=""></span>
+  </div>
   <p class="muted">GPS ที่ P3 (TX→IO35) · ต่อ IO22→GPS RX เพิ่มเพื่อโหมด 10Hz · ไม่มี GPS = โหมด DEMO</p>
   <details>
     <summary><b>📌 การต่อสาย (Lap Timer)</b></summary>
@@ -147,7 +161,12 @@
   <p>ระบบนำร่อง GPS สำหรับเรือตกปลา / รถ / รถตัดหญ้า — GOTO, MISSION ปล่อยเหยื่อ,
      FIELD วิ่งแถวตัดหญ้า, ANCHOR, RTH, PID + AUTO TUNE, Web Dashboard บนมือถือ,
      Mission Planner จาก SD, ELRS/CRSF telemetry, OTA</p>
-  <esp-web-install-button manifest="manifest_boat.json"></esp-web-install-button>
+  <esp-web-install-button id="boatBtn" manifest="manifest_boat.json"></esp-web-install-button>
+  <div class="meta">
+    <span><b id="boatVer">v…</b></span>
+    <span id="boatDate">อัปเดตล่าสุด: …</span>
+    <span><img id="boatHits" alt="click count" src=""></span>
+  </div>
   <p class="muted">รับวิทยุ SBUS หรือ CRSF/ELRS · ขับ Servo/ESC ผ่าน PCA9685 · ไม่มี GPS = โหมด DEMO จำลองเรือ</p>
   <details>
     <summary><b>📌 การต่อสาย (Autopilot)</b></summary>
@@ -313,6 +332,52 @@ function unlockInstall(id) {
     }
   } catch (e) {}
 })();
+
+// ---- เวอร์ชัน + วันที่อัปเดตล่าสุด: อ่านสดจาก manifest*.json + GitHub commit history ----
+// (ไม่ต้องมาแก้เลขในหน้านี้เองทุกรุ่น — อัปเดต manifest ที่ไหนก็ขึ้นตรงนี้เอง)
+function loadReleaseMeta(prefix, manifestFile) {
+  fetch(manifestFile + '?_=' + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (m) {
+      var el = document.getElementById(prefix + 'Ver');
+      if (el) el.textContent = 'v' + m.version;
+    })
+    .catch(function () {});
+  fetch('https://api.github.com/repos/KungrcKMK/CYD-firmware/commits?path=' + manifestFile + '&per_page=1')
+    .then(function (r) { return r.json(); })
+    .then(function (arr) {
+      var el = document.getElementById(prefix + 'Date');
+      if (!el || !arr || !arr[0]) return;
+      var d = new Date(arr[0].commit.committer.date);
+      el.textContent = 'อัปเดตล่าสุด ' + d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+    })
+    .catch(function () {});
+}
+loadReleaseMeta('vario', 'manifest_vario.json');
+loadReleaseMeta('lap', 'manifest_laptimer.json');
+loadReleaseMeta('boat', 'manifest_boat.json');
+
+// ---- จำนวนคลิกปุ่มติดตั้ง: นับเฉพาะตอนกดปุ่มจริงเท่านั้น ----
+// hits.sh เพิ่มตัวนับทุกครั้งที่โหลดรูป (ไม่มีโหมด view-only จริง — ทดสอบแล้ว) จึงห้ามโหลดรูปตอนเปิดหน้า
+// ไม่งั้นจะนับคนแค่เข้ามาดูเป็น "คลิก" ไปด้วย — โชว์ "—" ไว้ก่อน แล้วค่อยขึ้นเลขจริงหลังกดครั้งแรก
+function wireClickCounter(btnId, imgId, key) {
+  var btn = document.getElementById(btnId);
+  var img = document.getElementById(imgId);
+  if (!btn || !img) return;
+  img.style.display = 'none';
+  var placeholder = document.createElement('span');
+  placeholder.textContent = 'ยังไม่มีสถิติคลิก';
+  img.insertAdjacentElement('afterend', placeholder);
+  btn.addEventListener('click', function () {
+    placeholder.remove();
+    img.style.display = '';
+    img.src = 'https://hits.sh/kungrckmk.github.io/CYD-firmware/' + key + '.svg' +
+              '?label=install%20clicks&color=05c7f2&labelColor=1a2230&' + Date.now();
+  });
+}
+wireClickCounter('varioBtn', 'varioHits', 'vario');
+wireClickCounter('lapBtn', 'lapHits', 'lap');
+wireClickCounter('boatBtn', 'boatHits', 'boat');
 </script>
 </body>
 </html>
