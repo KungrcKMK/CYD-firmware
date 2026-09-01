@@ -1,1 +1,1 @@
-{"name":"KungRC GPS LAP TIMER","version":"2.1.0","new_install_prompt_erase":true,"builds":[{"chipFamily":"ESP32","parts":[{"path":"web_laptimer.bin","offset":0}]}]}
+{"name":"KungRC GPS LAP TIMER","version":"2.2.0","new_install_prompt_erase":true,"builds":[{"chipFamily":"ESP32","parts":[{"path":"web_laptimer.bin","offset":0}]}]}
