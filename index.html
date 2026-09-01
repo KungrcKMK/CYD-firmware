@@ -222,8 +222,8 @@
 <div class="card cnc">
   <h2>🛠️ KungRC CNC PENDANT</h2>
   <p>จอสั่งงานเครื่อง CNC GRBL (3018 ฯลฯ) แบบไม่ต้องใช้คอม — DRO ตำแหน่งสด,
-     Jog ทัชสกรีน, ตั้งศูนย์ชิ้นงาน, กัดงานจากไฟล์บนการ์ด SD,
-     อัปโหลด G-code ผ่าน WiFi (สแกน QR), HOLD/RESUME, Feed override, OTA</p>
+     Jog ทัชสกรีน, Z-Probe ตั้งศูนย์อัตโนมัติ, SET/GO HOME, กัดงานจากไฟล์บนการ์ด SD,
+     อัปโหลด G-code ผ่าน WiFi, สรุปเวลาจบงาน, HOLD/RESUME, Feed override, OTA</p>
   <esp-web-install-button id="cncBtn" manifest="manifest_cnc.json"></esp-web-install-button>
   <div class="meta">
     <span><b id="cncVer">v…</b></span>
@@ -245,17 +245,28 @@
   </details>
   <details>
     <summary><b>📖 วิธีใช้งาน (CNC Pendant)</b></summary>
-    <p><b>เริ่มครั้งแรก:</b> Settings → WIFI SETUP + CHECK UPDATE · จอสีเพี้ยน → หน้า Display กด COLORS</p>
-    <p><b>ขั้นตอนกัดงาน:</b></p>
+    <p><b>เริ่มครั้งแรก:</b> Settings → WIFI SETUP + CHECK UPDATE · จอสีเพี้ยน → หน้า Display กด COLORS ·
+      ส่งไฟล์เข้าการ์ด: หน้า <b>Upload</b> → START WIFI UPLOAD → คอม/มือถือต่อ WiFi <b>KungRC-CNC</b>
+      (รหัส 12345678) → เปิด <b>http://192.168.4.1</b> (หรือถอดการ์ดไป copy บนคอมก็ได้)</p>
+    <p><b>🏁 5 ขั้นตอนเริ่มงาน (ครั้งแรกของวัน)</b> — เรียงตามปุ่มหน้า Tools จากบนลงล่าง:</p>
     <ol>
-      <li>ส่งไฟล์เข้าเครื่อง: Settings → <b>WIFI UPLOAD</b> → มือถือ/คอมสแกน QR → หน้าอัปโหลดไฟล์ .nc/.gcode ลงการ์ด
-        (หรือถอดการ์ดไป copy บนคอมก็ได้)</li>
-      <li>หน้า Jog → เลื่อนหัวกัดไปมุมชิ้นงาน (STEP เลือก 0.1/1/10/50 มม.) → กด <b>ZERO</b> ตั้งศูนย์</li>
-      <li>หน้า Files → แตะไฟล์ → <b>RUN</b> — ดูตำแหน่ง/เปอร์เซ็นต์สดที่หน้า DRO</li>
-      <li>ปุ่มกลางแถบล่าง (สถานะ) = <b>HOLD/RESUME</b> หยุดชั่วคราวได้ตลอด · Settings → STOP JOB = หยุดฉุกเฉิน (soft reset)</li>
+      <li><b>SET HOME</b> — เปิดเครื่อง, Jog หัวไปจุดจอดที่ชอบ (มุมหลัง ยกสูง) →
+        หน้า Tools กด <b>1. SET HOME</b> จำเป็นจุดกลับบ้านถาวร (ทำครั้งเดียวพอ)</li>
+      <li><b>Jog + ZERO</b> — จับชิ้นงาน ใส่ดอก → หน้า Jog เลื่อนปลายดอกไปจ่อ
+        <b>จุด origin ที่ตั้งไว้ใน Fusion/CAM</b> (มุมหรือกลางชิ้นงาน — ต้องจุดเดียวกันเป๊ะ,
+        ใกล้แล้วลด STEP เหลือ 0.1) → กด <b>ZERO</b></li>
+      <li><b>Z-PROBE</b> — วางแผ่น probe บนผิวงาน หนีบคลิปกับดอก → Tools กด
+        <b>3. Z-PROBE</b> → PROBE → หัวจิ้มหาผิวเองแล้วตั้ง Z0 (หักความหนาแผ่นตามค่า PLATE)
+        → <b>เก็บแผ่น+คลิปออก!</b> · ไม่มีแผ่น: ใช้วิธีกระดาษ ลด Z ทีละ 0.1 จนกระดาษฝืดแล้วค่อย ZERO</li>
+      <li><b>RAISE Z +15</b> — ยกหัวให้พ้นชิ้นงานก่อนเริ่ม</li>
+      <li><b>RUN</b> — หน้า Files แตะไฟล์ → <b>RUN</b> (ไฟล์เปิด spindle เอง) —
+        <b>นาทีแรกเฝ้าไว้</b> นิ้วเตรียมที่ปุ่มกลาง (HOLD) · กัดเสร็จขึ้นหน้า JOB DONE + เสียงเรียก
+        แล้วหัววิ่งกลับจุด SET HOME เอง</li>
     </ol>
-    <p class="muted">DRO: HOLD หยุดพัก · UNLK ปลด ALARM ($X) · HOME กลับจุด home ($H) ·
-      Feed override ±10% ระหว่างกัดได้ที่ Settings</p>
+    <p class="muted">ตั้ง Z ใหม่เมื่อ: เปลี่ยนดอก / เปลี่ยนชิ้นงาน (XY ไม่ต้องถ้างานไม่ขยับ) ·
+      DRO: HOLD พัก · UNLK ปลด ALARM · HOME กลับจุด SET HOME ·
+      Feed ±10% ระหว่างกัดที่ Settings · รอบ spindle S1000-12000 ที่ Tools ·
+      จอแปล error/ALARM เป็นข้อความให้เองที่หน้า DRO</p>
   </details>
 
 </div>
