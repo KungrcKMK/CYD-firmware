@@ -15,6 +15,7 @@
   .vario h2 { color: #07e86a; }
   .lap h2 { color: #f2b705; }
   .boat h2 { color: #37e6c9; }
+  .cnc h2 { color: #f95867; }
   ol li { margin: 6px 0; }
   esp-web-install-button { --esp-tools-button-color: #05c7f2; }
   .muted { color: #8a93a8; font-size: 0.9em; }
@@ -218,6 +219,47 @@
 
 </div>
 
+<div class="card cnc">
+  <h2>🛠️ KungRC CNC PENDANT</h2>
+  <p>จอสั่งงานเครื่อง CNC GRBL (3018 ฯลฯ) แบบไม่ต้องใช้คอม — DRO ตำแหน่งสด,
+     Jog ทัชสกรีน, ตั้งศูนย์ชิ้นงาน, กัดงานจากไฟล์บนการ์ด SD,
+     อัปโหลด G-code ผ่าน WiFi (สแกน QR), HOLD/RESUME, Feed override, OTA</p>
+  <esp-web-install-button id="cncBtn" manifest="manifest_cnc.json"></esp-web-install-button>
+  <div class="meta">
+    <span><b id="cncVer">v…</b></span>
+    <span id="cncDate">อัปเดตล่าสุด: …</span>
+    <span><img id="cncHits" alt="click count" src=""></span>
+  </div>
+  <p class="muted">ไม่ต่อเครื่อง CNC = โหมด DEMO จำลอง GRBL ให้ลองเล่นได้ทันที</p>
+  <details>
+    <summary><b>📌 การต่อสาย (CNC Pendant)</b></summary>
+    <table class="pin">
+      <tr><th>ฝั่งบอร์ด GRBL (พอร์ต offline)</th><th>ต่อที่ CYD (P1)</th></tr>
+      <tr><td>RX</td><td>IO1 (P1-TX)</td></tr>
+      <tr><td>TX</td><td>IO3 (P1-RX) <b>ผ่านตัวแบ่งแรงดัน R1k/R2k</b> (GRBL เป็นลอจิก 5V)</td></tr>
+      <tr><td>GND</td><td>GND</td></tr>
+      <tr><td>5V</td><td>VIN (เลี้ยงจอจากบอร์ด CNC ได้เลย)</td></tr>
+    </table>
+    <p class="muted">⚠ ใช้พอร์ต offline controller ของบอร์ด GRBL — ต้องถอดสาย USB คอมออกจากเครื่อง CNC ก่อน ·
+      115200 baud · ตอนเปิดจอ GRBL อาจได้ข้อความขยะจาก boot ROM ของ ESP32 สั้น ๆ ไม่มีผลอะไร</p>
+  </details>
+  <details>
+    <summary><b>📖 วิธีใช้งาน (CNC Pendant)</b></summary>
+    <p><b>เริ่มครั้งแรก:</b> Settings → WIFI SETUP + CHECK UPDATE · จอสีเพี้ยน → หน้า Display กด COLORS</p>
+    <p><b>ขั้นตอนกัดงาน:</b></p>
+    <ol>
+      <li>ส่งไฟล์เข้าเครื่อง: Settings → <b>WIFI UPLOAD</b> → มือถือ/คอมสแกน QR → หน้าอัปโหลดไฟล์ .nc/.gcode ลงการ์ด
+        (หรือถอดการ์ดไป copy บนคอมก็ได้)</li>
+      <li>หน้า Jog → เลื่อนหัวกัดไปมุมชิ้นงาน (STEP เลือก 0.1/1/10/50 มม.) → กด <b>ZERO</b> ตั้งศูนย์</li>
+      <li>หน้า Files → แตะไฟล์ → <b>RUN</b> — ดูตำแหน่ง/เปอร์เซ็นต์สดที่หน้า DRO</li>
+      <li>ปุ่มกลางแถบล่าง (สถานะ) = <b>HOLD/RESUME</b> หยุดชั่วคราวได้ตลอด · Settings → STOP JOB = หยุดฉุกเฉิน (soft reset)</li>
+    </ol>
+    <p class="muted">DRO: HOLD หยุดพัก · UNLK ปลด ALARM ($X) · HOME กลับจุด home ($H) ·
+      Feed override ±10% ระหว่างกัดได้ที่ Settings</p>
+  </details>
+
+</div>
+
 <div class="card">
   <h2 style="color:#05c7f2">🛒 อุปกรณ์ที่ใช้ (ลิงก์ร้านแนะนำ)</h2>
   <table style="width:100%;border-collapse:collapse">
@@ -356,6 +398,7 @@ function loadReleaseMeta(prefix, manifestFile) {
 loadReleaseMeta('vario', 'manifest_vario.json');
 loadReleaseMeta('lap', 'manifest_laptimer.json');
 loadReleaseMeta('boat', 'manifest_boat.json');
+loadReleaseMeta('cnc', 'manifest_cnc.json');
 
 // ---- ยอดความสนใจ (เข้าชม+กดปุ่ม): hits.sh ไม่มีโหมด view-only จริง (ทดสอบแล้ว)
 // เลยเลือกให้ตัวเลขนี้ "จำได้เสมอ" ทุกครั้งที่เปิดหน้า แทนที่จะซ่อนไว้จนกว่าจะกด —
@@ -374,6 +417,7 @@ function wireClickCounter(btnId, imgId, key) {
 wireClickCounter('varioBtn', 'varioHits', 'vario');
 wireClickCounter('lapBtn', 'lapHits', 'lap');
 wireClickCounter('boatBtn', 'boatHits', 'boat');
+wireClickCounter('cncBtn', 'cncHits', 'cnc');
 </script>
 </body>
 </html>
