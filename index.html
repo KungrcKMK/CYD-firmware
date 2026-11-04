@@ -78,11 +78,14 @@
   @media (max-width: 920px) { .loom { display: none; } }
 
   /* ---------- project panels ---------- */
-  .panels { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
-  @media (max-width: 1150px) { .panels { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 880px) { .panels { grid-template-columns: repeat(2, 1fr); } }
+  .panels { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px 16px; }
+  @media (max-width: 1150px) { .panels { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 880px) { .panels { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; } }
   @media (max-width: 640px) { .panels { grid-template-columns: 1fr; } }
-  .panel { border: 2px solid var(--rule); background: #0a0d12; padding: 16px; position: relative; display: flex; flex-direction: column; }
+  .panel { border: 2px solid var(--rule); background: #0a0d12; padding: 16px; position: relative;
+           display: grid; grid-template-rows: subgrid; grid-row: span 6; align-items: start;
+           min-width: 0; }
+  @supports not (grid-template-rows: subgrid) { .panel { display: flex; flex-direction: column; } }
   @media (max-width: 920px) {
     .panel { margin-top: 26px; }
     .panel::before { content: ''; position: absolute; top: -26px; left: 50%; width: 3px; height: 18px;
@@ -101,7 +104,7 @@
   .pname { display: flex; align-items: center; gap: 10px; }
   .pname svg { flex: 0 0 26px; stroke: var(--pc); filter: drop-shadow(0 0 4px var(--pc)); }
   .pname h2 { font-family: 'Orbitron', sans-serif; font-size: .95rem; letter-spacing: .14em; color: var(--pc); margin: 0; font-weight: 700; }
-  .pdesc { font-size: .86rem; color: var(--ink); margin: 10px 0 12px; flex: 1; }
+  .pdesc { font-size: .86rem; color: var(--ink); margin: 10px 0 12px; align-self: start; }
   .inst {
     font-family: 'Orbitron', sans-serif; font-size: .82rem; letter-spacing: .22em; font-weight: 700;
     width: 100%; padding: 13px 10px; cursor: pointer;
@@ -109,14 +112,15 @@
   }
   .inst:hover, .inst:focus-visible { background: var(--pc); color: var(--bg); box-shadow: 0 0 20px var(--pc); }
   esp-web-install-button { width: 100%; display: block; }
-  .meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 12px 0 2px;
+  .meta { display: grid; gap: 5px; justify-items: start; margin: 12px 0 2px;
           font-size: .78rem; color: var(--dim); font-family: Consolas, monospace; font-variant-numeric: tabular-nums; }
   .meta b { color: var(--ink); font-weight: 400; }
   .meta img { vertical-align: middle; height: 18px; }
   .pnote { color: var(--dim); font-size: .78rem; margin: 8px 0 0; }
 
   /* ---------- details / tables ---------- */
-  details { margin-top: 12px; border-top: 1px solid var(--rule); padding-top: 10px; }
+  .plinks { align-self: end; width: 100%; }
+  details { margin-top: 12px; border-top: 1px solid var(--rule); padding-top: 10px; overflow-wrap: anywhere; }
   summary { cursor: pointer; color: var(--c-lap); font-size: .85rem; list-style: none; }
   summary::before { content: '▸ '; color: var(--wire-off); }
   details[open] summary::before { content: '▾ '; }
@@ -137,8 +141,6 @@
   .frame p, .frame li { max-width: 70ch; }
 
   /* ---------- hits badge: ครอบกรอบให้เข้าภาษาเส้น ---------- */
-  .hitchip { display: inline-block; border: 1px solid var(--rule); line-height: 0; background: #0a0d12; }
-  .hitchip img { display: block; height: 20px; margin: -1px; clip-path: inset(1.5px); }
   .shead { display: flex; align-items: baseline; gap: 16px; border-bottom: 2px solid var(--rule); padding-bottom: 10px; }
   .shead .no { font-family: 'Orbitron', sans-serif; color: var(--dim2); font-size: 1rem; letter-spacing: .1em; }
   .shead h2 { font-family: 'Orbitron', sans-serif; font-size: 1.05rem; letter-spacing: .22em; margin: 0; font-weight: 700; }
@@ -235,17 +237,20 @@
       </svg>
       <h2>VARIOMETER</h2>
     </div>
-    <p class="pdesc">เครื่องวัดอัตราไต่ระดับสำหรับร่มร่อน/พารามอเตอร์ — Buddy Link, XCTrack (BLE),
-       พยากรณ์ฝน, Thermal Assistant, บันทึกเที่ยวบิน GPX/KML, OTA</p>
+    <p class="pdesc">เครื่องวัดอัตราไต่ระดับ (วาริโอ) สำหรับร่มร่อน / พารามอเตอร์</p>
     <esp-web-install-button id="varioBtn" manifest="manifest_vario.json">
       <button slot="activate" class="inst">INSTALL ▸</button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="varioVer">v…</b></span>
       <span id="varioDate">อัปเดตล่าสุด: …</span>
-      <span class="hitchip"><img id="varioHits" alt="จำนวนความสนใจ" src=""></span>
     </div>
     <p class="pnote">เซ็นเซอร์: BMP280+AHT20 ที่ CN1 · GPS ที่ P3 · ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ</p>
+    <div class="plinks">
+    <details>
+      <summary><b>ความสามารถ (Variometer)</b></summary>
+      <p>Buddy Link · XCTrack (BLE) · พยากรณ์ฝน · Thermal Assistant · บันทึกเที่ยวบิน GPX/KML · OTA</p>
+    </details>
     <details>
       <summary><b>การต่อสาย (Variometer)</b></summary>
       <table class="pin">
@@ -279,6 +284,7 @@
         Settings (<b>BLE</b> ส่งค่าเข้า XCTrack แบบ LK8EX1 — เปิดแล้วรีสตาร์ท, BL ปรับแสงจอ)</p>
       <p class="muted">Buddy กับ BLE ใช้พร้อมกันไม่ได้ (เครื่องสลับให้เอง) · เสียง vario ปิดได้ที่ปุ่ม VOL</p>
     </details>
+    </div>
   </div>
 
   <!-- LAP TIMER -->
@@ -289,17 +295,20 @@
       </svg>
       <h2>GPS LAP TIMER</h2>
     </div>
-    <p class="pdesc">จับเวลาต่อรอบด้วยประตู GPS — Live Delta, Race Mode, Sector times,
-       แผนที่ไลน์, แข่งกัน 2 บอร์ด (Rivals), Web Dashboard, OTA</p>
+    <p class="pdesc">จับเวลาต่อรอบในสนามด้วยประตู GPS ไม่ต้องวางเซ็นเซอร์ข้างแทร็ก</p>
     <esp-web-install-button id="lapBtn" manifest="manifest_laptimer.json">
       <button slot="activate" class="inst">INSTALL ▸</button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="lapVer">v…</b></span>
       <span id="lapDate">อัปเดตล่าสุด: …</span>
-      <span class="hitchip"><img id="lapHits" alt="จำนวนความสนใจ" src=""></span>
     </div>
     <p class="pnote">GPS ที่ P3 (TX→IO35) · ต่อ IO22→GPS RX เพิ่มเพื่อโหมด 10Hz · ไม่มี GPS = โหมด DEMO</p>
+    <div class="plinks">
+    <details>
+      <summary><b>ความสามารถ (Lap Timer)</b></summary>
+      <p>Live Delta · Race Mode · Sector times · แผนที่ไลน์ · แข่งกัน 2 บอร์ด (Rivals) · Web Dashboard · OTA</p>
+    </details>
     <details>
       <summary><b>การต่อสาย (Lap Timer)</b></summary>
       <table class="pin">
@@ -329,6 +338,7 @@
       <p class="muted">Web Dashboard: เปิด AP แล้วมือถือต่อ WiFi "LapTimer-ชื่อ" ดูเวลาสดบนเบราว์เซอร์ ·
         ต่อสาย IO22→GPS RX จะได้ GPS 10Hz จับเวลาแม่นขึ้น ~10 เท่า · ใส่ SD = บันทึกทุกรอบเป็นไฟล์</p>
     </details>
+    </div>
   </div>
 
   <!-- AUTOPILOT -->
@@ -339,18 +349,20 @@
       </svg>
       <h2>AUTOPILOT</h2>
     </div>
-    <p class="pdesc">ระบบนำร่อง GPS สำหรับเรือตกปลา / รถ / รถตัดหญ้า — GOTO, MISSION ปล่อยเหยื่อ,
-       FIELD วิ่งแถวตัดหญ้า, ANCHOR, RTH, PID + AUTO TUNE, Web Dashboard,
-       Mission Planner จาก SD, ELRS/CRSF telemetry, OTA</p>
+    <p class="pdesc">ระบบนำร่อง GPS สำหรับเรือตกปลา / รถ / รถตัดหญ้า</p>
     <esp-web-install-button id="boatBtn" manifest="manifest_boat.json">
       <button slot="activate" class="inst">INSTALL ▸</button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="boatVer">v…</b></span>
       <span id="boatDate">อัปเดตล่าสุด: …</span>
-      <span class="hitchip"><img id="boatHits" alt="จำนวนความสนใจ" src=""></span>
     </div>
     <p class="pnote">รับวิทยุ SBUS หรือ CRSF/ELRS · ขับ Servo/ESC ผ่าน PCA9685 · ไม่มี GPS = โหมด DEMO จำลองเรือ</p>
+    <div class="plinks">
+    <details>
+      <summary><b>ความสามารถ (Autopilot)</b></summary>
+      <p>GOTO · MISSION ปล่อยเหยื่อ · FIELD วิ่งแถวตัดหญ้า · ANCHOR · RTH · PID + AUTO TUNE · Web Dashboard · Mission Planner จาก SD · ELRS/CRSF telemetry · OTA</p>
+    </details>
     <details>
       <summary><b>การต่อสาย (Autopilot)</b></summary>
       <table class="pin">
@@ -397,6 +409,7 @@
         <b>SD Card:</b> บันทึกเที่ยว (trip) อัตโนมัติ, คลังหมายไม่จำกัด spots.csv, แผนภารกิจ mission.csv
         (บรรทัดละ lat,lon,GO/DROP/HOLD,วินาที), สำรอง config · ELRS ได้ telemetry ขึ้นจอวิทยุ</p>
     </details>
+    </div>
   </div>
 
   <!-- CNC PENDANT -->
@@ -407,18 +420,20 @@
       </svg>
       <h2>CNC PENDANT</h2>
     </div>
-    <p class="pdesc">จอสั่งงานเครื่อง CNC GRBL (3018 ฯลฯ) แบบไม่ต้องใช้คอม — DRO ตำแหน่งสด,
-       Jog ทัชสกรีน, Z-Probe ตั้งศูนย์อัตโนมัติ, SET/GO HOME, กัดงานจากไฟล์บนการ์ด SD,
-       อัปโหลด G-code ผ่าน WiFi, สรุปเวลาจบงาน, HOLD/RESUME, Feed override, OTA</p>
+    <p class="pdesc">จอสั่งงานเครื่อง CNC GRBL (3018 ฯลฯ) แบบไม่ต้องใช้คอม</p>
     <esp-web-install-button id="cncBtn" manifest="manifest_cnc.json">
       <button slot="activate" class="inst">INSTALL ▸</button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="cncVer">v…</b></span>
       <span id="cncDate">อัปเดตล่าสุด: …</span>
-      <span class="hitchip"><img id="cncHits" alt="จำนวนความสนใจ" src=""></span>
     </div>
     <p class="pnote">ไม่ต่อเครื่อง CNC = โหมด DEMO จำลอง GRBL ให้ลองเล่นได้ทันที</p>
+    <div class="plinks">
+    <details>
+      <summary><b>ความสามารถ (CNC Pendant)</b></summary>
+      <p>DRO ตำแหน่งสด · Jog ทัชสกรีน · Z-Probe ตั้งศูนย์อัตโนมัติ · SET/GO HOME · กัดงานจากไฟล์บนการ์ด SD · อัปโหลด G-code ผ่าน WiFi · สรุปเวลาจบงาน · HOLD/RESUME · Feed override · OTA</p>
+    </details>
     <details>
       <summary><b>การต่อสาย (CNC Pendant)</b></summary>
       <table class="pin">
@@ -457,6 +472,7 @@
         Feed ±10% ระหว่างกัดที่ Settings · รอบ spindle S1000-12000 ที่ Tools ·
         จอแปล error/ALARM เป็นข้อความให้เองที่หน้า DRO</p>
     </details>
+    </div>
   </div>
 
   <!-- ROTARY INDEXER -->
@@ -467,18 +483,20 @@
       </svg>
       <h2>ROTARY INDEXER</h2>
     </div>
-    <p class="pdesc">แท่นหมุนแบ่งองศาคุมสเต็ปมอเตอร์ — หมุนไปองศาที่ต้องการ / แบ่งวงเป็น N ช่อง
-       กดไปช่องถัดไปทีละปุ่ม ใช้คู่เครื่อง CNC (กัดเฟือง เจาะรูวงกลม) หรือถ่ายรูปสินค้า 360° ·
-       แบ่งแบบสเต็ปสัมบูรณ์ไม่มีเศษองศาสะสม · ramp ความเร็วกันหลุดสเต็ป · OTA</p>
+    <p class="pdesc">แท่นหมุนแบ่งองศาคุมสเต็ปมอเตอร์ — คู่เครื่อง CNC หรือถ่ายรูปสินค้า 360°</p>
     <esp-web-install-button id="rotaryBtn" manifest="manifest_rotary.json">
       <button slot="activate" class="inst">INSTALL ▸</button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="rotaryVer">v…</b></span>
       <span id="rotaryDate">อัปเดตล่าสุด: …</span>
-      <span class="hitchip"><img id="rotaryHits" alt="จำนวนความสนใจ" src=""></span>
     </div>
     <p class="pnote">ยังไม่ต่อมอเตอร์ก็ลอง UI ได้ทันที (สั่งหมุนลอย ๆ ไม่มีผลอะไร)</p>
+    <div class="plinks">
+    <details>
+      <summary><b>ความสามารถ (Rotary Indexer)</b></summary>
+      <p>หมุนไปองศาที่ต้องการ · แบ่งวงเป็น N ช่อง กดไปช่องถัดไปทีละปุ่ม · สเต็ปสัมบูรณ์ไม่มีเศษองศาสะสม · ramp ความเร็วกันหลุดสเต็ป · OTA</p>
+    </details>
     <details>
       <summary><b>การต่อสาย (Rotary — ไดรเวอร์ A4988/DRV8825/TMC2208)</b></summary>
       <table class="pin">
@@ -505,6 +523,7 @@
         <li>ปุ่มกลางแถบล่าง = <b>STOP ฉุกเฉิน</b> ระหว่างหมุน · จอสีเพี้ยน → หน้า Display กด COLORS</li>
       </ol>
     </details>
+    </div>
   </div>
 
 
@@ -517,18 +536,20 @@
       </svg>
       <h2>HUD NAV</h2>
     </div>
-    <p class="pdesc">จอนำทางสะท้อนกระจกหน้ารถ — มือถือ Android นำทาง Google Maps
-       แล้วเห็น<b>ไอคอนเลี้ยว + ระยะถึงทางเลี้ยว</b>ลอยบนกระจก ผ่านแอป Chronos (BLE) ·
-       สีจอเลือกได้ เขียว/อำพัน/ขาว · โหมดจอตรงใช้กลางวัน · DEMO ลองได้ไม่ต้องมีมือถือ · OTA</p>
+    <p class="pdesc">จอนำทาง Google Maps สะท้อนกระจกหน้ารถ — ไอคอนเลี้ยว + ระยะถึงทางเลี้ยว</p>
     <esp-web-install-button id="hudBtn" manifest="manifest_hud.json">
       <button slot="activate" class="inst">INSTALL ▸</button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="hudVer">v…</b></span>
       <span id="hudDate">อัปเดตล่าสุด: …</span>
-      <span class="hitchip"><img id="hudHits" alt="จำนวนความสนใจ" src=""></span>
     </div>
-    <p class="pnote">บอร์ดเปล่า + สาย USB จากรถ — ไม่ต้องต่อเซ็นเซอร์ใด ๆ · ใช้ได้เฉพาะมือถือ Android (iPhone ปิดตายทางเทคนิค)</p>
+    <p class="pnote">บอร์ดเปล่า + สาย USB จากรถ ไม่ต่อเซ็นเซอร์ใด ๆ · เฉพาะ Android (iPhone ใช้ไม่ได้)</p>
+    <div class="plinks">
+    <details>
+      <summary><b>ความสามารถ (HUD NAV)</b></summary>
+      <p>รับจาก Google Maps ผ่านแอป Chronos (BLE, เฉพาะ Android) · สีจอเลือกได้ เขียว/อำพัน/ขาว · โหมดจอตรงใช้กลางวัน · DEMO ลองได้ไม่ต้องมีมือถือ · OTA</p>
+    </details>
     <details>
       <summary><b>การติดตั้ง + ตั้งค่ามือถือ (HUD NAV)</b></summary>
       <ol>
@@ -545,6 +566,7 @@
       <p class="muted">สีจอกด HUD: GREEN/AMBER/WHITE ใน Settings · แนะนำติดฟิล์ม HUD ใสบนกระจกช่วยให้ชัดขึ้นมาก ·
         ถ้า Google อัปเดตจนข้อมูลหยุด ให้รออัปเดตแอป Chronos (เคยเกิดและผู้พัฒนาแก้เร็ว)</p>
     </details>
+    </div>
   </div>
 
 </div><!-- /panels -->
@@ -689,27 +711,6 @@ loadReleaseMeta('boat', 'manifest_boat.json');
 loadReleaseMeta('cnc', 'manifest_cnc.json');
 loadReleaseMeta('rotary', 'manifest_rotary.json');
 loadReleaseMeta('hud', 'manifest_hud.json');
-
-// ---- ยอดความสนใจ (เข้าชม+กดปุ่ม): hits.sh ไม่มีโหมด view-only จริง (ทดสอบแล้ว)
-// เลยเลือกให้ตัวเลขนี้ "จำได้เสมอ" ทุกครั้งที่เปิดหน้า แทนที่จะซ่อนไว้จนกว่าจะกด —
-// แลกมาคือรวมทั้งคนที่แค่เปิดดูกับคนที่กดปุ่มจริง ไม่ใช่ยอดคลิกล้วน ๆ
-function wireClickCounter(btnId, imgId, key) {
-  var btn = document.getElementById(btnId);
-  var img = document.getElementById(imgId);
-  if (!btn || !img) return;
-  function refresh() {
-    img.src = 'https://hits.sh/kungrckmk.github.io/CYD-firmware/' + key + '.svg' +
-              '?label=interest&color=05c7f2&labelColor=0a0d12&' + Date.now();
-  }
-  btn.addEventListener('click', refresh);
-  refresh();
-}
-wireClickCounter('varioBtn', 'varioHits', 'vario');
-wireClickCounter('lapBtn', 'lapHits', 'lap');
-wireClickCounter('boatBtn', 'boatHits', 'boat');
-wireClickCounter('cncBtn', 'cncHits', 'cnc');
-wireClickCounter('rotaryBtn', 'rotaryHits', 'rotary');
-wireClickCounter('hudBtn', 'hudHits', 'hud');
 
 // ---- สัญญาณไฟ ----
 // 1) พัลส์ default วนครบทุกสาย w1→w5 ทีละรอบ (จังหวะเดียวกับ dur ของ animation)
