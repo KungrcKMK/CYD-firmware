@@ -16,6 +16,7 @@ colors:
   signal-boat: "#ffa02e"
   signal-cnc: "#f95867"
   signal-rotary: "#c77dff"
+- `--c-hud` `#e8f4ff` — Signal Ice: HUD NAV (โปรเจกต์ที่ 6, เพิ่ม 2026-11-05) — ขาวน้ำแข็งโทนเย็น สื่อ 'แสงบนกระจก' ของตัวผลิตภัณฑ์เอง
 typography:
   display:
     fontFamily: "Orbitron, sans-serif"

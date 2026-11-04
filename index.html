@@ -26,6 +26,7 @@
     --c-boat: #ffa02e;
     --c-cnc: #f95867;
     --c-rotary: #c77dff;
+    --c-hud: #e8f4ff;
   }
   * { box-sizing: border-box; }
   html { scrollbar-color: var(--wire-off) var(--bg); }
@@ -77,8 +78,9 @@
   @media (max-width: 920px) { .loom { display: none; } }
 
   /* ---------- project panels ---------- */
-  .panels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
-  @media (max-width: 1150px) { .panels { grid-template-columns: repeat(2, 1fr); } }
+  .panels { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  @media (max-width: 1150px) { .panels { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 880px) { .panels { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px) { .panels { grid-template-columns: 1fr; } }
   .panel { border: 2px solid var(--rule); background: #0a0d12; padding: 16px; position: relative; display: flex; flex-direction: column; }
   @media (max-width: 920px) {
@@ -93,6 +95,7 @@
   .panel.boat   { --pc: var(--c-boat); }
   .panel.cnc    { --pc: var(--c-cnc); }
   .panel.rotary { --pc: var(--c-rotary); }
+  .panel.hud    { --pc: var(--c-hud); }
   .panel { border-top: 2px solid var(--pc); }
   .panel:hover, .panel:focus-within { border-color: var(--pc); box-shadow: 0 0 18px color-mix(in srgb, var(--pc) 22%, transparent); }
   .pname { display: flex; align-items: center; gap: 10px; }
@@ -150,7 +153,7 @@
   .use { display: inline-block; font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .07em;
          border: 1px solid; padding: 2px 6px; margin: 1px 2px 1px 0; white-space: nowrap; }
   .u-vario { color: var(--c-vario); } .u-lap { color: var(--c-lap); } .u-boat { color: var(--c-boat); }
-  .u-cnc { color: var(--c-cnc); } .u-rotary { color: var(--c-rotary); }
+  .u-cnc { color: var(--c-cnc); } .u-rotary { color: var(--c-rotary); } .u-hud { color: var(--c-hud); }
   .tablewrap { overflow-x: auto; }
 
   /* ---------- footer ---------- */
@@ -189,7 +192,7 @@
 
 <!-- บัสหลักแตกเป็นสาย 5 สีเข้าโหนดโปรเจกต์ (ซ่อนบนจอแคบ แผงจะมีสายหยดของตัวเองแทน) -->
 <svg class="loom" viewBox="0 0 1000 150" aria-hidden="true">
-  <path d="M30 0 V22 H970" stroke="var(--wire-off)" stroke-width="4" fill="none"/>
+  <path d="M30 0 V22 H917" stroke="var(--wire-off)" stroke-width="4" fill="none"/>
   <circle cx="30" cy="22" r="5" fill="var(--wire-off)"/>
   <defs>
     <linearGradient id="wg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c3b22"/><stop offset="1" stop-color="#07e86a"/></linearGradient>
@@ -197,26 +200,29 @@
     <linearGradient id="wg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d2808"/><stop offset="1" stop-color="#ffa02e"/></linearGradient>
     <linearGradient id="wg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d1218"/><stop offset="1" stop-color="#f95867"/></linearGradient>
     <linearGradient id="wg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b1840"/><stop offset="1" stop-color="#c77dff"/></linearGradient>
+    <linearGradient id="wg6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a414a"/><stop offset="1" stop-color="#e8f4ff"/></linearGradient>
   </defs>
   <g stroke-width="4" fill="none">
-    <path id="w1" d="M100 22 V118" stroke="url(#wg1)"/>
-    <path id="w2" d="M300 22 V118" stroke="url(#wg2)"/>
-    <path id="w3" d="M500 22 V118" stroke="url(#wg3)"/>
-    <path id="w4" d="M700 22 V118" stroke="url(#wg4)"/>
-    <path id="w5" d="M900 22 V118" stroke="url(#wg5)"/>
+    <path id="w1" d="M83 22 V118" stroke="url(#wg1)"/>
+    <path id="w2" d="M250 22 V118" stroke="url(#wg2)"/>
+    <path id="w3" d="M417 22 V118" stroke="url(#wg3)"/>
+    <path id="w4" d="M583 22 V118" stroke="url(#wg4)"/>
+    <path id="w5" d="M750 22 V118" stroke="url(#wg5)"/>
+    <path id="w6" d="M917 22 V118" stroke="url(#wg6)"/>
   </g>
-  <path class="pulse" d="M30 0 V22 H100 V118" stroke="#eafff2" stroke-width="2" fill="none"
+  <path class="pulse" d="M30 0 V22 H83 V118" stroke="#eafff2" stroke-width="2" fill="none"
         stroke-dasharray="26 600" stroke-linecap="round" opacity=".9">
     <animate attributeName="stroke-dashoffset" from="626" to="0" dur="3.2s" repeatCount="indefinite"/>
   </path>
   <g>
-    <circle id="n1" cx="100" cy="126" r="9" fill="var(--c-vario)"/>
-    <circle id="n2" cx="300" cy="126" r="9" fill="var(--c-lap)"/>
-    <circle id="n3" cx="500" cy="126" r="9" fill="var(--c-boat)"/>
-    <circle id="n4" cx="700" cy="126" r="9" fill="var(--c-cnc)"/>
-    <circle id="n5" cx="900" cy="126" r="9" fill="var(--c-rotary)"/>
+    <circle id="n1" cx="83" cy="126" r="9" fill="var(--c-vario)"/>
+    <circle id="n2" cx="250" cy="126" r="9" fill="var(--c-lap)"/>
+    <circle id="n3" cx="417" cy="126" r="9" fill="var(--c-boat)"/>
+    <circle id="n4" cx="583" cy="126" r="9" fill="var(--c-cnc)"/>
+    <circle id="n5" cx="750" cy="126" r="9" fill="var(--c-rotary)"/>
+    <circle id="n6" cx="917" cy="126" r="9" fill="var(--c-hud)"/>
   </g>
-  <text class="lab" x="46" y="14">MAIN BUS — FIRMWARE 5 ตัว</text>
+  <text class="lab" x="46" y="14">MAIN BUS — FIRMWARE 6 ตัว</text>
 </svg>
 
 <div class="panels">
@@ -501,6 +507,46 @@
     </details>
   </div>
 
+
+  <!-- HUD NAV -->
+  <div class="panel hud" data-wire="w6">
+    <div class="pname">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
+        <path d="M3 16 Q12 11 21 16"/><path d="M3 16 V20 M21 16 V20"/>
+        <path d="M12 3 V9 M12 3 L9 6 M12 3 L15 6"/>
+      </svg>
+      <h2>HUD NAV</h2>
+    </div>
+    <p class="pdesc">จอนำทางสะท้อนกระจกหน้ารถ — มือถือ Android นำทาง Google Maps
+       แล้วเห็น<b>ไอคอนเลี้ยว + ระยะถึงทางเลี้ยว</b>ลอยบนกระจก ผ่านแอป Chronos (BLE) ·
+       สีจอเลือกได้ เขียว/อำพัน/ขาว · โหมดจอตรงใช้กลางวัน · DEMO ลองได้ไม่ต้องมีมือถือ · OTA</p>
+    <esp-web-install-button id="hudBtn" manifest="manifest_hud.json">
+      <button slot="activate" class="inst">INSTALL ▸</button>
+    </esp-web-install-button>
+    <div class="meta">
+      <span><b id="hudVer">v…</b></span>
+      <span id="hudDate">อัปเดตล่าสุด: …</span>
+      <span class="hitchip"><img id="hudHits" alt="จำนวนความสนใจ" src=""></span>
+    </div>
+    <p class="pnote">บอร์ดเปล่า + สาย USB จากรถ — ไม่ต้องต่อเซ็นเซอร์ใด ๆ · ใช้ได้เฉพาะมือถือ Android (iPhone ปิดตายทางเทคนิค)</p>
+    <details>
+      <summary><b>การติดตั้ง + ตั้งค่ามือถือ (HUD NAV)</b></summary>
+      <ol>
+        <li>แฟลชเฟิร์มแวร์ปุ่มบน → เปิดเครื่อง จอขึ้นโหมด DEMO ลูกศรวนให้เห็นหน้าตาเลย</li>
+        <li>มือถือติดตั้งแอป <b>Chronos</b> (Play Store — ถ้าเวอร์ชันต่ำกว่า v3.9.3 ให้โหลดจาก
+          <a href="https://chronos.ke" target="_blank">chronos.ke</a> เพราะรุ่นเก่าอ่านแจ้งเตือน
+          Google Maps ยุคใหม่ไม่ได้)</li>
+        <li>ในแอป Chronos: จับคู่อุปกรณ์ชื่อ <b>KungRC-HUD</b> → เปิดสิทธิ์
+          <b>Notification Access</b> → ปิด battery optimization ของแอป (ไม่งั้นระบบฆ่าแอปแล้วข้อมูลหยุด)</li>
+        <li>เปิดนำทางใน Google Maps ตามปกติ → ไอคอนเลี้ยว+ระยะขึ้นจอเอง</li>
+        <li>วางจอนอนบนคอนโซลหงายขึ้น เปิด <b>MIRROR</b> ใน Settings (แตะจอหนึ่งครั้ง) →
+          ภาพสะท้อนบนกระจกอ่านถูกด้าน · กลางวันแดดจัดสลับเป็นโหมดจอตรงได้</li>
+      </ol>
+      <p class="muted">สีจอกด HUD: GREEN/AMBER/WHITE ใน Settings · แนะนำติดฟิล์ม HUD ใสบนกระจกช่วยให้ชัดขึ้นมาก ·
+        ถ้า Google อัปเดตจนข้อมูลหยุด ให้รออัปเดตแอป Chronos (เคยเกิดและผู้พัฒนาแก้เร็ว)</p>
+    </details>
+  </div>
+
 </div><!-- /panels -->
 
 <p class="flownote">▼ การต่อสาย · วิธีใช้ · ร้านอุปกรณ์ — เส้นไฟวิ่งต่อลงด้านล่าง</p>
@@ -527,7 +573,7 @@
     <tr>
       <td><b>บอร์ด ESP32 CYD 2.8" จอสัมผัส TFT</b><br>
         <span class="muted">ตัวเครื่องหลัก — ต้องมี</span></td>
-      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span><span class="use u-cnc">CNC</span><span class="use u-rotary">ROTARY</span></td>
+      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span><span class="use u-cnc">CNC</span><span class="use u-rotary">ROTARY</span><span class="use u-hud">HUD</span></td>
       <td><a href="https://s.shopee.co.th/5foDlJPUiU?share_channel_code=6" target="_blank">SHOPEE ↗</a><br>
           <a href="https://s.shopee.co.th/40g0IqAmN3?share_channel_code=6" target="_blank">อีกร้าน ↗</a></td>
     </tr>
@@ -642,6 +688,7 @@ loadReleaseMeta('lap', 'manifest_laptimer.json');
 loadReleaseMeta('boat', 'manifest_boat.json');
 loadReleaseMeta('cnc', 'manifest_cnc.json');
 loadReleaseMeta('rotary', 'manifest_rotary.json');
+loadReleaseMeta('hud', 'manifest_hud.json');
 
 // ---- ยอดความสนใจ (เข้าชม+กดปุ่ม): hits.sh ไม่มีโหมด view-only จริง (ทดสอบแล้ว)
 // เลยเลือกให้ตัวเลขนี้ "จำได้เสมอ" ทุกครั้งที่เปิดหน้า แทนที่จะซ่อนไว้จนกว่าจะกด —
@@ -662,14 +709,15 @@ wireClickCounter('lapBtn', 'lapHits', 'lap');
 wireClickCounter('boatBtn', 'boatHits', 'boat');
 wireClickCounter('cncBtn', 'cncHits', 'cnc');
 wireClickCounter('rotaryBtn', 'rotaryHits', 'rotary');
+wireClickCounter('hudBtn', 'hudHits', 'hud');
 
 // ---- สัญญาณไฟ ----
 // 1) พัลส์ default วนครบทุกสาย w1→w5 ทีละรอบ (จังหวะเดียวกับ dur ของ animation)
 // 2) hover/focus แผงไหน: สายเส้นนั้นหนา+โหนดสว่างเต็ม (glow) ส่วนที่เหลือหรี่ลงขั้นเดียวแบบไฟติด
 (function () {
   var pulse = document.querySelector('.pulse');
-  var busX = { w1: 100, w2: 300, w3: 500, w4: 700, w5: 900 };
-  var ids = ['w1', 'w2', 'w3', 'w4', 'w5'];
+  var busX = { w1: 83, w2: 250, w3: 417, w4: 583, w5: 750, w6: 917 };
+  var ids = ['w1', 'w2', 'w3', 'w4', 'w5', 'w6'];
   var held = null;                       // แผงที่ถูกชี้อยู่ (ล็อกพัลส์ไว้เส้นนั้น)
   function route(id) {
     if (pulse) pulse.setAttribute('d', 'M30 0 V22 H' + busX[id] + ' V118');

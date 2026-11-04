@@ -1,0 +1,1 @@
+{"name":"KungRC HUD NAV","version":"1.0.0","new_install_prompt_erase":true,"builds":[{"chipFamily":"ESP32","parts":[{"path":"web_hud.bin","offset":0}]}]}

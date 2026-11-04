@@ -38,6 +38,21 @@
         ],
         "createdAt": "2026-11-04T02:07:26.820Z",
         "reason": "โลกที่ user เลือกบนหน้า decision (kraftwerk-man-machine neon schematic) — glow คือแสงหลอดสัญญาณ วัสดุหลักตาม direction contract OWN-WORLD"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-04T17:06:36.517Z",
+        "reason": "ขนาด .9/.86/.72/.7rem/11px อยู่ในหน้าที่ ship ก่อน DESIGN.md ถูกเขียน — type ramp ของ documenter เก็บไม่ครบ เป็น pre-existing ไม่ใช่ drift ใหม่ (จดใน DESIGN.md Not canonized)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(255, 255, 255)",
+        "createdAt": "2026-11-04T17:06:36.583Z",
+        "reason": "พื้นขาวของ cyd_pinout.jpg = ภาพอ้างอิงจริงที่ผู้ใช้จัดหา (ข้อยกเว้นข้อมูลจริงแบบเดียวกับ badge hits.sh ที่จดไว้ใน DESIGN.md)"
       }
     ]
   }
