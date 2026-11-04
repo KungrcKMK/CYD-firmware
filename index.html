@@ -120,11 +120,22 @@
 
   /* ---------- details / tables ---------- */
   .plinks { align-self: end; width: 100%; }
-  details { margin-top: 12px; border-top: 1px solid var(--rule); padding-top: 10px; overflow-wrap: anywhere; }
-  summary { cursor: pointer; color: var(--c-lap); font-size: .85rem; list-style: none; }
-  summary::before { content: '▸ '; color: var(--wire-off); }
-  details[open] summary::before { content: '▾ '; }
-  summary:hover { color: var(--ink); }
+  .doclink { display: block; width: 100%; text-align: left; background: none; border: 0;
+             border-top: 1px solid var(--rule); margin-top: 12px; padding: 10px 0 0;
+             cursor: pointer; font: inherit; font-size: .85rem; font-weight: 700; color: var(--c-lap); }
+  .doclink::before { content: '▸ '; color: var(--wire-off); }
+  .doclink:hover { color: var(--ink); }
+  .docdlg { background: #0a0d12; color: var(--ink); border: 2px solid var(--pc, var(--rule));
+            padding: 22px 26px; width: min(680px, calc(100vw - 32px)); max-height: 82vh;
+            overflow-y: auto; overflow-wrap: anywhere; }
+  .docdlg::backdrop { background: rgba(6, 7, 9, .82); }
+  .dochead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+             border-bottom: 1px solid var(--rule); padding-bottom: 10px; margin-bottom: 12px; }
+  .dochead h3 { margin: 0; font-size: 1.25rem; letter-spacing: .02em; color: var(--pc, var(--c-lap)); }
+  .docdlg p, .docdlg li { font-size: .92rem; line-height: 1.75; }
+  .docx { background: none; border: 1px solid var(--rule); color: var(--dim); font: inherit;
+          font-size: .8rem; padding: 4px 10px; cursor: pointer; flex-shrink: 0; }
+  .docx:hover { border-color: var(--pc, var(--ink)); color: var(--ink); }
   .pin { border-collapse: collapse; margin-top: 10px; width: 100%; }
   .pin td, .pin th { border: 1px solid var(--rule); padding: 6px 9px; font-size: .82rem; }
   .pin th { color: var(--dim); text-align: left; font-weight: 600; background: #0d1119; }
@@ -247,12 +258,14 @@
     </div>
     <p class="pnote">เซ็นเซอร์: BMP280+AHT20 ที่ CN1 · GPS ที่ P3 · ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ</p>
     <div class="plinks">
-    <details>
-      <summary><b>ความสามารถ (Variometer)</b></summary>
+    <button class="doclink" type="button">ความสามารถ (Variometer)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>ความสามารถ (Variometer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p>Buddy Link · XCTrack (BLE) · พยากรณ์ฝน · Thermal Assistant · บันทึกเที่ยวบิน GPX/KML · OTA</p>
-    </details>
-    <details>
-      <summary><b>การต่อสาย (Variometer)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">การต่อสาย (Variometer)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>การต่อสาย (Variometer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <table class="pin">
         <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
         <tr><td rowspan="4">AHT20+BMP280<br>(คอนเนกเตอร์ CN1)</td>
@@ -267,9 +280,10 @@
         <tr><td>ลำโพง 4Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
       </table>
       <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (เป็น backlight จอ) · สาย Grove ของเซ็นเซอร์อาจเรียงขาไม่ตรง CN1 — ไล่สายเทียบซิลค์ก่อนเสียบ</p>
-    </details>
-    <details>
-      <summary><b>วิธีใช้งาน (Variometer)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">วิธีใช้งาน (Variometer)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>วิธีใช้งาน (Variometer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p><b>เริ่มครั้งแรก:</b></p>
       <ol>
         <li>เปิดเครื่อง → หน้า Settings → <b>CALIBRATE</b> แตะ 4 มุมตามจุดที่ขึ้น (ทำครั้งเดียว)</li>
@@ -283,7 +297,7 @@
         Logger (บันทึกเที่ยวบินลง SD — เลือก AUTO/MANUAL ทั้งเริ่มและหยุด แปลงเป็น GPX/KML ได้),
         Settings (<b>BLE</b> ส่งค่าเข้า XCTrack แบบ LK8EX1 — เปิดแล้วรีสตาร์ท, BL ปรับแสงจอ)</p>
       <p class="muted">Buddy กับ BLE ใช้พร้อมกันไม่ได้ (เครื่องสลับให้เอง) · เสียง vario ปิดได้ที่ปุ่ม VOL</p>
-    </details>
+    </dialog>
     </div>
   </div>
 
@@ -305,12 +319,14 @@
     </div>
     <p class="pnote">GPS ที่ P3 (TX→IO35) · ต่อ IO22→GPS RX เพิ่มเพื่อโหมด 10Hz · ไม่มี GPS = โหมด DEMO</p>
     <div class="plinks">
-    <details>
-      <summary><b>ความสามารถ (Lap Timer)</b></summary>
+    <button class="doclink" type="button">ความสามารถ (Lap Timer)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>ความสามารถ (Lap Timer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p>Live Delta · Race Mode · Sector times · แผนที่ไลน์ · แข่งกัน 2 บอร์ด (Rivals) · Web Dashboard · OTA</p>
-    </details>
-    <details>
-      <summary><b>การต่อสาย (Lap Timer)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">การต่อสาย (Lap Timer)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>การต่อสาย (Lap Timer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <table class="pin">
         <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
         <tr><td rowspan="4">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
@@ -321,9 +337,10 @@
         <tr><td>ลำโพง 4Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
       </table>
       <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (backlight จอ) · ไม่ต่อ GPS = เครื่องเข้าโหมด DEMO ให้ทดลองเล่นได้</p>
-    </details>
-    <details>
-      <summary><b>วิธีใช้งาน (Lap Timer)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">วิธีใช้งาน (Lap Timer)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>วิธีใช้งาน (Lap Timer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p><b>เริ่มครั้งแรก:</b></p>
       <ol>
         <li>หน้า Settings (กลุ่ม SETUP) → ตั้ง <b>WiFi + ชื่อนักขับ</b> → CHECK UPDATE</li>
@@ -337,7 +354,7 @@
         (ตั้ง<b>จำนวนรอบแข่ง</b> — ครบแล้วสรุปให้เอง)</p>
       <p class="muted">Web Dashboard: เปิด AP แล้วมือถือต่อ WiFi "LapTimer-ชื่อ" ดูเวลาสดบนเบราว์เซอร์ ·
         ต่อสาย IO22→GPS RX จะได้ GPS 10Hz จับเวลาแม่นขึ้น ~10 เท่า · ใส่ SD = บันทึกทุกรอบเป็นไฟล์</p>
-    </details>
+    </dialog>
     </div>
   </div>
 
@@ -359,12 +376,14 @@
     </div>
     <p class="pnote">รับวิทยุ SBUS หรือ CRSF/ELRS · ขับ Servo/ESC ผ่าน PCA9685 · ไม่มี GPS = โหมด DEMO จำลองเรือ</p>
     <div class="plinks">
-    <details>
-      <summary><b>ความสามารถ (Autopilot)</b></summary>
+    <button class="doclink" type="button">ความสามารถ (Autopilot)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>ความสามารถ (Autopilot)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p>GOTO · MISSION ปล่อยเหยื่อ · FIELD วิ่งแถวตัดหญ้า · ANCHOR · RTH · PID + AUTO TUNE · Web Dashboard · Mission Planner จาก SD · ELRS/CRSF telemetry · OTA</p>
-    </details>
-    <details>
-      <summary><b>การต่อสาย (Autopilot)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">การต่อสาย (Autopilot)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>การต่อสาย (Autopilot)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <table class="pin">
         <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
         <tr><td rowspan="4">PCA9685 (ขับ Servo/ESC)<br>+ เข็มทิศ GY-87 หรือ QMC5883L<br>(I²C ร่วมกันที่ CN1)</td>
@@ -385,9 +404,10 @@
       <p class="muted">⚠ IO1/IO3 ใช้กับวิทยุ — ห้ามเปิด Serial Monitor ระหว่างใช้งานจริง ·
         โหมด SINGLE: PCA CH0 = หางเสือ, CH1 = ESC · โหมด DUAL: CH0/CH1 = มอเตอร์ซ้าย/ขวา ·
         GY-87 เสียบแล้วตรวจพบเอง (รองรับทั้ง HMC5883L และ QMC5883L)</p>
-    </details>
-    <details>
-      <summary><b>วิธีใช้งาน (Autopilot)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">วิธีใช้งาน (Autopilot)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>วิธีใช้งาน (Autopilot)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p><b>เริ่มครั้งแรก:</b></p>
       <ol>
         <li>หน้า Vehicle (หน้าสุดท้าย) → เลือก <b>PLATFORM</b> BOAT/CAR/MOWER และ <b>DRIVE</b>
@@ -408,7 +428,7 @@
         (รหัส 12345678) เปิด 192.168.4.1 = แผนที่สด + สั่งโหมด/เลือกจุด/ตั้ง HOME จากมือถือ ·
         <b>SD Card:</b> บันทึกเที่ยว (trip) อัตโนมัติ, คลังหมายไม่จำกัด spots.csv, แผนภารกิจ mission.csv
         (บรรทัดละ lat,lon,GO/DROP/HOLD,วินาที), สำรอง config · ELRS ได้ telemetry ขึ้นจอวิทยุ</p>
-    </details>
+    </dialog>
     </div>
   </div>
 
@@ -430,12 +450,14 @@
     </div>
     <p class="pnote">ไม่ต่อเครื่อง CNC = โหมด DEMO จำลอง GRBL ให้ลองเล่นได้ทันที</p>
     <div class="plinks">
-    <details>
-      <summary><b>ความสามารถ (CNC Pendant)</b></summary>
+    <button class="doclink" type="button">ความสามารถ (CNC Pendant)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>ความสามารถ (CNC Pendant)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p>DRO ตำแหน่งสด · Jog ทัชสกรีน · Z-Probe ตั้งศูนย์อัตโนมัติ · SET/GO HOME · กัดงานจากไฟล์บนการ์ด SD · อัปโหลด G-code ผ่าน WiFi · สรุปเวลาจบงาน · HOLD/RESUME · Feed override · OTA</p>
-    </details>
-    <details>
-      <summary><b>การต่อสาย (CNC Pendant)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">การต่อสาย (CNC Pendant)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>การต่อสาย (CNC Pendant)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <table class="pin">
         <tr><th>ฝั่งบอร์ด GRBL (พอร์ต offline)</th><th>ต่อที่ CYD (P1)</th></tr>
         <tr><td>RX</td><td>IO1 (P1-TX)</td></tr>
@@ -446,9 +468,10 @@
       </table>
       <p class="muted">⚠ ใช้พอร์ต offline controller ของบอร์ด GRBL — ต้องถอดสาย USB คอมออกจากเครื่อง CNC ก่อน ·
         115200 baud · ตอนเปิดจอ GRBL อาจได้ข้อความขยะจาก boot ROM ของ ESP32 สั้น ๆ ไม่มีผลอะไร</p>
-    </details>
-    <details>
-      <summary><b>วิธีใช้งาน (CNC Pendant)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">วิธีใช้งาน (CNC Pendant)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>วิธีใช้งาน (CNC Pendant)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p><b>เริ่มครั้งแรก:</b> Settings → WIFI SETUP + CHECK UPDATE · จอสีเพี้ยน → หน้า Display กด COLORS ·
         ส่งไฟล์เข้าการ์ด: หน้า <b>Upload</b> → START WIFI UPLOAD → คอม/มือถือต่อ WiFi <b>KungRC-CNC</b>
         (รหัส 12345678) → เปิด <b>http://192.168.4.1</b> (หรือถอดการ์ดไป copy บนคอมก็ได้)</p>
@@ -471,7 +494,7 @@
         DRO: HOLD พัก · UNLK ปลด ALARM · HOME กลับจุด SET HOME ·
         Feed ±10% ระหว่างกัดที่ Settings · รอบ spindle S1000-12000 ที่ Tools ·
         จอแปล error/ALARM เป็นข้อความให้เองที่หน้า DRO</p>
-    </details>
+    </dialog>
     </div>
   </div>
 
@@ -493,12 +516,14 @@
     </div>
     <p class="pnote">ยังไม่ต่อมอเตอร์ก็ลอง UI ได้ทันที (สั่งหมุนลอย ๆ ไม่มีผลอะไร)</p>
     <div class="plinks">
-    <details>
-      <summary><b>ความสามารถ (Rotary Indexer)</b></summary>
+    <button class="doclink" type="button">ความสามารถ (Rotary Indexer)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>ความสามารถ (Rotary Indexer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p>หมุนไปองศาที่ต้องการ · แบ่งวงเป็น N ช่อง กดไปช่องถัดไปทีละปุ่ม · สเต็ปสัมบูรณ์ไม่มีเศษองศาสะสม · ramp ความเร็วกันหลุดสเต็ป · OTA</p>
-    </details>
-    <details>
-      <summary><b>การต่อสาย (Rotary — ไดรเวอร์ A4988/DRV8825/TMC2208)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">การต่อสาย (Rotary — ไดรเวอร์ A4988/DRV8825/TMC2208)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>การต่อสาย (Rotary — ไดรเวอร์ A4988/DRV8825/TMC2208)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <table class="pin">
         <tr><th>ไดรเวอร์</th><th>ต่อกับ</th></tr>
         <tr><td>STEP</td><td>CYD <b>IO27</b> (CN1)</td></tr>
@@ -510,9 +535,10 @@
         <tr><td>1A 1B 2A 2B</td><td>ขดลวด NEMA17 (ขดเดียวกันวัดได้ ~2-3Ω)</td></tr>
       </table>
       <p class="muted">⚠ ก่อนใช้จริงต้องปรับ Vref บนไดรเวอร์จำกัดกระแสตามสเปคมอเตอร์ ไม่งั้นร้อนจัด</p>
-    </details>
-    <details>
-      <summary><b>วิธีใช้งาน (Rotary Indexer)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">วิธีใช้งาน (Rotary Indexer)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>วิธีใช้งาน (Rotary Indexer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <ol>
         <li><b>Settings</b> — ตั้งค่ามอเตอร์ครั้งแรก: STEPS/REV (NEMA17 = 200), microstep ตาม jumper,
           GEAR อัตราทดเฟือง (ขับตรง = 1), SPEED องศา/วินาที · ทุกค่าใส่ผ่าน NUM PAD จำถาวร</li>
@@ -522,7 +548,7 @@
           เดินหน้าทางเดียวตลอด (กัน backlash) ไม่มีเศษองศาสะสมกี่รอบก็ตาม</li>
         <li>ปุ่มกลางแถบล่าง = <b>STOP ฉุกเฉิน</b> ระหว่างหมุน · จอสีเพี้ยน → หน้า Display กด COLORS</li>
       </ol>
-    </details>
+    </dialog>
     </div>
   </div>
 
@@ -546,12 +572,14 @@
     </div>
     <p class="pnote">บอร์ดเปล่า + สาย USB จากรถ ไม่ต่อเซ็นเซอร์ใด ๆ · เฉพาะ Android (iPhone ใช้ไม่ได้)</p>
     <div class="plinks">
-    <details>
-      <summary><b>ความสามารถ (HUD NAV)</b></summary>
+    <button class="doclink" type="button">ความสามารถ (HUD NAV)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>ความสามารถ (HUD NAV)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p>รับจาก Google Maps ผ่านแอป Chronos (BLE, เฉพาะ Android) · สีจอเลือกได้ เขียว/อำพัน/ขาว · โหมดจอตรงใช้กลางวัน · DEMO ลองได้ไม่ต้องมีมือถือ · OTA</p>
-    </details>
-    <details>
-      <summary><b>การติดตั้ง + ตั้งค่ามือถือ (HUD NAV)</b></summary>
+    </dialog>
+    <button class="doclink" type="button">การติดตั้ง + ตั้งค่ามือถือ (HUD NAV)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>การติดตั้ง + ตั้งค่ามือถือ (HUD NAV)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <ol>
         <li>แฟลชเฟิร์มแวร์ปุ่มบน → เปิดเครื่อง จอขึ้นโหมด DEMO ลูกศรวนให้เห็นหน้าตาเลย</li>
         <li>มือถือติดตั้งแอป <b>Chronos</b> (Play Store — ถ้าเวอร์ชันต่ำกว่า v3.9.3 ให้โหลดจาก
@@ -565,7 +593,7 @@
       </ol>
       <p class="muted">สีจอกด HUD: GREEN/AMBER/WHITE ใน Settings · แนะนำติดฟิล์ม HUD ใสบนกระจกช่วยให้ชัดขึ้นมาก ·
         ถ้า Google อัปเดตจนข้อมูลหยุด ให้รออัปเดตแอป Chronos (เคยเกิดและผู้พัฒนาแก้เร็ว)</p>
-    </details>
+    </dialog>
     </div>
   </div>
 
@@ -711,6 +739,15 @@ loadReleaseMeta('boat', 'manifest_boat.json');
 loadReleaseMeta('cnc', 'manifest_cnc.json');
 loadReleaseMeta('rotary', 'manifest_rotary.json');
 loadReleaseMeta('hud', 'manifest_hud.json');
+
+// ---- คู่มือแบบหน้าต่าง ----
+document.querySelectorAll('.doclink').forEach(function (btn) {
+  btn.addEventListener('click', function () { btn.nextElementSibling.showModal(); });
+});
+document.querySelectorAll('.docdlg').forEach(function (dlg) {
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  dlg.querySelector('.docx').addEventListener('click', function () { dlg.close(); });
+});
 
 // ---- สัญญาณไฟ ----
 // 1) พัลส์ default วนครบทุกสาย w1→w5 ทีละรอบ (จังหวะเดียวกับ dur ของ animation)
