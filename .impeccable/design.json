@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T00:00:00+07:00",
+  "title": "Design System: KungRC Firmware Installer",
+  "extensions": {
+    "colorMeta": {
+      "schematic-black": { "role": "neutral", "displayName": "Schematic Black", "canonical": "#060709", "tonalRamp": ["oklch(10% 0.01 260)", "oklch(15% 0.01 260)", "oklch(25% 0.01 260)", "oklch(37% 0.01 260)", "oklch(50% 0.01 260)", "oklch(65% 0.01 260)", "oklch(80% 0.01 260)", "oklch(95% 0.005 260)"] },
+      "wire-off": { "role": "neutral", "displayName": "Wire Off (สายดับ)", "canonical": "#2a3140", "tonalRamp": ["oklch(15% 0.02 260)", "oklch(24% 0.025 260)", "oklch(32% 0.025 260)", "oklch(42% 0.025 260)", "oklch(54% 0.025 260)", "oklch(68% 0.02 260)", "oklch(82% 0.015 260)", "oklch(94% 0.01 260)"] },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#e8ecf2", "tonalRamp": ["oklch(15% 0.01 255)", "oklch(28% 0.01 255)", "oklch(42% 0.01 255)", "oklch(56% 0.01 255)", "oklch(70% 0.01 255)", "oklch(82% 0.008 255)", "oklch(89% 0.006 255)", "oklch(95% 0.005 255)"] },
+      "signal-vario": { "role": "primary", "displayName": "Signal Green (Vario · ไฟแอคทีฟของระบบ)", "canonical": "#07e86a", "tonalRamp": ["oklch(18% 0.07 155)", "oklch(30% 0.11 155)", "oklch(42% 0.14 155)", "oklch(54% 0.17 155)", "oklch(66% 0.2 155)", "oklch(78% 0.21 155)", "oklch(87% 0.15 155)", "oklch(95% 0.07 155)"] },
+      "signal-lap": { "role": "primary", "displayName": "Signal Cyan (Lap Timer · สีลิงก์)", "canonical": "#05c7f2", "tonalRamp": ["oklch(18% 0.05 220)", "oklch(30% 0.08 220)", "oklch(42% 0.1 220)", "oklch(54% 0.12 220)", "oklch(66% 0.13 220)", "oklch(77% 0.13 220)", "oklch(87% 0.09 220)", "oklch(95% 0.04 220)"] },
+      "signal-boat": { "role": "primary", "displayName": "Signal Amber (Autopilot · สี code)", "canonical": "#ffa02e", "tonalRamp": ["oklch(20% 0.06 70)", "oklch(32% 0.09 70)", "oklch(44% 0.12 70)", "oklch(56% 0.14 70)", "oklch(68% 0.16 70)", "oklch(78% 0.16 70)", "oklch(87% 0.11 70)", "oklch(95% 0.05 70)"] },
+      "signal-cnc": { "role": "primary", "displayName": "Signal Red-Pink (CNC Pendant)", "canonical": "#f95867", "tonalRamp": ["oklch(20% 0.08 20)", "oklch(32% 0.12 20)", "oklch(44% 0.16 20)", "oklch(55% 0.19 20)", "oklch(65% 0.2 20)", "oklch(75% 0.15 20)", "oklch(85% 0.09 20)", "oklch(94% 0.04 20)"] },
+      "signal-rotary": { "role": "primary", "displayName": "Signal Violet (Rotary Indexer)", "canonical": "#c77dff", "tonalRamp": ["oklch(20% 0.09 310)", "oklch(32% 0.13 310)", "oklch(44% 0.17 310)", "oklch(56% 0.19 310)", "oklch(68% 0.19 310)", "oklch(78% 0.15 310)", "oklch(87% 0.1 310)", "oklch(95% 0.04 310)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "KUNGRC masthead เท่านั้น — Orbitron 800 tracked .28em" },
+      "headline": { "displayName": "Headline", "purpose": "ชื่อหมวดใน .shead คู่เลขหมวดสองหลัก" },
+      "title": { "displayName": "Title", "purpose": "ชื่อโปรเจกต์บนแผง สีสัญญาณประจำตัว" },
+      "body": { "displayName": "Body", "purpose": "เนื้อหาไทยทั้งหมด · จำกัด 70ch ใน .frame" },
+      "label": { "displayName": "Label", "purpose": "ปุ่ม INSTALL และป้าย tracked-caps — ภาษาอังกฤษสั้นเท่านั้น" },
+      "data": { "displayName": "Data", "purpose": "เลขสดทุกตัว (เวอร์ชัน/วันที่/พิน) — Consolas tabular-nums" }
+    },
+    "shadows": [
+      { "name": "glow-station-lit", "value": "0 0 12px #07e86a33", "purpose": "สถานีที่ผ่านแล้วสว่างค้าง" },
+      { "name": "glow-panel-hover", "value": "0 0 18px color-mix(in srgb, var(--pc) 22%, transparent)", "purpose": "แผงถูกชี้/โฟกัส — glow สีสัญญาณของแผงเอง" },
+      { "name": "glow-button-on", "value": "0 0 20px var(--pc)", "purpose": "ปุ่ม INSTALL ตอนไฟเข้า (hover/focus)" },
+      { "name": "glow-lamp", "value": "drop-shadow(0 0 4px var(--pc))", "purpose": "filter บนไอคอนแผงและโหนดหลอดสัญญาณ (4–10px ตามขนาด)" }
+    ],
+    "motion": [
+      { "name": "current-pulse", "value": "SMIL stroke-dashoffset 626→0, dur 3.2s, repeat indefinite, dasharray 26 600", "purpose": "พัลส์กระแสวิ่งบัส→สาย วนเปลี่ยนเส้นที่ repeatEvent · ปิดเมื่อ prefers-reduced-motion (ทุกเส้นสว่างนิ่ง)" },
+      { "name": "power-on", "value": "none", "purpose": "ทุก state อื่นสลับทันที — ไม่มี transition/easing ที่ไหนในระบบ (The Power-On Rule)" }
+    ],
+    "breakpoints": [
+      { "name": "panels-2col", "value": "1150px" },
+      { "name": "loom-hidden", "value": "920px" },
+      { "name": "panels-1col", "value": "640px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Install Button",
+      "kind": "button",
+      "refersTo": "button-install",
+      "description": "ปุ่มจ่ายไฟเข้าบอร์ด — กรอบนีออนสีสัญญาณ โปร่งตอนพัก เติมสีเต็มตอน hover แบบไฟติด",
+      "html": "<button class=\"ds-btn-install\">INSTALL ▸</button>",
+      "css": ".ds-btn-install { font-family: 'Orbitron', sans-serif; font-size: .82rem; letter-spacing: .22em; font-weight: 700; width: 100%; padding: 13px 10px; cursor: pointer; background: transparent; color: #07e86a; border: 2px solid #07e86a; border-radius: 0; } .ds-btn-install:hover, .ds-btn-install:focus-visible { background: #07e86a; color: #060709; box-shadow: 0 0 20px #07e86a; } .ds-btn-install:focus-visible { outline: 2px solid #07e86a; outline-offset: 3px; }"
+    },
+    {
+      "name": "Frame Link (GITHUB)",
+      "kind": "button",
+      "refersTo": "link-frame",
+      "description": "ลิงก์กรอบสายดับ — กรอบเทา Wire Off ตัวหรี่ hover เปลี่ยนเป็นฟ้าทั้งกรอบและตัวอักษร ไม่เติมพื้น",
+      "html": "<a class=\"ds-link-frame\" href=\"#\">GITHUB ↗</a>",
+      "css": ".ds-link-frame { font-family: 'Orbitron', sans-serif; font-size: .72rem; letter-spacing: .2em; border: 2px solid #2a3140; padding: 9px 16px; color: #8a94a2; text-decoration: none; border-radius: 0; } .ds-link-frame:hover, .ds-link-frame:focus-visible { border-color: #05c7f2; color: #05c7f2; }"
+    },
+    {
+      "name": "Project Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "แผงโปรเจกต์ — พื้นทึบบนกริด กรอบ Rule + ขอบบนสีสัญญาณ hover ทั้งกรอบติดไฟ + glow",
+      "html": "<div class=\"ds-panel\"><h2 class=\"ds-panel-name\">VARIOMETER</h2><p class=\"ds-panel-desc\">เครื่องวัดอัตราไต่ระดับสำหรับร่มร่อน/พารามอเตอร์</p><div class=\"ds-panel-meta\"><b>v2.4</b><span>อัปเดตล่าสุด 1 พ.ย. 2569</span></div></div>",
+      "css": ".ds-panel { border: 2px solid #1d2431; border-top: 2px solid #07e86a; background: #0a0d12; padding: 16px; border-radius: 0; max-width: 240px; } .ds-panel:hover { border-color: #07e86a; box-shadow: 0 0 18px color-mix(in srgb, #07e86a 22%, transparent); } .ds-panel-name { font-family: 'Orbitron', sans-serif; font-size: .95rem; letter-spacing: .14em; color: #07e86a; margin: 0 0 10px; font-weight: 700; } .ds-panel-desc { font-family: 'Segoe UI', 'Noto Sans Thai', sans-serif; font-size: .86rem; color: #e8ecf2; margin: 0 0 12px; line-height: 1.55; } .ds-panel-meta { display: flex; gap: 10px; font-size: .78rem; color: #8a94a2; font-family: Consolas, monospace; font-variant-numeric: tabular-nums; } .ds-panel-meta b { color: #e8ecf2; font-weight: 400; }"
+    },
+    {
+      "name": "Station (lit + unlit)",
+      "kind": "chip",
+      "refersTo": "station",
+      "description": "สถานีขั้นตอน 1-2-3 ร้อยบนสายเดียว — สถานะผ่านแล้วสว่างค้าง (state ไม่ใช่ hover)",
+      "html": "<span class=\"ds-st ds-st-lit\"><b>1</b>เสียบบอร์ดกับคอม</span><span class=\"ds-st-wire\"></span><span class=\"ds-st\"><b>2</b>เลือกเฟิร์มแวร์</span>",
+      "css": ".ds-st { border: 2px solid #2a3140; color: #8a94a2; padding: 9px 18px; font-size: .92rem; white-space: nowrap; background: #060709; display: inline-block; font-family: 'Segoe UI', 'Noto Sans Thai', sans-serif; border-radius: 0; } .ds-st b { font-family: 'Orbitron', sans-serif; font-size: .8rem; margin-right: 8px; } .ds-st-lit { border-color: #07e86a; color: #e8ecf2; box-shadow: 0 0 12px #07e86a33; } .ds-st-lit b { color: #07e86a; } .ds-st-wire { display: inline-block; width: 26px; height: 2px; background: #2a3140; vertical-align: middle; }"
+    },
+    {
+      "name": "Use Chip",
+      "kind": "chip",
+      "refersTo": "panel",
+      "description": "ป้ายบอกว่าอะไหล่ใช้กับโปรเจกต์ไหน — กรอบ 1px สีสัญญาณของโปรเจกต์",
+      "html": "<span class=\"ds-use\" style=\"color:#07e86a\">VARIO</span> <span class=\"ds-use\" style=\"color:#05c7f2\">LAP</span> <span class=\"ds-use\" style=\"color:#ffa02e\">BOAT</span>",
+      "css": ".ds-use { display: inline-block; font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .07em; border: 1px solid currentColor; padding: 2px 6px; margin: 1px 2px 1px 0; white-space: nowrap; border-radius: 0; }"
+    },
+    {
+      "name": "Section Head",
+      "kind": "nav",
+      "refersTo": "panel",
+      "description": "หัวหมวดเลขสองหลักแบบปกอัลบั้ม + ชื่อ tracked-caps + คำอธิบายไทยชิดขวา ใต้เส้น 2px",
+      "html": "<div class=\"ds-shead\"><span class=\"ds-shead-no\">02</span><h2 class=\"ds-shead-h\">BOARD PINOUT</h2><span class=\"ds-shead-thai\">ผังพินบอร์ด CYD ฉบับเต็ม</span></div>",
+      "css": ".ds-shead { display: flex; align-items: baseline; gap: 16px; border-bottom: 2px solid #1d2431; padding-bottom: 10px; background: #060709; padding-top: 8px; } .ds-shead-no { font-family: 'Orbitron', sans-serif; color: #768192; font-size: 1rem; letter-spacing: .1em; } .ds-shead-h { font-family: 'Orbitron', sans-serif; font-size: 1.05rem; letter-spacing: .22em; margin: 0; font-weight: 700; color: #e8ecf2; } .ds-shead-thai { color: #8a94a2; font-size: .85rem; margin-left: auto; font-family: 'Segoe UI', 'Noto Sans Thai', sans-serif; }"
+    },
+    {
+      "name": "Disclosure",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "รายละเอียดเชิงช่างพับเก็บได้ — summary ฟ้า ลูกศร Wire Off ไม่บังทางแฟลช",
+      "html": "<details class=\"ds-details\"><summary class=\"ds-summary\"><b>การต่อสาย (Variometer)</b></summary><p class=\"ds-details-body\">ตารางพินอยู่ตรงนี้</p></details>",
+      "css": ".ds-details { border-top: 1px solid #1d2431; padding-top: 10px; background: #060709; font-family: 'Segoe UI', 'Noto Sans Thai', sans-serif; } .ds-summary { cursor: pointer; color: #05c7f2; font-size: .85rem; list-style: none; } .ds-summary::before { content: '▸ '; color: #2a3140; } .ds-details[open] .ds-summary::before { content: '▾ '; } .ds-summary:hover { color: #e8ecf2; } .ds-details-body { color: #8a94a2; font-size: .85rem; }"
+    },
+    {
+      "name": "Pin Table",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "ตารางต่อสาย — เส้น 1px Rule หัวพื้น Well คอลัมน์พินเป็น Consolas",
+      "html": "<table class=\"ds-pin\"><tr><th>อุปกรณ์</th><th>ต่อที่บอร์ด</th></tr><tr><td>SDA</td><td>IO27</td></tr><tr><td>SCL</td><td>IO22</td></tr></table>",
+      "css": ".ds-pin { border-collapse: collapse; width: 100%; background: #060709; color: #e8ecf2; font-family: 'Segoe UI', 'Noto Sans Thai', sans-serif; } .ds-pin td, .ds-pin th { border: 1px solid #1d2431; padding: 6px 9px; font-size: .82rem; } .ds-pin th { color: #8a94a2; text-align: left; font-weight: 600; background: #0d1119; } .ds-pin td:last-child { font-family: Consolas, monospace; font-size: .8rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Kraftwerk Man-Machine — the live wiring schematic",
+    "overview": "ทั้งหน้าเว็บคือแผนผังวงจรนีออนแผ่นเดียวบนกระดาษดำสนิท: กริดโมดูลาร์ 40px มองเห็นทั้งหน้า, บัสเทาเส้นเดียวแตกเป็นสายสัญญาณ 5 สีลงโหนดหลอดไฟ แล้วไหลต่อเป็น flowline ผ่านทุกหมวดจนจบที่ขั้ว GND ท้ายหน้า ไม่มีการ์ดใดลอยอิสระ — ทุกแผงถูกเดินสายถึงกัน หมึกเดียวของระบบคือเส้นอีนาเมลเรียบ (flat สนิท ไม่มี texture, ไม่มี gradient บนขอบ UI): เทาสำหรับสายดับ, สีสัญญาณประจำโปรเจกต์สำหรับสายมีไฟ\n\nบุคลิกคือเครื่องมือช่าง ไม่ใช่โบรชัวร์: ป้าย Orbitron tracked-caps กับเลขหมวดแบบปกอัลบั้ม (02, 03, 04), ตัวเลข/รหัสเป็น Consolas, เนื้อหาไทยเป็น sans สะอาดอ่านง่าย ทุก state เปลี่ยนแบบ \"ไฟติด\" — สว่างทันทีไม่มี fade โลกนี้ปฏิเสธผัง hero + การ์ดกริดลอยของหมวด dev-tool โดยตรง (ยืนยันใน direction contract)",
+    "keyCharacteristics": [
+      "พื้นดำสนิท (#060709) + กริดแฮร์ไลน์ 40px มองเห็นตลอด",
+      "สีสัญญาณ 5 สีประจำโปรเจกต์ = เอกลักษณ์แบรนด์ (brand commitment ใน PRODUCT.md)",
+      "มุมฉากทั้งระบบ ยกเว้นวงกลมหลอดสัญญาณ",
+      "เงาเดียวที่มีคือแสงนีออนเรือง (glow) จากตัว element สีของมันเอง",
+      "ไม่มี transition — ทุก state สลับแบบสวิตช์ไฟ"
+    ],
+    "rules": [
+      { "name": "The One-Project-One-Color Rule", "body": "สีสัญญาณ 5 สีผูกกับโปรเจกต์ของตัวเองผ่าน --pc ต่อแผง ห้ามเอาสีของโปรเจกต์หนึ่งไปแต่งอีกโปรเจกต์ · บทระบบกลางที่ยืมสีไปใช้มีแค่ที่ build ใช้จริง: เขียว = active/focus/selection, ฟ้า = ลิงก์, อำพัน = code", "section": "colors" },
+      { "name": "The Dead-Wire Rule", "body": "ทุกอย่างที่ยังไม่มีไฟใช้ Wire Off (#2a3140) หรือ Rule (#1d2431) — สีสัญญาณปรากฏเฉพาะจุดที่ \"มีไฟ\": หัวแผง, สาย, โหนด, ปุ่ม, state ที่แอคทีฟ", "section": "colors" },
+      { "name": "The Tracked-Caps Label Rule", "body": "Orbitron ใช้ได้เฉพาะตัวพิมพ์ใหญ่ภาษาอังกฤษแบบ tracked (≥ .07em) ความยาวสั้น ห้ามใช้พิมพ์ข้อความไทยหรือย่อหน้า", "section": "typography" },
+      { "name": "The Live-Number Rule", "body": "เลขที่มาจากข้อมูลจริง (เวอร์ชัน วันที่ ตัวนับ) อยู่ใน Consolas + tabular-nums เสมอ", "section": "typography" },
+      { "name": "The Lamp-Light Rule", "body": "เงาทุกตัวคือแสงที่ element เปล่งออกมาเอง: offset 0 0, สีตามสีสัญญาณของเจ้าของ ห้ามมีเงาเทา เงาเฉียง หรือเงาบอกความสูง", "section": "elevation" },
+      { "name": "The Right-Angle Rule", "body": "กล่องทุกใบมุมฉาก วงกลมใช้ได้บทเดียวคือหลอดสัญญาณ/โหนดไฟ", "section": "shapes" },
+      { "name": "The Power-On Rule", "body": "ไม่มี transition/slide/fade ที่ไหนเลยในระบบ — ทุก state เปลี่ยนแบบไฟติด (สลับค่าทันที) การเคลื่อนไหวเดียวที่อนุญาตคือพัลส์กระแสบนเส้น SVG", "section": "components" }
+    ],
+    "dos": [
+      "Do ตีกรอบทุกแผง/ปุ่ม/สถานีด้วยเส้น 2px มุมฉาก และเดินสาย (st-wire / flowline / loom / สายหยด) เชื่อมทุกส่วนเข้าหากัน — ของใหม่ต้องต่อเข้าวงจร ไม่ลอย",
+      "Do ใช้ --pc ของแผงเป็นแหล่งสีเดียวของ element ภายในแผงนั้น (หัว, ไอคอน, ปุ่ม, สายหยด)",
+      "Do ให้ตัวเลขสด (เวอร์ชัน/วันที่/ตัวนับ) เป็น Consolas tabular-nums และปล่อยให้ JS เติมจากแหล่งจริง",
+      "Do เขียนป้ายอังกฤษเป็น Orbitron tracked-caps + เลขหมวดสองหลัก และคำอธิบายไทยเป็น body sans ข้างกัน"
+    ],
+    "donts": [
+      "Don't ใช้ border-radius บนกล่องหรือปุ่มใดๆ — วงกลมสงวนไว้ให้หลอดสัญญาณ/โหนดเท่านั้น (The Right-Angle Rule)",
+      "Don't ใส่เงาเทา เงาเฉียง หรือเงายกความสูง — box-shadow ต้อง offset 0 0 สีสัญญาณของเจ้าของเท่านั้น (The Lamp-Light Rule)",
+      "Don't ใส่ transition, fade, slide หรือ easing — state สลับทันทีแบบสวิตช์ (The Power-On Rule)",
+      "Don't สลับสีสัญญาณข้ามโปรเจกต์ หรือเพิ่มสี accent ที่หก (The One-Project-One-Color Rule — brand commitment)",
+      "Don't วางการ์ดลอยอิสระแบบ hero + grid ของเว็บ dev-tool ทั่วไป — โลกนี้ปฏิเสธผังนั้นโดยสัญญา"
+    ]
+  }
+}

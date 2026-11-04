@@ -1,0 +1,44 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-04T02:05:57.608Z",
+        "reason": "hits.sh badge pattern: img src ว่างโดยตั้งใจ ให้ wireClickCounter() เติมตอน page load — แพทเทิร์นเดิมใช้จริงตั้งแต่ 2026-09 (ignore เดิมหายไปกับ scratchpad ที่โดน Temp cleanup)"
+      },
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-04T02:07:13.085Z",
+        "reason": "กริดโมดูลาร์มองเห็นได้คือ grammar ของโลก kraftwerk-man-machine ใน direction contract (raise: กริดพิตช์เดียวทั้งหน้า) — user เลือกทิศทางนี้บนหน้า decision 2026-11-04"
+      },
+      {
+        "rule": "ai-color-palette",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-04T02:07:26.768Z",
+        "reason": "สีม่วง #c77dff คือสีประจำโปรเจกต์ Rotary ตาม Brand Commitments ใน PRODUCT.md (user confirmed 2026-11-04: สีประจำโปรเจกต์ต้องคงไว้)"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-04T02:07:26.820Z",
+        "reason": "โลกที่ user เลือกบนหน้า decision (kraftwerk-man-machine neon schematic) — glow คือแสงหลอดสัญญาณ วัสดุหลักตาม direction contract OWN-WORLD"
+      }
+    ]
+  }
+}

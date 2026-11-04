@@ -4,439 +4,619 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KungRC Firmware Installer</title>
+<meta name="description" content="แฟลชเฟิร์มแวร์จอ ESP32-2432S028R (CYD) ผ่านเบราว์เซอร์ — Variometer, GPS Lap Timer, Autopilot, CNC Pendant, Rotary Indexer">
 <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 <style>
-  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #12141c; color: #e8ecf2;
-         max-width: 720px; margin: 0 auto; padding: 24px; }
-  h1 { color: #05c7f2; }
-  .card { background: #1a2230; border: 1px solid #2a3550; border-radius: 12px;
-          padding: 20px 24px; margin: 18px 0; }
-  .card h2 { margin-top: 0; }
-  .vario h2 { color: #07e86a; }
-  .lap h2 { color: #f2b705; }
-  .boat h2 { color: #37e6c9; }
-  .cnc h2 { color: #f95867; }
-  .rotary h2 { color: #c77dff; }
-  ol li { margin: 6px 0; }
-  esp-web-install-button { --esp-tools-button-color: #05c7f2; }
-  .muted { color: #8a93a8; font-size: 0.9em; }
-  code { background: #0d121c; padding: 2px 6px; border-radius: 4px; }
-  details { margin-top: 10px; }
-  summary { cursor: pointer; color: #05c7f2; }
-  .pin td, .pin th { border: 1px solid #2a3550; padding: 5px 8px; font-size: 0.9em; }
-  .pin { border-collapse: collapse; margin-top: 8px; }
-  .pin th { background: #232e42; color: #8a93a8; text-align: left; }
-  .installwrap { position: relative; display: inline-block; }
-  .lockoverlay { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center;
-                 gap: 6px; justify-content: center; cursor: pointer; border-radius: 8px;
-                 background: rgba(10,14,20,0.72); color: #e8ecf2; font-size: 13px; font-weight: 600;
-                 border: 1px solid #2a3550; }
-  .lockoverlay:hover { background: rgba(10,14,20,0.85); }
-  .meta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
-          margin: 8px 0 2px; font-size: 0.85em; color: #8a93a8; }
-  .meta b { color: #e8ecf2; }
+  @font-face {
+    font-family: 'Orbitron';
+    src: url('orbitron.ttf') format('truetype');
+    font-weight: 400 900;
+    font-display: swap;
+  }
+  :root {
+    --bg: #060709;
+    --grid: #10141c;
+    --rule: #1d2431;
+    --wire-off: #2a3140;
+    --ink: #e8ecf2;
+    --dim: #8a94a2;
+    --dim2: #768192;   /* ป้ายหรี่สุดที่ยังอ่านออก (เลขหมวด/GND) */
+    --c-vario: #07e86a;
+    --c-lap: #05c7f2;
+    --c-boat: #ffa02e;
+    --c-cnc: #f95867;
+    --c-rotary: #c77dff;
+  }
+  * { box-sizing: border-box; }
+  html { scrollbar-color: var(--wire-off) var(--bg); }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Segoe UI', 'Noto Sans Thai', Tahoma, sans-serif;
+    font-size: 16px; line-height: 1.55;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  ::selection { background: var(--c-vario); color: var(--bg); }
+  a { color: var(--c-lap); text-decoration: none; border-bottom: 1px solid currentColor; }
+  a:hover { color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--c-vario); outline-offset: 3px; }
+  code { font-family: Consolas, monospace; background: #0d1119; border: 1px solid var(--rule); padding: 1px 7px; color: var(--c-boat); }
+  .disp { font-family: 'Orbitron', sans-serif; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
+
+  /* ---------- masthead ---------- */
+  header { padding: 46px 0 0; }
+  header .row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  h1 {
+    font-family: 'Orbitron', sans-serif; font-weight: 800;
+    font-size: clamp(2.4rem, 7vw, 5.2rem); letter-spacing: .28em;
+    margin: 0; line-height: 1; padding-left: .04em;
+  }
+  .tagline { color: var(--dim); font-size: .9rem; margin: 14px 0 0; }
+  .tagline .en { font-family: 'Orbitron', sans-serif; letter-spacing: .3em; font-size: .78rem; }
+  .gh { font-family: 'Orbitron', sans-serif; font-size: .72rem; letter-spacing: .2em;
+        border: 2px solid var(--wire-off); padding: 9px 16px; color: var(--dim); border-bottom-width: 2px; }
+  .gh:hover { border-color: var(--c-lap); color: var(--c-lap); }
+
+  /* ---------- station strip ---------- */
+  .stations { display: flex; align-items: center; margin: 34px 0 0; flex-wrap: wrap; row-gap: 12px; }
+  .st {
+    border: 2px solid var(--wire-off); color: var(--dim); padding: 9px 18px;
+    font-size: .92rem; white-space: nowrap; background: var(--bg);
+  }
+  .st b { font-family: 'Orbitron', sans-serif; font-size: .8rem; margin-right: 8px; }
+  .st.lit { border-color: var(--c-vario); color: var(--ink); box-shadow: 0 0 12px #07e86a33; }
+  .st.lit b { color: var(--c-vario); }
+  .st-wire { flex: 1 0 26px; height: 2px; background: var(--wire-off); min-width: 18px; }
+  .st-note { width: 100%; color: var(--dim); font-size: .85rem; margin-top: 10px; }
+
+  /* ---------- loom ---------- */
+  .loom { display: block; width: 100%; height: auto; margin-top: 8px; }
+  .loom .lab { font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 2px; fill: var(--dim); }
+  @media (max-width: 920px) { .loom { display: none; } }
+
+  /* ---------- project panels ---------- */
+  .panels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+  @media (max-width: 1150px) { .panels { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .panels { grid-template-columns: 1fr; } }
+  .panel { border: 2px solid var(--rule); background: #0a0d12; padding: 16px; position: relative; display: flex; flex-direction: column; }
+  @media (max-width: 920px) {
+    .panel { margin-top: 26px; }
+    .panel::before { content: ''; position: absolute; top: -26px; left: 50%; width: 3px; height: 18px;
+                     transform: translateX(-50%); background: var(--pc); }
+    .panel::after { content: ''; position: absolute; top: -10px; left: 50%; width: 10px; height: 10px;
+                    transform: translateX(-50%); border-radius: 50%; background: var(--pc); box-shadow: 0 0 10px var(--pc); }
+  }
+  .panel.vario  { --pc: var(--c-vario); }
+  .panel.lap    { --pc: var(--c-lap); }
+  .panel.boat   { --pc: var(--c-boat); }
+  .panel.cnc    { --pc: var(--c-cnc); }
+  .panel.rotary { --pc: var(--c-rotary); }
+  .panel { border-top: 2px solid var(--pc); }
+  .panel:hover, .panel:focus-within { border-color: var(--pc); box-shadow: 0 0 18px color-mix(in srgb, var(--pc) 22%, transparent); }
+  .pname { display: flex; align-items: center; gap: 10px; }
+  .pname svg { flex: 0 0 26px; stroke: var(--pc); filter: drop-shadow(0 0 4px var(--pc)); }
+  .pname h2 { font-family: 'Orbitron', sans-serif; font-size: .95rem; letter-spacing: .14em; color: var(--pc); margin: 0; font-weight: 700; }
+  .pdesc { font-size: .86rem; color: var(--ink); margin: 10px 0 12px; flex: 1; }
+  .inst {
+    font-family: 'Orbitron', sans-serif; font-size: .82rem; letter-spacing: .22em; font-weight: 700;
+    width: 100%; padding: 13px 10px; cursor: pointer;
+    background: transparent; color: var(--pc); border: 2px solid var(--pc);
+  }
+  .inst:hover, .inst:focus-visible { background: var(--pc); color: var(--bg); box-shadow: 0 0 20px var(--pc); }
+  esp-web-install-button { width: 100%; display: block; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 12px 0 2px;
+          font-size: .78rem; color: var(--dim); font-family: Consolas, monospace; font-variant-numeric: tabular-nums; }
+  .meta b { color: var(--ink); font-weight: 400; }
   .meta img { vertical-align: middle; height: 18px; }
+  .pnote { color: var(--dim); font-size: .78rem; margin: 8px 0 0; }
+
+  /* ---------- details / tables ---------- */
+  details { margin-top: 12px; border-top: 1px solid var(--rule); padding-top: 10px; }
+  summary { cursor: pointer; color: var(--c-lap); font-size: .85rem; list-style: none; }
+  summary::before { content: '▸ '; color: var(--wire-off); }
+  details[open] summary::before { content: '▾ '; }
+  summary:hover { color: var(--ink); }
+  .pin { border-collapse: collapse; margin-top: 10px; width: 100%; }
+  .pin td, .pin th { border: 1px solid var(--rule); padding: 6px 9px; font-size: .82rem; }
+  .pin th { color: var(--dim); text-align: left; font-weight: 600; background: #0d1119; }
+  .pin td:last-child { font-family: Consolas, monospace; font-size: .8rem; }
+  .muted { color: var(--dim); font-size: .85rem; }
+  ol { padding-left: 22px; } ol li { margin: 7px 0; }
+
+  /* ---------- สายไหลลงระหว่างหมวด (metaphor ครบวงจรถึง GND) ---------- */
+  .flowline { width: 2px; height: 54px; background: var(--wire-off); margin: 0 auto; }
+  .flownote { text-align: center; color: var(--dim); font-size: .85rem; margin: 26px 0 0; }
+
+  /* ---------- sections ---------- */
+  section { margin-top: 0; }
+  .frame p, .frame li { max-width: 70ch; }
+
+  /* ---------- hits badge: ครอบกรอบให้เข้าภาษาเส้น ---------- */
+  .hitchip { display: inline-block; border: 1px solid var(--rule); line-height: 0; background: #0a0d12; }
+  .hitchip img { display: block; height: 20px; margin: -1px; clip-path: inset(1.5px); }
+  .shead { display: flex; align-items: baseline; gap: 16px; border-bottom: 2px solid var(--rule); padding-bottom: 10px; }
+  .shead .no { font-family: 'Orbitron', sans-serif; color: var(--dim2); font-size: 1rem; letter-spacing: .1em; }
+  .shead h2 { font-family: 'Orbitron', sans-serif; font-size: 1.05rem; letter-spacing: .22em; margin: 0; font-weight: 700; }
+  .shead .thai { color: var(--dim); font-size: .85rem; margin-left: auto; }
+  .frame { border: 2px solid var(--rule); background: #0a0d12; padding: 20px; margin-top: 20px; }
+
+  /* ---------- shop ---------- */
+  .shop { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  .shop th { text-align: left; color: var(--dim); font-size: .8rem; padding: 8px 6px; border-bottom: 2px solid var(--rule); }
+  .shop td { padding: 11px 6px; border-bottom: 1px solid var(--rule); vertical-align: top; font-size: .9rem; }
+  .shop a { color: var(--c-vario); font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .12em; white-space: nowrap; }
+  .use { display: inline-block; font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .07em;
+         border: 1px solid; padding: 2px 6px; margin: 1px 2px 1px 0; white-space: nowrap; }
+  .u-vario { color: var(--c-vario); } .u-lap { color: var(--c-lap); } .u-boat { color: var(--c-boat); }
+  .u-cnc { color: var(--c-cnc); } .u-rotary { color: var(--c-rotary); }
+  .tablewrap { overflow-x: auto; }
+
+  /* ---------- footer ---------- */
+  footer { margin: 80px 0 0; padding-bottom: 60px; text-align: center; }
+  footer .gnd { color: var(--dim2); font-family: Consolas, monospace; font-size: .9rem; letter-spacing: 3px; }
+  footer p { color: var(--dim); font-size: .85rem; max-width: 620px; margin: 14px auto 0; }
+
+  @media (prefers-reduced-motion: reduce) { .pulse { display: none; } }
 </style>
 </head>
 <body>
-<h1>🛠️ KungRC Firmware Installer</h1>
-<p>ติดตั้งเฟิร์มแวร์ลงบอร์ด <b>ESP32-2432S028R (CYD)</b> ผ่านเบราว์เซอร์ — ไม่ต้องลงโปรแกรมอะไรเลย</p>
+<div class="wrap">
 
-<div class="card">
-  <b>วิธีใช้</b>
-  <ol>
-    <li>เปิดหน้านี้ด้วย <b>Chrome</b> หรือ <b>Edge</b> บนคอมพิวเตอร์ (มือถือใช้ไม่ได้)</li>
-    <li>เสียบบอร์ดกับคอมด้วยสาย USB <b>ที่ส่งข้อมูลได้</b> (สายชาร์จอย่างเดียวใช้ไม่ได้!)</li>
-    <li>กดปุ่ม INSTALL ของโปรแกรมที่ต้องการ → เลือกพอร์ต (CH340/USB Serial) → รอจนเสร็จ</li>
-    <li>ถ้าเชื่อมต่อไม่ติด: กดปุ่ม <code>BOOT</code> บนบอร์ดค้างไว้ตอนกด INSTALL</li>
-    <li>ถ้าเสียบแล้ว<b>ไม่เห็นพอร์ตเลย</b>: ติดตั้งไดรเวอร์ USB ก่อน แล้วเสียบใหม่
-      <br>👉 <a style="color:#05c7f2" href="https://www.wch-ic.com/downloads/CH341SER_EXE.html" target="_blank">
-      ดาวน์โหลดไดรเวอร์ CH340 (Windows)</a> — ชิป USB ของบอร์ด CYD
-      <br>👉 <a style="color:#05c7f2" href="https://www.wch-ic.com/downloads/CH34XSER_MAC_ZIP.html" target="_blank">
-      ไดรเวอร์สำหรับ macOS</a> (Linux มีในตัวอยู่แล้ว)</li>
-  </ol>
-</div>
-
-<div class="card">
-  <h2 style="color:#f95867">📌 ผังพินบอร์ด CYD ฉบับเต็ม</h2>
-  <p class="muted">ใช้ร่วมกันได้ทั้ง 3 โปรเจกต์ — จุดต่อขยาย (Expansion IO1/IO2) คือคอนเนกเตอร์ P3 และ CN1 ที่อ้างถึงในตารางต่อสายด้านล่าง</p>
-  <img src="cyd_pinout.jpg" alt="ผังพินบอร์ด ESP32-2432S028R (CYD)"
-       style="width:100%;height:auto;border-radius:10px;border:1px solid #2a3550;background:#fff">
-</div>
-
-<div class="card vario">
-  <h2>🪂 KungRC VARIOMETER</h2>
-  <p>เครื่องวัดอัตราไต่ระดับสำหรับร่มร่อน/พารามอเตอร์ — Buddy Link, XCTrack (BLE),
-     พยากรณ์ฝน, บันทึกเที่ยวบิน GPX/KML, OTA</p>
-  <div class="installwrap">
-    <esp-web-install-button id="varioBtn" manifest="manifest_vario.json"></esp-web-install-button>
-    <div class="lockoverlay" id="varioLock" onclick="unlockInstall('varioLock')">🔒 ปลดล็อกก่อนติดตั้ง</div>
+<header>
+  <div class="row">
+    <div>
+      <h1>KUNGRC</h1>
+      <p class="tagline"><span class="en">FIRMWARE INSTALLER · ESP32-2432S028R</span>
+        — แฟลชเฟิร์มแวร์จอ CYD ผ่านเบราว์เซอร์ ไม่ต้องลงโปรแกรม</p>
+    </div>
+    <a class="gh" href="https://github.com/KungrcKMK/CYD-firmware">GITHUB ↗</a>
   </div>
-  <div class="meta">
-    <span><b id="varioVer">v…</b></span>
-    <span id="varioDate">อัปเดตล่าสุด: …</span>
-    <span><img id="varioHits" alt="click count" src=""></span>
+
+  <div class="stations" aria-label="ขั้นตอนการแฟลช 3 ขั้น">
+    <span class="st lit"><b>1</b>เสียบบอร์ดกับคอมด้วยสาย USB แบบส่งข้อมูลได้</span>
+    <span class="st-wire"></span>
+    <span class="st"><b>2</b>เลือกเฟิร์มแวร์ข้างล่าง (Chrome / Edge เท่านั้น)</span>
+    <span class="st-wire"></span>
+    <span class="st"><b>3</b>กด INSTALL → เลือกพอร์ต → รอจนเสร็จ</span>
+    <span class="st-note">ต่อไม่ติด: กดปุ่ม <code>BOOT</code> บนบอร์ดค้างไว้ตอนกด INSTALL ·
+      ไม่เห็นพอร์ตเลย: ลงไดรเวอร์ก่อน —
+      <a href="https://www.wch-ic.com/downloads/CH341SER_EXE.html" target="_blank">CH340 สำหรับ Windows</a> ·
+      <a href="https://www.wch-ic.com/downloads/CH34XSER_MAC_ZIP.html" target="_blank">macOS</a> (Linux มีในตัว)</span>
   </div>
-  <p class="muted">เซ็นเซอร์: BMP280+AHT20 ที่ CN1 · GPS ที่ P3 · ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ</p>
-  <details>
-    <summary><b>📌 การต่อสาย (Variometer)</b></summary>
-    <table class="pin">
-      <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
-      <tr><td rowspan="4">AHT20+BMP280<br>(คอนเนกเตอร์ CN1)</td>
-          <td>VCC</td><td>3.3V</td></tr>
-      <tr><td>GND</td><td>GND</td></tr>
-      <tr><td>SDA</td><td>IO27</td></tr>
-      <tr><td>SCL</td><td>IO22</td></tr>
-      <tr><td rowspan="3">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
-          <td>TX</td><td>IO35</td></tr>
-      <tr><td>GND</td><td>GND</td></tr>
-      <tr><td>VCC</td><td>3.3V (แยกสายจาก CN1)</td></tr>
-      <tr><td>ลำโพง 4Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
-    </table>
-    <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (เป็น backlight จอ) · สาย Grove ของเซ็นเซอร์อาจเรียงขาไม่ตรง CN1 — ไล่สายเทียบซิลค์ก่อนเสียบ</p>
-  </details>
+</header>
 
-  <details>
-    <summary><b>📖 วิธีใช้งาน (Variometer)</b></summary>
-    <p><b>เริ่มครั้งแรก:</b></p>
-    <ol>
-      <li>เปิดเครื่อง → หน้า Settings → <b>CALIBRATE</b> แตะ 4 มุมตามจุดที่ขึ้น (ทำครั้งเดียว)</li>
-      <li>ตั้ง <b>ชื่อนักบิน</b> (โชว์หน้าบูต By ...) และ <b>WiFi</b> บ้าน → กด CHECK UPDATE รับเฟิร์มแวร์ล่าสุด</li>
-      <li>ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ · มีเซ็นเซอร์แล้วกดปุ่ม <b>DATA</b> สลับเป็นข้อมูลจริง</li>
-    </ol>
-    <p><b>ใช้งานประจำ:</b> ปุ่ม <b>&lt; / &gt;</b> เปลี่ยนหน้า — Vario (เข็ม+เสียงไต่/จม, ปรับระดับเสียงได้),
-      Altitude (ตั้งเตือนความสูง MAX/MIN), GPS, <b>Back to Takeoff</b> (ลูกศรชี้กลับจุดปล่อยตัว),
-      <b>Buddy</b> (เปิดสองเครื่องเห็นตำแหน่ง+THERMAL ของเพื่อนเอง), Weather (แนวโน้มฝน),
-      Logger (บันทึกเที่ยวบินลง SD — เลือก AUTO/MANUAL ทั้งเริ่มและหยุด แปลงเป็น GPX/KML ได้),
-      Settings (<b>BLE</b> ส่งค่าเข้า XCTrack แบบ LK8EX1 — เปิดแล้วรีสตาร์ท, BL ปรับแสงจอ)</p>
-    <p class="muted">Buddy กับ BLE ใช้พร้อมกันไม่ได้ (เครื่องสลับให้เอง) · เสียง vario ปิดได้ที่ปุ่ม VOL</p>
-  </details>
+<!-- บัสหลักแตกเป็นสาย 5 สีเข้าโหนดโปรเจกต์ (ซ่อนบนจอแคบ แผงจะมีสายหยดของตัวเองแทน) -->
+<svg class="loom" viewBox="0 0 1000 150" aria-hidden="true">
+  <path d="M30 0 V22 H970" stroke="var(--wire-off)" stroke-width="4" fill="none"/>
+  <circle cx="30" cy="22" r="5" fill="var(--wire-off)"/>
+  <defs>
+    <linearGradient id="wg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c3b22"/><stop offset="1" stop-color="#07e86a"/></linearGradient>
+    <linearGradient id="wg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#083344"/><stop offset="1" stop-color="#05c7f2"/></linearGradient>
+    <linearGradient id="wg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d2808"/><stop offset="1" stop-color="#ffa02e"/></linearGradient>
+    <linearGradient id="wg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d1218"/><stop offset="1" stop-color="#f95867"/></linearGradient>
+    <linearGradient id="wg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b1840"/><stop offset="1" stop-color="#c77dff"/></linearGradient>
+  </defs>
+  <g stroke-width="4" fill="none">
+    <path id="w1" d="M100 22 V118" stroke="url(#wg1)"/>
+    <path id="w2" d="M300 22 V118" stroke="url(#wg2)"/>
+    <path id="w3" d="M500 22 V118" stroke="url(#wg3)"/>
+    <path id="w4" d="M700 22 V118" stroke="url(#wg4)"/>
+    <path id="w5" d="M900 22 V118" stroke="url(#wg5)"/>
+  </g>
+  <path class="pulse" d="M30 0 V22 H100 V118" stroke="#eafff2" stroke-width="2" fill="none"
+        stroke-dasharray="26 600" stroke-linecap="round" opacity=".9">
+    <animate attributeName="stroke-dashoffset" from="626" to="0" dur="3.2s" repeatCount="indefinite"/>
+  </path>
+  <g>
+    <circle id="n1" cx="100" cy="126" r="9" fill="var(--c-vario)"/>
+    <circle id="n2" cx="300" cy="126" r="9" fill="var(--c-lap)"/>
+    <circle id="n3" cx="500" cy="126" r="9" fill="var(--c-boat)"/>
+    <circle id="n4" cx="700" cy="126" r="9" fill="var(--c-cnc)"/>
+    <circle id="n5" cx="900" cy="126" r="9" fill="var(--c-rotary)"/>
+  </g>
+  <text class="lab" x="46" y="14">MAIN BUS — FIRMWARE 5 ตัว</text>
+</svg>
 
-</div>
+<div class="panels">
 
-<div class="card lap">
-  <h2>🏁 KungRC GPS LAP TIMER</h2>
-  <p>จับเวลาต่อรอบด้วยประตู GPS — Live Delta, Race Mode, Sector times,
-     แผนที่ไลน์, แข่งกัน 2 บอร์ด (Rivals), Web Dashboard, OTA</p>
-  <esp-web-install-button id="lapBtn" manifest="manifest_laptimer.json"></esp-web-install-button>
-  <div class="meta">
-    <span><b id="lapVer">v…</b></span>
-    <span id="lapDate">อัปเดตล่าสุด: …</span>
-    <span><img id="lapHits" alt="click count" src=""></span>
+  <!-- VARIOMETER -->
+  <div class="panel vario" data-wire="w1">
+    <div class="pname">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
+        <path d="M3 8 Q12 2 21 8"/><path d="M5 8.6 L11 17 M19 8.6 L13 17"/><circle cx="12" cy="19" r="1.6"/>
+      </svg>
+      <h2>VARIOMETER</h2>
+    </div>
+    <p class="pdesc">เครื่องวัดอัตราไต่ระดับสำหรับร่มร่อน/พารามอเตอร์ — Buddy Link, XCTrack (BLE),
+       พยากรณ์ฝน, Thermal Assistant, บันทึกเที่ยวบิน GPX/KML, OTA</p>
+    <esp-web-install-button id="varioBtn" manifest="manifest_vario.json">
+      <button slot="activate" class="inst">INSTALL ▸</button>
+    </esp-web-install-button>
+    <div class="meta">
+      <span><b id="varioVer">v…</b></span>
+      <span id="varioDate">อัปเดตล่าสุด: …</span>
+      <span class="hitchip"><img id="varioHits" alt="จำนวนความสนใจ" src=""></span>
+    </div>
+    <p class="pnote">เซ็นเซอร์: BMP280+AHT20 ที่ CN1 · GPS ที่ P3 · ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ</p>
+    <details>
+      <summary><b>การต่อสาย (Variometer)</b></summary>
+      <table class="pin">
+        <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
+        <tr><td rowspan="4">AHT20+BMP280<br>(คอนเนกเตอร์ CN1)</td>
+            <td>VCC</td><td>3.3V</td></tr>
+        <tr><td>GND</td><td>GND</td></tr>
+        <tr><td>SDA</td><td>IO27</td></tr>
+        <tr><td>SCL</td><td>IO22</td></tr>
+        <tr><td rowspan="3">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
+            <td>TX</td><td>IO35</td></tr>
+        <tr><td>GND</td><td>GND</td></tr>
+        <tr><td>VCC</td><td>3.3V (แยกสายจาก CN1)</td></tr>
+        <tr><td>ลำโพง 4Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
+      </table>
+      <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (เป็น backlight จอ) · สาย Grove ของเซ็นเซอร์อาจเรียงขาไม่ตรง CN1 — ไล่สายเทียบซิลค์ก่อนเสียบ</p>
+    </details>
+    <details>
+      <summary><b>วิธีใช้งาน (Variometer)</b></summary>
+      <p><b>เริ่มครั้งแรก:</b></p>
+      <ol>
+        <li>เปิดเครื่อง → หน้า Settings → <b>CALIBRATE</b> แตะ 4 มุมตามจุดที่ขึ้น (ทำครั้งเดียว)</li>
+        <li>ตั้ง <b>ชื่อนักบิน</b> (โชว์หน้าบูต By ...) และ <b>WiFi</b> บ้าน → กด CHECK UPDATE รับเฟิร์มแวร์ล่าสุด</li>
+        <li>ไม่มีเซ็นเซอร์ = โหมด DEMO อัตโนมัติ · มีเซ็นเซอร์แล้วกดปุ่ม <b>DATA</b> สลับเป็นข้อมูลจริง</li>
+      </ol>
+      <p><b>ใช้งานประจำ:</b> ปุ่ม <b>&lt; / &gt;</b> เปลี่ยนหน้า — Vario (เข็ม+เสียงไต่/จม, ปรับระดับเสียงได้),
+        Thermal (ลูกศรกลับ thermal 5 ลูกล่าสุด), Altitude (ตั้งเตือนความสูง MAX/MIN), GPS,
+        <b>Back to Takeoff</b> (ลูกศรชี้กลับจุดปล่อยตัว),
+        <b>Buddy</b> (เปิดสองเครื่องเห็นตำแหน่ง+THERMAL ของเพื่อนเอง), Weather (แนวโน้มฝน),
+        Logger (บันทึกเที่ยวบินลง SD — เลือก AUTO/MANUAL ทั้งเริ่มและหยุด แปลงเป็น GPX/KML ได้),
+        Settings (<b>BLE</b> ส่งค่าเข้า XCTrack แบบ LK8EX1 — เปิดแล้วรีสตาร์ท, BL ปรับแสงจอ)</p>
+      <p class="muted">Buddy กับ BLE ใช้พร้อมกันไม่ได้ (เครื่องสลับให้เอง) · เสียง vario ปิดได้ที่ปุ่ม VOL</p>
+    </details>
   </div>
-  <p class="muted">GPS ที่ P3 (TX→IO35) · ต่อ IO22→GPS RX เพิ่มเพื่อโหมด 10Hz · ไม่มี GPS = โหมด DEMO</p>
-  <details>
-    <summary><b>📌 การต่อสาย (Lap Timer)</b></summary>
-    <table class="pin">
-      <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
-      <tr><td rowspan="4">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
-          <td>TX</td><td>IO35</td></tr>
-      <tr><td>RX</td><td>IO22 <span class="muted">(ไม่บังคับ — ต่อแล้วได้โหมด 10Hz แม่นขึ้น ~10 เท่า)</span></td></tr>
-      <tr><td>GND</td><td>GND</td></tr>
-      <tr><td>VCC</td><td>3.3V</td></tr>
-      <tr><td>ลำโพง 4Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
-    </table>
-    <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (backlight จอ) · ไม่ต่อ GPS = เครื่องเข้าโหมด DEMO ให้ทดลองเล่นได้</p>
-  </details>
 
-  <details>
-    <summary><b>📖 วิธีใช้งาน (Lap Timer)</b></summary>
-    <p><b>เริ่มครั้งแรก:</b></p>
-    <ol>
-      <li>หน้า Settings (กลุ่ม SETUP) → ตั้ง <b>WiFi + ชื่อนักขับ</b> → CHECK UPDATE</li>
-      <li>หน้า Course → เลือกช่องสนาม 1-3 → ไปจอดที่<b>ทุ่นซ้าย</b>ของประตู กด SAVE L →
-        ไป<b>ทุ่นขวา</b> กด SAVE R (ประตูเป็นเส้น 2 จุด ต้องลอดกลาง — กันตัดทุ่น)</li>
-      <li><b>GATE 1 = จุด Start/Finish</b> · ตั้งได้สูงสุด 8 ประตู = sector times อัตโนมัติ</li>
-    </ol>
-    <p><b>ใช้งานประจำ:</b> หน้าแบ่ง 3 กลุ่มตามสีหัวจอ — <b style="color:#f95867">RACE</b>: Lap (เวลาสด + Live Delta เทียบรอบดีสุด),
-      Sectors, Speed, Map (เส้นทางวิ่ง) · <b style="color:#f2b705">RESULT</b>: History (10 รอบล่าสุด เก็บถาวร), Rivals
-      (2 เครื่องแข่งกันผ่านคลื่นวิทยุ เห็นเวลากันสด) · <b style="color:#05c7f2">SETUP</b>: Course, GPS, Settings
-      (ตั้ง<b>จำนวนรอบแข่ง</b> — ครบแล้วสรุปให้เอง)</p>
-    <p class="muted">Web Dashboard: เปิด AP แล้วมือถือต่อ WiFi "LapTimer-ชื่อ" ดูเวลาสดบนเบราว์เซอร์ ·
-      ต่อสาย IO22→GPS RX จะได้ GPS 10Hz จับเวลาแม่นขึ้น ~10 เท่า · ใส่ SD = บันทึกทุกรอบเป็นไฟล์</p>
-  </details>
-
-</div>
-
-<div class="card boat">
-  <h2>🚤 KungRC AUTOPILOT</h2>
-  <p>ระบบนำร่อง GPS สำหรับเรือตกปลา / รถ / รถตัดหญ้า — GOTO, MISSION ปล่อยเหยื่อ,
-     FIELD วิ่งแถวตัดหญ้า, ANCHOR, RTH, PID + AUTO TUNE, Web Dashboard บนมือถือ,
-     Mission Planner จาก SD, ELRS/CRSF telemetry, OTA</p>
-  <esp-web-install-button id="boatBtn" manifest="manifest_boat.json"></esp-web-install-button>
-  <div class="meta">
-    <span><b id="boatVer">v…</b></span>
-    <span id="boatDate">อัปเดตล่าสุด: …</span>
-    <span><img id="boatHits" alt="click count" src=""></span>
+  <!-- LAP TIMER -->
+  <div class="panel lap" data-wire="w2">
+    <div class="pname">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
+        <path d="M6 21 V3 H19 L16 7.5 L19 12 H6"/>
+      </svg>
+      <h2>GPS LAP TIMER</h2>
+    </div>
+    <p class="pdesc">จับเวลาต่อรอบด้วยประตู GPS — Live Delta, Race Mode, Sector times,
+       แผนที่ไลน์, แข่งกัน 2 บอร์ด (Rivals), Web Dashboard, OTA</p>
+    <esp-web-install-button id="lapBtn" manifest="manifest_laptimer.json">
+      <button slot="activate" class="inst">INSTALL ▸</button>
+    </esp-web-install-button>
+    <div class="meta">
+      <span><b id="lapVer">v…</b></span>
+      <span id="lapDate">อัปเดตล่าสุด: …</span>
+      <span class="hitchip"><img id="lapHits" alt="จำนวนความสนใจ" src=""></span>
+    </div>
+    <p class="pnote">GPS ที่ P3 (TX→IO35) · ต่อ IO22→GPS RX เพิ่มเพื่อโหมด 10Hz · ไม่มี GPS = โหมด DEMO</p>
+    <details>
+      <summary><b>การต่อสาย (Lap Timer)</b></summary>
+      <table class="pin">
+        <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
+        <tr><td rowspan="4">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
+            <td>TX</td><td>IO35</td></tr>
+        <tr><td>RX</td><td>IO22 <span class="muted">(ไม่บังคับ — ต่อแล้วได้โหมด 10Hz แม่นขึ้น ~10 เท่า)</span></td></tr>
+        <tr><td>GND</td><td>GND</td></tr>
+        <tr><td>VCC</td><td>3.3V</td></tr>
+        <tr><td>ลำโพง 4Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
+      </table>
+      <p class="muted">⚠ ห้ามใช้ IO21 บน P3 (backlight จอ) · ไม่ต่อ GPS = เครื่องเข้าโหมด DEMO ให้ทดลองเล่นได้</p>
+    </details>
+    <details>
+      <summary><b>วิธีใช้งาน (Lap Timer)</b></summary>
+      <p><b>เริ่มครั้งแรก:</b></p>
+      <ol>
+        <li>หน้า Settings (กลุ่ม SETUP) → ตั้ง <b>WiFi + ชื่อนักขับ</b> → CHECK UPDATE</li>
+        <li>หน้า Course → เลือกช่องสนาม 1-3 → ไปจอดที่<b>ทุ่นซ้าย</b>ของประตู กด SAVE L →
+          ไป<b>ทุ่นขวา</b> กด SAVE R (ประตูเป็นเส้น 2 จุด ต้องลอดกลาง — กันตัดทุ่น)</li>
+        <li><b>GATE 1 = จุด Start/Finish</b> · ตั้งได้สูงสุด 8 ประตู = sector times อัตโนมัติ</li>
+      </ol>
+      <p><b>ใช้งานประจำ:</b> หน้าแบ่ง 3 กลุ่มตามสีหัวจอ — <b style="color:var(--c-cnc)">RACE</b>: Lap (เวลาสด + Live Delta เทียบรอบดีสุด),
+        Sectors, Speed, Map (เส้นทางวิ่ง) · <b style="color:var(--c-boat)">RESULT</b>: History (10 รอบล่าสุด เก็บถาวร), Rivals
+        (2 เครื่องแข่งกันผ่านคลื่นวิทยุ เห็นเวลากันสด) · <b style="color:var(--c-lap)">SETUP</b>: Course, GPS, Settings
+        (ตั้ง<b>จำนวนรอบแข่ง</b> — ครบแล้วสรุปให้เอง)</p>
+      <p class="muted">Web Dashboard: เปิด AP แล้วมือถือต่อ WiFi "LapTimer-ชื่อ" ดูเวลาสดบนเบราว์เซอร์ ·
+        ต่อสาย IO22→GPS RX จะได้ GPS 10Hz จับเวลาแม่นขึ้น ~10 เท่า · ใส่ SD = บันทึกทุกรอบเป็นไฟล์</p>
+    </details>
   </div>
-  <p class="muted">รับวิทยุ SBUS หรือ CRSF/ELRS · ขับ Servo/ESC ผ่าน PCA9685 · ไม่มี GPS = โหมด DEMO จำลองเรือ</p>
-  <details>
-    <summary><b>📌 การต่อสาย (Autopilot)</b></summary>
-    <table class="pin">
-      <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
-      <tr><td rowspan="4">PCA9685 (ขับ Servo/ESC)<br>+ เข็มทิศ GY-87 หรือ QMC5883L<br>(I²C ร่วมกันที่ CN1)</td>
-          <td>VCC</td><td>3.3V</td></tr>
-      <tr><td>GND</td><td>GND</td></tr>
-      <tr><td>SDA</td><td>IO27</td></tr>
-      <tr><td>SCL</td><td>IO22</td></tr>
-      <tr><td>PCA9685 V+ (ไฟ servo)</td><td>V+</td><td>BEC 5V (ห้ามใช้ไฟบอร์ด!)</td></tr>
-      <tr><td rowspan="2">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
-          <td>TX</td><td>IO35</td></tr>
-      <tr><td>VCC / GND</td><td>3.3V / GND</td></tr>
-      <tr><td>รีซีฟเวอร์ SBUS</td><td>SBUS out</td><td>IO3 (P1-RX) · ไฟจาก BEC 5V</td></tr>
-      <tr><td rowspan="2">รีซีฟเวอร์ ELRS/CRSF</td><td>TX</td><td>IO3 (P1-RX)</td></tr>
-      <tr><td>RX</td><td>IO1 (P1-TX) — ได้ telemetry ขึ้นจอวิทยุ</td></tr>
-      <tr><td>Servo เปิดกระบะเหยื่อ</td><td>สัญญาณ</td><td>PCA9685 CH2</td></tr>
-      <tr><td>ลำโพง 4Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
-    </table>
-    <p class="muted">⚠ IO1/IO3 ใช้กับวิทยุ — ห้ามเปิด Serial Monitor ระหว่างใช้งานจริง ·
-      โหมด SINGLE: PCA CH0 = หางเสือ, CH1 = ESC · โหมด DUAL: CH0/CH1 = มอเตอร์ซ้าย/ขวา ·
-      GY-87 เสียบแล้วตรวจพบเอง (รองรับทั้ง HMC5883L และ QMC5883L)</p>
-  </details>
 
-  <details>
-    <summary><b>📖 วิธีใช้งาน (Autopilot)</b></summary>
-    <p><b>เริ่มครั้งแรก:</b></p>
-    <ol>
-      <li>หน้า Vehicle (หน้าสุดท้าย) → เลือก <b>PLATFORM</b> BOAT/CAR/MOWER และ <b>DRIVE</b>
-        (SERVO+ESC หรือ 2 มอเตอร์) — โหมดที่ใช้ได้จะกรองตามแพลตฟอร์มเอง</li>
-      <li>หน้า Sensors → <b>CAL COMPASS</b> หมุนตัวเรือ/รถช้า ๆ เป็นวงกลม 20 วิ →
-        หันหัวไปทิศเหนือจริงแล้วกด <b>ALIGN BOW</b></li>
-      <li>หน้า RC Monitor → เลือก <b>RC:SBUS/CRSF</b> ตามวิทยุ, <b>CH5:3POS/6POS</b>
-        (6POS = หมุน knob เลือกครบทุกโหมด ค้าง 3 วิยืนยัน), <b>FS:</b> เลือกท่าตอนสัญญาณขาด (RTH/ANCHOR/STOP/CONT)</li>
-      <li>ก่อนออกทุกครั้ง: รอ GPS ติด แล้วกดปุ่ม <b>HOME</b> (แถบล่าง) ตั้งจุดกลับบ้าน — สีฟ้า = ตั้งแล้ว</li>
-    </ol>
-    <p><b>โหมดขับ (ปุ่ม MODE หรือสวิตช์ CH5):</b> MANUAL บังคับเอง · <b>GOTO</b> วิ่งไปจุดที่เลือกแล้วหยุดรอ ·
-      <b>MISSION</b> ไล่ทุกจุดตามลำดับ จุดที่ติ๊ก DROP เปิดกระบะเหยื่อ 3 วิ เสร็จกลับบ้านเอง ·
-      <b>FIELD</b> (ตัดหญ้า) SPOT1-4 = สี่มุมแปลง วิ่งซิกแซกเต็มแปลงตามหน้ากว้าง SWATH ·
-      CIRCLE วนรอบจุด · ANCHOR ล็อกตำแหน่งสู้ลม/กระแสน้ำ · RTH กลับบ้าน</p>
-    <p><b>จุดตกปลา:</b> หน้า Spots — ถึงหมายแล้วกด <b>SAVE</b> เก็บพิกัด, แตะชื่อ = เลือกเป้า GOTO, ปุ่ม DROP = จุดปล่อยเหยื่อ ·
-      <b>PID:</b> Settings → <b>AUTO TUNE</b> ในที่โล่งน้ำนิ่ง (นับถอยหลัง 10 วิ เรือจะแกว่งเองแล้วคำนวณค่าให้) หรือ TUNE PID แก้มือ</p>
-    <p class="muted"><b>Web Dashboard:</b> Settings → WEB DASHBOARD → มือถือต่อ WiFi "KungRC-AUTOPILOT"
-      (รหัส 12345678) เปิด 192.168.4.1 = แผนที่สด + สั่งโหมด/เลือกจุด/ตั้ง HOME จากมือถือ ·
-      <b>SD Card:</b> บันทึกเที่ยว (trip) อัตโนมัติ, คลังหมายไม่จำกัด spots.csv, แผนภารกิจ mission.csv
-      (บรรทัดละ lat,lon,GO/DROP/HOLD,วินาที), สำรอง config · ELRS ได้ telemetry ขึ้นจอวิทยุ</p>
-  </details>
-
-</div>
-
-<div class="card cnc">
-  <h2>🛠️ KungRC CNC PENDANT</h2>
-  <p>จอสั่งงานเครื่อง CNC GRBL (3018 ฯลฯ) แบบไม่ต้องใช้คอม — DRO ตำแหน่งสด,
-     Jog ทัชสกรีน, Z-Probe ตั้งศูนย์อัตโนมัติ, SET/GO HOME, กัดงานจากไฟล์บนการ์ด SD,
-     อัปโหลด G-code ผ่าน WiFi, สรุปเวลาจบงาน, HOLD/RESUME, Feed override, OTA</p>
-  <esp-web-install-button id="cncBtn" manifest="manifest_cnc.json"></esp-web-install-button>
-  <div class="meta">
-    <span><b id="cncVer">v…</b></span>
-    <span id="cncDate">อัปเดตล่าสุด: …</span>
-    <span><img id="cncHits" alt="click count" src=""></span>
+  <!-- AUTOPILOT -->
+  <div class="panel boat" data-wire="w3">
+    <div class="pname">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
+        <path d="M3 14 H21 L17 19 H7 Z"/><path d="M12 14 V4 L17 11"/><path d="M2 21.5 Q6 19.5 9 21.5 T16 21.5 T22 21.5"/>
+      </svg>
+      <h2>AUTOPILOT</h2>
+    </div>
+    <p class="pdesc">ระบบนำร่อง GPS สำหรับเรือตกปลา / รถ / รถตัดหญ้า — GOTO, MISSION ปล่อยเหยื่อ,
+       FIELD วิ่งแถวตัดหญ้า, ANCHOR, RTH, PID + AUTO TUNE, Web Dashboard,
+       Mission Planner จาก SD, ELRS/CRSF telemetry, OTA</p>
+    <esp-web-install-button id="boatBtn" manifest="manifest_boat.json">
+      <button slot="activate" class="inst">INSTALL ▸</button>
+    </esp-web-install-button>
+    <div class="meta">
+      <span><b id="boatVer">v…</b></span>
+      <span id="boatDate">อัปเดตล่าสุด: …</span>
+      <span class="hitchip"><img id="boatHits" alt="จำนวนความสนใจ" src=""></span>
+    </div>
+    <p class="pnote">รับวิทยุ SBUS หรือ CRSF/ELRS · ขับ Servo/ESC ผ่าน PCA9685 · ไม่มี GPS = โหมด DEMO จำลองเรือ</p>
+    <details>
+      <summary><b>การต่อสาย (Autopilot)</b></summary>
+      <table class="pin">
+        <tr><th>อุปกรณ์</th><th>สายอุปกรณ์</th><th>ต่อที่บอร์ด</th></tr>
+        <tr><td rowspan="4">PCA9685 (ขับ Servo/ESC)<br>+ เข็มทิศ GY-87 หรือ QMC5883L<br>(I²C ร่วมกันที่ CN1)</td>
+            <td>VCC</td><td>3.3V</td></tr>
+        <tr><td>GND</td><td>GND</td></tr>
+        <tr><td>SDA</td><td>IO27</td></tr>
+        <tr><td>SCL</td><td>IO22</td></tr>
+        <tr><td>PCA9685 V+ (ไฟ servo)</td><td>V+</td><td>BEC 5V (ห้ามใช้ไฟบอร์ด!)</td></tr>
+        <tr><td rowspan="2">GPS ATGM336H<br>(คอนเนกเตอร์ P3)</td>
+            <td>TX</td><td>IO35</td></tr>
+        <tr><td>VCC / GND</td><td>3.3V / GND</td></tr>
+        <tr><td>รีซีฟเวอร์ SBUS</td><td>SBUS out</td><td>IO3 (P1-RX) · ไฟจาก BEC 5V</td></tr>
+        <tr><td rowspan="2">รีซีฟเวอร์ ELRS/CRSF</td><td>TX</td><td>IO3 (P1-RX)</td></tr>
+        <tr><td>RX</td><td>IO1 (P1-TX) — ได้ telemetry ขึ้นจอวิทยุ</td></tr>
+        <tr><td>Servo เปิดกระบะเหยื่อ</td><td>สัญญาณ</td><td>PCA9685 CH2</td></tr>
+        <tr><td>ลำโพง 4Ω</td><td>+ / −</td><td>ช่อง SPEAK (IO26 / GND)</td></tr>
+      </table>
+      <p class="muted">⚠ IO1/IO3 ใช้กับวิทยุ — ห้ามเปิด Serial Monitor ระหว่างใช้งานจริง ·
+        โหมด SINGLE: PCA CH0 = หางเสือ, CH1 = ESC · โหมด DUAL: CH0/CH1 = มอเตอร์ซ้าย/ขวา ·
+        GY-87 เสียบแล้วตรวจพบเอง (รองรับทั้ง HMC5883L และ QMC5883L)</p>
+    </details>
+    <details>
+      <summary><b>วิธีใช้งาน (Autopilot)</b></summary>
+      <p><b>เริ่มครั้งแรก:</b></p>
+      <ol>
+        <li>หน้า Vehicle (หน้าสุดท้าย) → เลือก <b>PLATFORM</b> BOAT/CAR/MOWER และ <b>DRIVE</b>
+          (SERVO+ESC หรือ 2 มอเตอร์) — โหมดที่ใช้ได้จะกรองตามแพลตฟอร์มเอง</li>
+        <li>หน้า Sensors → <b>CAL COMPASS</b> หมุนตัวเรือ/รถช้า ๆ เป็นวงกลม 20 วิ →
+          หันหัวไปทิศเหนือจริงแล้วกด <b>ALIGN BOW</b></li>
+        <li>หน้า RC Monitor → เลือก <b>RC:SBUS/CRSF</b> ตามวิทยุ, <b>CH5:3POS/6POS</b>
+          (6POS = หมุน knob เลือกครบทุกโหมด ค้าง 3 วิยืนยัน), <b>FS:</b> เลือกท่าตอนสัญญาณขาด (RTH/ANCHOR/STOP/CONT)</li>
+        <li>ก่อนออกทุกครั้ง: รอ GPS ติด แล้วกดปุ่ม <b>HOME</b> (แถบล่าง) ตั้งจุดกลับบ้าน — สีฟ้า = ตั้งแล้ว</li>
+      </ol>
+      <p><b>โหมดขับ (ปุ่ม MODE หรือสวิตช์ CH5):</b> MANUAL บังคับเอง · <b>GOTO</b> วิ่งไปจุดที่เลือกแล้วหยุดรอ ·
+        <b>MISSION</b> ไล่ทุกจุดตามลำดับ จุดที่ติ๊ก DROP เปิดกระบะเหยื่อ 3 วิ เสร็จกลับบ้านเอง ·
+        <b>FIELD</b> (ตัดหญ้า) SPOT1-4 = สี่มุมแปลง วิ่งซิกแซกเต็มแปลงตามหน้ากว้าง SWATH ·
+        CIRCLE วนรอบจุด · ANCHOR ล็อกตำแหน่งสู้ลม/กระแสน้ำ · RTH กลับบ้าน</p>
+      <p><b>จุดตกปลา:</b> หน้า Spots — ถึงหมายแล้วกด <b>SAVE</b> เก็บพิกัด, แตะชื่อ = เลือกเป้า GOTO, ปุ่ม DROP = จุดปล่อยเหยื่อ ·
+        <b>PID:</b> Settings → <b>AUTO TUNE</b> ในที่โล่งน้ำนิ่ง (นับถอยหลัง 10 วิ เรือจะแกว่งเองแล้วคำนวณค่าให้) หรือ TUNE PID แก้มือ</p>
+      <p class="muted"><b>Web Dashboard:</b> Settings → WEB DASHBOARD → มือถือต่อ WiFi "KungRC-AUTOPILOT"
+        (รหัส 12345678) เปิด 192.168.4.1 = แผนที่สด + สั่งโหมด/เลือกจุด/ตั้ง HOME จากมือถือ ·
+        <b>SD Card:</b> บันทึกเที่ยว (trip) อัตโนมัติ, คลังหมายไม่จำกัด spots.csv, แผนภารกิจ mission.csv
+        (บรรทัดละ lat,lon,GO/DROP/HOLD,วินาที), สำรอง config · ELRS ได้ telemetry ขึ้นจอวิทยุ</p>
+    </details>
   </div>
-  <p class="muted">ไม่ต่อเครื่อง CNC = โหมด DEMO จำลอง GRBL ให้ลองเล่นได้ทันที</p>
-  <details>
-    <summary><b>📌 การต่อสาย (CNC Pendant)</b></summary>
-    <table class="pin">
-      <tr><th>ฝั่งบอร์ด GRBL (พอร์ต offline)</th><th>ต่อที่ CYD (P1)</th></tr>
-      <tr><td>RX</td><td>IO1 (P1-TX)</td></tr>
-      <tr><td>TX</td><td>IO3 (P1-RX) <b>ผ่านตัวแบ่งแรงดัน R1k/R2k</b> (GRBL เป็นลอจิก 5V)
-        — หรือใช้โมดูล <b>NA077</b> เรียบร้อยกว่า (ดูตารางอุปกรณ์ด้านล่าง)</td></tr>
-      <tr><td>GND</td><td>GND</td></tr>
-      <tr><td>5V</td><td>VIN (เลี้ยงจอจากบอร์ด CNC ได้เลย)</td></tr>
-    </table>
-    <p class="muted">⚠ ใช้พอร์ต offline controller ของบอร์ด GRBL — ต้องถอดสาย USB คอมออกจากเครื่อง CNC ก่อน ·
-      115200 baud · ตอนเปิดจอ GRBL อาจได้ข้อความขยะจาก boot ROM ของ ESP32 สั้น ๆ ไม่มีผลอะไร</p>
-  </details>
-  <details>
-    <summary><b>📖 วิธีใช้งาน (CNC Pendant)</b></summary>
-    <p><b>เริ่มครั้งแรก:</b> Settings → WIFI SETUP + CHECK UPDATE · จอสีเพี้ยน → หน้า Display กด COLORS ·
-      ส่งไฟล์เข้าการ์ด: หน้า <b>Upload</b> → START WIFI UPLOAD → คอม/มือถือต่อ WiFi <b>KungRC-CNC</b>
-      (รหัส 12345678) → เปิด <b>http://192.168.4.1</b> (หรือถอดการ์ดไป copy บนคอมก็ได้)</p>
-    <p><b>🏁 5 ขั้นตอนเริ่มงาน (ครั้งแรกของวัน)</b> — เรียงตามปุ่มหน้า Tools จากบนลงล่าง:</p>
-    <ol>
-      <li><b>SET HOME</b> — เปิดเครื่อง, Jog หัวไปจุดจอดที่ชอบ (มุมหลัง ยกสูง) →
-        หน้า Tools กด <b>1. SET HOME</b> จำเป็นจุดกลับบ้านถาวร (ทำครั้งเดียวพอ)</li>
-      <li><b>Jog + ZERO</b> — จับชิ้นงาน ใส่ดอก → หน้า Jog เลื่อนปลายดอกไปจ่อ
-        <b>จุด origin ที่ตั้งไว้ใน Fusion/CAM</b> (มุมหรือกลางชิ้นงาน — ต้องจุดเดียวกันเป๊ะ,
-        ใกล้แล้วลด STEP เหลือ 0.1) → กด <b>ZERO</b></li>
-      <li><b>Z-PROBE</b> — วางแผ่น probe บนผิวงาน หนีบคลิปกับดอก → Tools กด
-        <b>3. Z-PROBE</b> → PROBE → หัวจิ้มหาผิวเองแล้วตั้ง Z0 (หักความหนาแผ่นตามค่า PLATE)
-        → <b>เก็บแผ่น+คลิปออก!</b> · ไม่มีแผ่น: ใช้วิธีกระดาษ ลด Z ทีละ 0.1 จนกระดาษฝืดแล้วค่อย ZERO</li>
-      <li><b>RAISE Z +15</b> — ยกหัวให้พ้นชิ้นงานก่อนเริ่ม</li>
-      <li><b>RUN</b> — หน้า Files แตะไฟล์ → <b>RUN</b> (ไฟล์เปิด spindle เอง) —
-        <b>นาทีแรกเฝ้าไว้</b> นิ้วเตรียมที่ปุ่มกลาง (HOLD) · กัดเสร็จขึ้นหน้า JOB DONE + เสียงเรียก
-        แล้วหัววิ่งกลับจุด SET HOME เอง</li>
-    </ol>
-    <p class="muted">ตั้ง Z ใหม่เมื่อ: เปลี่ยนดอก / เปลี่ยนชิ้นงาน (XY ไม่ต้องถ้างานไม่ขยับ) ·
-      DRO: HOLD พัก · UNLK ปลด ALARM · HOME กลับจุด SET HOME ·
-      Feed ±10% ระหว่างกัดที่ Settings · รอบ spindle S1000-12000 ที่ Tools ·
-      จอแปล error/ALARM เป็นข้อความให้เองที่หน้า DRO</p>
-  </details>
 
-</div>
-
-<div class="card rotary">
-  <h2>🔄 KungRC ROTARY INDEXER</h2>
-  <p>แท่นหมุนแบ่งองศาคุมสเต็ปมอเตอร์ — หมุนไปองศาที่ต้องการ / แบ่งวงเป็น N ช่อง
-     กดไปช่องถัดไปทีละปุ่ม ใช้คู่เครื่อง CNC (กัดเฟือง เจาะรูวงกลม) หรือถ่ายรูปสินค้า 360° ·
-     แบ่งแบบสเต็ปสัมบูรณ์ไม่มีเศษองศาสะสม · ramp ความเร็วกันหลุดสเต็ป · OTA</p>
-  <esp-web-install-button id="rotaryBtn" manifest="manifest_rotary.json"></esp-web-install-button>
-  <div class="meta">
-    <span><b id="rotaryVer">v…</b></span>
-    <span id="rotaryDate">อัปเดตล่าสุด: …</span>
-    <span><img id="rotaryHits" alt="click count" src=""></span>
+  <!-- CNC PENDANT -->
+  <div class="panel cnc" data-wire="w4">
+    <div class="pname">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
+        <path d="M8 3 H16 V8 L12 13 L8 8 Z"/><path d="M12 13 V18"/><path d="M5 21 H19 M12 18 L10 21 M12 18 L14 21"/>
+      </svg>
+      <h2>CNC PENDANT</h2>
+    </div>
+    <p class="pdesc">จอสั่งงานเครื่อง CNC GRBL (3018 ฯลฯ) แบบไม่ต้องใช้คอม — DRO ตำแหน่งสด,
+       Jog ทัชสกรีน, Z-Probe ตั้งศูนย์อัตโนมัติ, SET/GO HOME, กัดงานจากไฟล์บนการ์ด SD,
+       อัปโหลด G-code ผ่าน WiFi, สรุปเวลาจบงาน, HOLD/RESUME, Feed override, OTA</p>
+    <esp-web-install-button id="cncBtn" manifest="manifest_cnc.json">
+      <button slot="activate" class="inst">INSTALL ▸</button>
+    </esp-web-install-button>
+    <div class="meta">
+      <span><b id="cncVer">v…</b></span>
+      <span id="cncDate">อัปเดตล่าสุด: …</span>
+      <span class="hitchip"><img id="cncHits" alt="จำนวนความสนใจ" src=""></span>
+    </div>
+    <p class="pnote">ไม่ต่อเครื่อง CNC = โหมด DEMO จำลอง GRBL ให้ลองเล่นได้ทันที</p>
+    <details>
+      <summary><b>การต่อสาย (CNC Pendant)</b></summary>
+      <table class="pin">
+        <tr><th>ฝั่งบอร์ด GRBL (พอร์ต offline)</th><th>ต่อที่ CYD (P1)</th></tr>
+        <tr><td>RX</td><td>IO1 (P1-TX)</td></tr>
+        <tr><td>TX</td><td>IO3 (P1-RX) <b>ผ่านตัวแบ่งแรงดัน R1k/R2k</b> (GRBL เป็นลอจิก 5V)
+          — หรือใช้โมดูล <b>NA077</b> เรียบร้อยกว่า (ดูตารางอุปกรณ์ด้านล่าง)</td></tr>
+        <tr><td>GND</td><td>GND</td></tr>
+        <tr><td>5V</td><td>VIN (เลี้ยงจอจากบอร์ด CNC ได้เลย)</td></tr>
+      </table>
+      <p class="muted">⚠ ใช้พอร์ต offline controller ของบอร์ด GRBL — ต้องถอดสาย USB คอมออกจากเครื่อง CNC ก่อน ·
+        115200 baud · ตอนเปิดจอ GRBL อาจได้ข้อความขยะจาก boot ROM ของ ESP32 สั้น ๆ ไม่มีผลอะไร</p>
+    </details>
+    <details>
+      <summary><b>วิธีใช้งาน (CNC Pendant)</b></summary>
+      <p><b>เริ่มครั้งแรก:</b> Settings → WIFI SETUP + CHECK UPDATE · จอสีเพี้ยน → หน้า Display กด COLORS ·
+        ส่งไฟล์เข้าการ์ด: หน้า <b>Upload</b> → START WIFI UPLOAD → คอม/มือถือต่อ WiFi <b>KungRC-CNC</b>
+        (รหัส 12345678) → เปิด <b>http://192.168.4.1</b> (หรือถอดการ์ดไป copy บนคอมก็ได้)</p>
+      <p><b>5 ขั้นตอนเริ่มงาน (ครั้งแรกของวัน)</b> — เรียงตามปุ่มหน้า Tools จากบนลงล่าง:</p>
+      <ol>
+        <li><b>SET HOME</b> — เปิดเครื่อง, Jog หัวไปจุดจอดที่ชอบ (มุมหลัง ยกสูง) →
+          หน้า Tools กด <b>1. SET HOME</b> จำเป็นจุดกลับบ้านถาวร (ทำครั้งเดียวพอ)</li>
+        <li><b>Jog + ZERO</b> — จับชิ้นงาน ใส่ดอก → หน้า Jog เลื่อนปลายดอกไปจ่อ
+          <b>จุด origin ที่ตั้งไว้ใน Fusion/CAM</b> (มุมหรือกลางชิ้นงาน — ต้องจุดเดียวกันเป๊ะ,
+          ใกล้แล้วลด STEP เหลือ 0.1) → กด <b>ZERO</b></li>
+        <li><b>Z-PROBE</b> — วางแผ่น probe บนผิวงาน หนีบคลิปกับดอก → Tools กด
+          <b>3. Z-PROBE</b> → PROBE → หัวจิ้มหาผิวเองแล้วตั้ง Z0 (หักความหนาแผ่นตามค่า PLATE)
+          → <b>เก็บแผ่น+คลิปออก!</b> · ไม่มีแผ่น: ใช้วิธีกระดาษ ลด Z ทีละ 0.1 จนกระดาษฝืดแล้วค่อย ZERO</li>
+        <li><b>RAISE Z +15</b> — ยกหัวให้พ้นชิ้นงานก่อนเริ่ม</li>
+        <li><b>RUN</b> — หน้า Files แตะไฟล์ → <b>RUN</b> (ไฟล์เปิด spindle เอง) —
+          <b>นาทีแรกเฝ้าไว้</b> นิ้วเตรียมที่ปุ่มกลาง (HOLD) · กัดเสร็จขึ้นหน้า JOB DONE + เสียงเรียก
+          แล้วหัววิ่งกลับจุด SET HOME เอง</li>
+      </ol>
+      <p class="muted">ตั้ง Z ใหม่เมื่อ: เปลี่ยนดอก / เปลี่ยนชิ้นงาน (XY ไม่ต้องถ้างานไม่ขยับ) ·
+        DRO: HOLD พัก · UNLK ปลด ALARM · HOME กลับจุด SET HOME ·
+        Feed ±10% ระหว่างกัดที่ Settings · รอบ spindle S1000-12000 ที่ Tools ·
+        จอแปล error/ALARM เป็นข้อความให้เองที่หน้า DRO</p>
+    </details>
   </div>
-  <p class="muted">ยังไม่ต่อมอเตอร์ก็ลอง UI ได้ทันที (สั่งหมุนลอย ๆ ไม่มีผลอะไร)</p>
-  <details>
-    <summary><b>📌 การต่อสาย (Rotary Indexer — ไดรเวอร์ A4988/DRV8825/TMC2208)</b></summary>
-    <table class="pin">
-      <tr><th>ไดรเวอร์</th><th>ต่อกับ</th></tr>
-      <tr><td>STEP</td><td>CYD <b>IO27</b> (CN1)</td></tr>
-      <tr><td>DIR</td><td>CYD <b>IO22</b> (CN1)</td></tr>
-      <tr><td>EN</td><td><b>GND ถาวร</b> — ให้มอเตอร์ล็อกแท่นต้านแรงกัดตลอด</td></tr>
-      <tr><td>MS1/MS2/MS3</td><td>HIGH ทั้งสาม = microstep 1/16 (ตรงค่าเริ่มบนจอ)</td></tr>
-      <tr><td>VMOT + GND</td><td>ไฟมอเตอร์ 12V + <b>คาปาซิเตอร์ 100µF คร่อมใกล้ไดรเวอร์</b></td></tr>
-      <tr><td>VDD + GND</td><td>3.3V จาก CYD (ลอจิก) · GND ร่วมกันทุกฝั่ง</td></tr>
-      <tr><td>1A 1B 2A 2B</td><td>ขดลวด NEMA17 (ขดเดียวกันวัดได้ ~2-3Ω)</td></tr>
-    </table>
-    <p class="muted">⚠ ก่อนใช้จริงต้องปรับ Vref บนไดรเวอร์จำกัดกระแสตามสเปคมอเตอร์ ไม่งั้นร้อนจัด</p>
-  </details>
-  <details>
-    <summary><b>📖 วิธีใช้งาน (Rotary Indexer)</b></summary>
-    <ol>
-      <li><b>Settings</b> — ตั้งค่ามอเตอร์ครั้งแรก: STEPS/REV (NEMA17 = 200), microstep ตาม jumper,
-        GEAR อัตราทดเฟือง (ขับตรง = 1), SPEED องศา/วินาที · ทุกค่าใส่ผ่าน NUM PAD จำถาวร</li>
-      <li><b>Rotary</b> — jog ด้วยปุ่ม &lt; &gt; (STEP วน 0.1-90°) · หมุนถึงจุดอ้างอิงแล้วกด
-        <b>ZERO HERE</b> · <b>GO TO</b> พิมพ์องศาเป้าหมายตรง ๆ</li>
-      <li><b>Divide</b> — ตั้ง N ช่อง (เช่น เฟือง 12 ฟัน = 12) → กด <b>NEXT</b> ทีละช่อง
-        เดินหน้าทางเดียวตลอด (กัน backlash) ไม่มีเศษองศาสะสมกี่รอบก็ตาม</li>
-      <li>ปุ่มกลางแถบล่าง = <b>STOP ฉุกเฉิน</b> ระหว่างหมุน · จอสีเพี้ยน → หน้า Display กด COLORS</li>
-    </ol>
-  </details>
 
-</div>
+  <!-- ROTARY INDEXER -->
+  <div class="panel rotary" data-wire="w5">
+    <div class="pname">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
+        <circle cx="12" cy="12" r="8"/><path d="M12 4 V7 M20 12 H17 M12 20 V17 M4 12 H7"/><path d="M15 6 L18.5 4.5 L17 8"/>
+      </svg>
+      <h2>ROTARY INDEXER</h2>
+    </div>
+    <p class="pdesc">แท่นหมุนแบ่งองศาคุมสเต็ปมอเตอร์ — หมุนไปองศาที่ต้องการ / แบ่งวงเป็น N ช่อง
+       กดไปช่องถัดไปทีละปุ่ม ใช้คู่เครื่อง CNC (กัดเฟือง เจาะรูวงกลม) หรือถ่ายรูปสินค้า 360° ·
+       แบ่งแบบสเต็ปสัมบูรณ์ไม่มีเศษองศาสะสม · ramp ความเร็วกันหลุดสเต็ป · OTA</p>
+    <esp-web-install-button id="rotaryBtn" manifest="manifest_rotary.json">
+      <button slot="activate" class="inst">INSTALL ▸</button>
+    </esp-web-install-button>
+    <div class="meta">
+      <span><b id="rotaryVer">v…</b></span>
+      <span id="rotaryDate">อัปเดตล่าสุด: …</span>
+      <span class="hitchip"><img id="rotaryHits" alt="จำนวนความสนใจ" src=""></span>
+    </div>
+    <p class="pnote">ยังไม่ต่อมอเตอร์ก็ลอง UI ได้ทันที (สั่งหมุนลอย ๆ ไม่มีผลอะไร)</p>
+    <details>
+      <summary><b>การต่อสาย (Rotary — ไดรเวอร์ A4988/DRV8825/TMC2208)</b></summary>
+      <table class="pin">
+        <tr><th>ไดรเวอร์</th><th>ต่อกับ</th></tr>
+        <tr><td>STEP</td><td>CYD <b>IO27</b> (CN1)</td></tr>
+        <tr><td>DIR</td><td>CYD <b>IO22</b> (CN1)</td></tr>
+        <tr><td>EN</td><td><b>GND ถาวร</b> — ให้มอเตอร์ล็อกแท่นต้านแรงกัดตลอด</td></tr>
+        <tr><td>MS1/MS2/MS3</td><td>HIGH ทั้งสาม = microstep 1/16 (ตรงค่าเริ่มบนจอ)</td></tr>
+        <tr><td>VMOT + GND</td><td>ไฟมอเตอร์ 12V + <b>คาปาซิเตอร์ 100µF คร่อมใกล้ไดรเวอร์</b></td></tr>
+        <tr><td>VDD + GND</td><td>3.3V จาก CYD (ลอจิก) · GND ร่วมกันทุกฝั่ง</td></tr>
+        <tr><td>1A 1B 2A 2B</td><td>ขดลวด NEMA17 (ขดเดียวกันวัดได้ ~2-3Ω)</td></tr>
+      </table>
+      <p class="muted">⚠ ก่อนใช้จริงต้องปรับ Vref บนไดรเวอร์จำกัดกระแสตามสเปคมอเตอร์ ไม่งั้นร้อนจัด</p>
+    </details>
+    <details>
+      <summary><b>วิธีใช้งาน (Rotary Indexer)</b></summary>
+      <ol>
+        <li><b>Settings</b> — ตั้งค่ามอเตอร์ครั้งแรก: STEPS/REV (NEMA17 = 200), microstep ตาม jumper,
+          GEAR อัตราทดเฟือง (ขับตรง = 1), SPEED องศา/วินาที · ทุกค่าใส่ผ่าน NUM PAD จำถาวร</li>
+        <li><b>Rotary</b> — jog ด้วยปุ่ม &lt; &gt; (STEP วน 0.1-90°) · หมุนถึงจุดอ้างอิงแล้วกด
+          <b>ZERO HERE</b> · <b>GO TO</b> พิมพ์องศาเป้าหมายตรง ๆ</li>
+        <li><b>Divide</b> — ตั้ง N ช่อง (เช่น เฟือง 12 ฟัน = 12) → กด <b>NEXT</b> ทีละช่อง
+          เดินหน้าทางเดียวตลอด (กัน backlash) ไม่มีเศษองศาสะสมกี่รอบก็ตาม</li>
+        <li>ปุ่มกลางแถบล่าง = <b>STOP ฉุกเฉิน</b> ระหว่างหมุน · จอสีเพี้ยน → หน้า Display กด COLORS</li>
+      </ol>
+    </details>
+  </div>
 
-<div class="card">
-  <h2 style="color:#05c7f2">🛒 อุปกรณ์ที่ใช้ (ลิงก์ร้านแนะนำ)</h2>
-  <table style="width:100%;border-collapse:collapse">
-    <tr style="color:#8a93a8;text-align:left">
-      <th style="padding:6px 4px">อุปกรณ์</th><th>ใช้กับ</th><th></th>
-    </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>บอร์ด ESP32 CYD 2.8" จอสัมผัส TFT</b><br>
+</div><!-- /panels -->
+
+<p class="flownote">▼ การต่อสาย · วิธีใช้ · ร้านอุปกรณ์ — เส้นไฟวิ่งต่อลงด้านล่าง</p>
+<div class="flowline" aria-hidden="true"></div>
+
+<section id="pinout">
+  <div class="shead"><span class="no">02</span><h2>BOARD PINOUT</h2>
+    <span class="thai">ผังพินบอร์ด CYD ฉบับเต็ม</span></div>
+  <div class="frame">
+    <p class="muted" style="margin-top:0">ใช้ร่วมกันได้ทุกโปรเจกต์ — จุดต่อขยาย (Expansion IO1/IO2)
+      คือคอนเนกเตอร์ P3 และ CN1 ที่อ้างถึงในตารางต่อสายของแต่ละแผงด้านบน</p>
+    <img src="cyd_pinout.jpg" alt="ผังพินบอร์ด ESP32-2432S028R (CYD)"
+         style="width:100%;height:auto;border:2px solid var(--rule);background:#fff;display:block">
+  </div>
+</section>
+
+<div class="flowline" aria-hidden="true"></div>
+<section id="shop">
+  <div class="shead"><span class="no">03</span><h2>PARTS</h2>
+    <span class="thai">อุปกรณ์ที่ใช้ (ลิงก์ร้านแนะนำ)</span></div>
+  <div class="tablewrap">
+  <table class="shop">
+    <tr><th>อุปกรณ์</th><th>ใช้กับ</th><th></th></tr>
+    <tr>
+      <td><b>บอร์ด ESP32 CYD 2.8" จอสัมผัส TFT</b><br>
         <span class="muted">ตัวเครื่องหลัก — ต้องมี</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/5foDlJPUiU?share_channel_code=6"
-        target="_blank"><b>Shopee &rarr;</b></a><br>
-        <a style="color:#07e86a" href="https://s.shopee.co.th/40g0IqAmN3?share_channel_code=6"
-        target="_blank"><b>อีกร้าน &rarr;</b></a></td>
+      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span><span class="use u-cnc">CNC</span><span class="use u-rotary">ROTARY</span></td>
+      <td><a href="https://s.shopee.co.th/5foDlJPUiU?share_channel_code=6" target="_blank">SHOPEE ↗</a><br>
+          <a href="https://s.shopee.co.th/40g0IqAmN3?share_channel_code=6" target="_blank">อีกร้าน ↗</a></td>
     </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>PCA9685 16-Channel PWM Servo Driver</b><br>
+    <tr>
+      <td><b>PCA9685 16-Channel PWM Servo Driver</b><br>
         <span class="muted">ขับหางเสือ/ESC/servo กระบะเหยื่อ · ต่อ I²C ที่ CN1 · หัวใจของ Autopilot</span></td>
-      <td style="white-space:nowrap">🚤</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/2qU2uZvdZ5?share_channel_code=6"
-        target="_blank"><b>Shopee &rarr;</b></a></td>
+      <td><span class="use u-boat">BOAT</span></td>
+      <td><a href="https://s.shopee.co.th/2qU2uZvdZ5?share_channel_code=6" target="_blank">SHOPEE ↗</a></td>
     </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>GY-87 (MPU6050 + เข็มทิศ + BMP180)</b><br>
+    <tr>
+      <td><b>GY-87 (MPU6050 + เข็มทิศ + BMP180)</b><br>
         <span class="muted">เข็มทิศนำทาง + IMU · ต่อ I²C ที่ CN1 · <b>เลือกรุ่น GY-87</b> ในตัวเลือกร้าน · เฟิร์มแวร์ตรวจพบเอง</span></td>
-      <td style="white-space:nowrap">🚤</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/20uvv0VVUe?share_channel_code=6"
-        target="_blank"><b>Shopee &rarr;</b></a></td>
+      <td><span class="use u-boat">BOAT</span></td>
+      <td><a href="https://s.shopee.co.th/20uvv0VVUe?share_channel_code=6" target="_blank">SHOPEE ↗</a></td>
     </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>GPS ATGM336H (GPS+BeiDou) พร้อม EEPROM</b><br>
+    <tr>
+      <td><b>GPS ATGM336H (GPS+BeiDou) พร้อม EEPROM</b><br>
         <span class="muted">ต่อที่ P3: TX→IO35 · จำเป็นสำหรับ Lap Timer และ Autopilot / เสริมให้ Variometer</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/2qU2NIbutt?share_channel_code=6"
-        target="_blank"><b>Shopee &rarr;</b></a></td>
+      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span></td>
+      <td><a href="https://s.shopee.co.th/2qU2NIbutt?share_channel_code=6" target="_blank">SHOPEE ↗</a></td>
     </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>เซ็นเซอร์ AHT20 + BMP280</b><br>
+    <tr>
+      <td><b>เซ็นเซอร์ AHT20 + BMP280</b><br>
         <span class="muted">อุณหภูมิ/ความชื้น/ความดัน · ต่อที่ CN1 (I²C) · หัวใจของ Variometer</span></td>
-      <td style="white-space:nowrap">🪂</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/7KwRjbF1ne?share_channel_code=6"
-        target="_blank"><b>Shopee &rarr;</b></a></td>
+      <td><span class="use u-vario">VARIO</span></td>
+      <td><a href="https://s.shopee.co.th/7KwRjbF1ne?share_channel_code=6" target="_blank">SHOPEE ↗</a></td>
     </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>ลำโพงจิ๋ว 4Ω 3W (35×25mm)</b><br>
+    <tr>
+      <td><b>ลำโพงจิ๋ว 4Ω 3W (35×25mm)</b><br>
         <span class="muted">เสียง vario / เสียงตัดรอบ / เสียงแจ้งโหมด · ต่อช่อง SPEAK · ตรงสเปกวงจรเสียงบอร์ด (4Ω)</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/8Kp0agCj0Q?share_channel_code=6"
-        target="_blank"><b>Shopee &rarr;</b></a></td>
+      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span></td>
+      <td><a href="https://s.shopee.co.th/8Kp0agCj0Q?share_channel_code=6" target="_blank">SHOPEE ↗</a></td>
     </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>สาย Molex MX1.25 2P ยาว 100mm</b><br>
+    <tr>
+      <td><b>สาย Molex MX1.25 2P ยาว 100mm</b><br>
         <span class="muted">สายต่อลำโพงเข้าช่อง SPEAK</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/8plFbdmxAY?share_channel_code=6"
-        target="_blank"><b>Shopee &rarr;</b></a></td>
+      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span></td>
+      <td><a href="https://s.shopee.co.th/8plFbdmxAY?share_channel_code=6" target="_blank">SHOPEE ↗</a></td>
     </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>สาย JST 1.25mm ตัวผู้-เมีย 4P ยาว 15ซม. (5 คู่)</b><br>
+    <tr>
+      <td><b>สาย JST 1.25mm ตัวผู้-เมีย 4P ยาว 15ซม. (5 คู่)</b><br>
         <span class="muted">ต่อเซ็นเซอร์ที่ CN1 และ GPS ที่ P3</span></td>
-      <td style="white-space:nowrap">🪂 + 🏁 + 🚤</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/3g39RUrmBv?share_channel_code=6"
-        target="_blank"><b>Shopee &rarr;</b></a></td>
+      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span></td>
+      <td><a href="https://s.shopee.co.th/3g39RUrmBv?share_channel_code=6" target="_blank">SHOPEE ↗</a></td>
     </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>KS UBEC 5V (low-noise RF filter)</b><br>
+    <tr>
+      <td><b>KS UBEC 5V (low-noise RF filter)</b><br>
         <span class="muted">ไฟเลี้ยง PCA9685 + servo หางเสือ/กระบะเหยื่อ · เลือกรุ่น 3A ก็พอ ·
           เสียงรบกวนต่ำ ไม่กวน GPS/เข็มทิศ · ห้ามดึงไฟ servo จากบอร์ด CYD โดยตรง</span></td>
-      <td style="white-space:nowrap">🚤</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/9V0xznoO02?share_channel_code=6"
-        target="_blank"><b>Shopee &rarr;</b></a></td>
+      <td><span class="use u-boat">BOAT</span></td>
+      <td><a href="https://s.shopee.co.th/9V0xznoO02?share_channel_code=6" target="_blank">SHOPEE ↗</a></td>
     </tr>
-    <tr style="border-top:1px solid #2a3550">
-      <td style="padding:8px 4px"><b>NA077 Logic Level Converter 2 Channel 3.3V↔5V</b><br>
+    <tr>
+      <td><b>NA077 Logic Level Converter 2 Channel 3.3V↔5V</b><br>
         <span class="muted">แปลงระดับสัญญาณจอ (3.3V) ↔ บอร์ด GRBL (5V) แทนวงจรตัวต้านทาน R1k/R2k ·
           ใช้ Chan1 ช่องเดียวครบทั้งไป-กลับ · ขา LV ต้องต่อ 3.3V จาก CN1 ของจอ</span></td>
-      <td style="white-space:nowrap">🛠️</td>
-      <td><a style="color:#07e86a" href="https://s.shopee.co.th/4qFJb8hR7V"
-        target="_blank"><b>Shopee &rarr;</b></a></td>
+      <td><span class="use u-cnc">CNC</span></td>
+      <td><a href="https://s.shopee.co.th/4qFJb8hR7V" target="_blank">SHOPEE ↗</a></td>
     </tr>
   </table>
-  <p class="muted">🪂 = Variometer · 🏁 = Lap Timer · 🚤 = Autopilot · 🛠️ = CNC Pendant</p>
-</div>
+  </div>
+</section>
 
-<div class="card">
-  <h2 style="color:#f2b705">📦 เคส 3D Print สำหรับบอร์ด CYD (ฟรี)</h2>
-  <p class="muted">ไฟล์ STL พิมพ์เองได้ฟรีจาก Printables — ใช้ได้กับบอร์ด ESP32-2432S028R ทั้ง 3 โปรเจกต์</p>
-  <ul style="margin:6px 0 0 18px;padding:0">
-    <li><a style="color:#07e86a" href="https://www.printables.com/tag/cyd" target="_blank">
-      รวมโมเดลแท็ก "cyd" ทั้งหมด</a> — เลือกดูได้หลายแบบ</li>
-    <li><a style="color:#07e86a" href="https://www.printables.com/model/793451-esp32-2432s028-usb-c-module-case-cheap-yellow-disp" target="_blank">
-      USB-C Module Case</a></li>
-    <li><a style="color:#07e86a" href="https://www.printables.com/model/685845-enclosure-for-sunton-esp32-2432s028r-cheap-yellow-" target="_blank">
-      Enclosure for Sunton ESP32-2432S028R</a></li>
-    <li><a style="color:#07e86a" href="https://www.printables.com/model/840199-case-for-esp32-2432s028r-aka-cheap-yellow-display" target="_blank">
-      Case for ESP32-2432S028R</a></li>
-  </ul>
-</div>
+<div class="flowline" aria-hidden="true"></div>
+<section id="case">
+  <div class="shead"><span class="no">04</span><h2>3D CASE</h2>
+    <span class="thai">เคสพิมพ์เองได้ฟรีจาก Printables</span></div>
+  <div class="frame">
+    <p class="muted" style="margin-top:0">ไฟล์ STL สำหรับบอร์ด ESP32-2432S028R — ใช้ได้กับทุกโปรเจกต์</p>
+    <ul style="margin:6px 0 0 18px;padding:0">
+      <li><a href="https://www.printables.com/tag/cyd" target="_blank">รวมโมเดลแท็ก "cyd" ทั้งหมด</a> — เลือกดูได้หลายแบบ</li>
+      <li><a href="https://www.printables.com/model/793451-esp32-2432s028-usb-c-module-case-cheap-yellow-disp" target="_blank">USB-C Module Case</a></li>
+      <li><a href="https://www.printables.com/model/685845-enclosure-for-sunton-esp32-2432s028r-cheap-yellow-" target="_blank">Enclosure for Sunton ESP32-2432S028R</a></li>
+      <li><a href="https://www.printables.com/model/840199-case-for-esp32-2432s028r-aka-cheap-yellow-display" target="_blank">Case for ESP32-2432S028R</a></li>
+    </ul>
+  </div>
+</section>
 
-<p class="muted">หลังติดตั้งครั้งแรก: ตั้ง WiFi ในหน้า Settings ของเครื่อง แล้วรับอัปเดตรุ่นถัดไปผ่านปุ่ม
-OTA/CHECK UPDATE บนจอได้เลย ไม่ต้องกลับมาหน้านี้อีก ·
-<a style="color:#05c7f2" href="https://github.com/KungrcKMK/CYD-firmware">GitHub</a></p>
+<footer>
+  <div class="flowline" aria-hidden="true" style="height:40px"></div>
+  <div class="gnd">⏚ GND</div>
+  <p>หลังติดตั้งครั้งแรก: ตั้ง WiFi ในหน้า Settings ของเครื่อง แล้วรับอัปเดตรุ่นถัดไปผ่านปุ่ม
+    OTA/CHECK UPDATE บนจอได้เลย ไม่ต้องกลับมาหน้านี้อีก ·
+    <a href="https://github.com/KungrcKMK/CYD-firmware">GitHub</a></p>
+</footer>
+
+</div><!-- /wrap -->
+
 <script>
-function unlockInstall(id) {
-  var el = document.getElementById(id);
-  var pw = prompt('รหัสผ่านสำหรับติดตั้งเฟิร์มแวร์นี้:');
-  if (pw === null) return;
-  if (pw === 'forpepsi') {
-    el.style.display = 'none';
-    try { localStorage.setItem('kungrc_' + id, '1'); } catch (e) {}
-  } else {
-    alert('รหัสผ่านไม่ถูกต้อง');
-  }
-}
-(function () {
-  try {
-    if (localStorage.getItem('kungrc_varioLock') === '1') {
-      var el = document.getElementById('varioLock');
-      if (el) el.style.display = 'none';
-    }
-  } catch (e) {}
-})();
-
 // ---- เวอร์ชัน + วันที่อัปเดตล่าสุด: อ่านสดจาก manifest*.json + GitHub commit history ----
 // (ไม่ต้องมาแก้เลขในหน้านี้เองทุกรุ่น — อัปเดต manifest ที่ไหนก็ขึ้นตรงนี้เอง)
 function loadReleaseMeta(prefix, manifestFile) {
@@ -472,7 +652,7 @@ function wireClickCounter(btnId, imgId, key) {
   if (!btn || !img) return;
   function refresh() {
     img.src = 'https://hits.sh/kungrckmk.github.io/CYD-firmware/' + key + '.svg' +
-              '?label=interest&color=05c7f2&labelColor=1a2230&' + Date.now();
+              '?label=interest&color=05c7f2&labelColor=0a0d12&' + Date.now();
   }
   btn.addEventListener('click', refresh);
   refresh();
@@ -482,6 +662,53 @@ wireClickCounter('lapBtn', 'lapHits', 'lap');
 wireClickCounter('boatBtn', 'boatHits', 'boat');
 wireClickCounter('cncBtn', 'cncHits', 'cnc');
 wireClickCounter('rotaryBtn', 'rotaryHits', 'rotary');
+
+// ---- สัญญาณไฟ ----
+// 1) พัลส์ default วนครบทุกสาย w1→w5 ทีละรอบ (จังหวะเดียวกับ dur ของ animation)
+// 2) hover/focus แผงไหน: สายเส้นนั้นหนา+โหนดสว่างเต็ม (glow) ส่วนที่เหลือหรี่ลงขั้นเดียวแบบไฟติด
+(function () {
+  var pulse = document.querySelector('.pulse');
+  var busX = { w1: 100, w2: 300, w3: 500, w4: 700, w5: 900 };
+  var ids = ['w1', 'w2', 'w3', 'w4', 'w5'];
+  var held = null;                       // แผงที่ถูกชี้อยู่ (ล็อกพัลส์ไว้เส้นนั้น)
+  function route(id) {
+    if (pulse) pulse.setAttribute('d', 'M30 0 V22 H' + busX[id] + ' V118');
+  }
+  function setDim(activeId) {            // activeId = null คืนสภาพปกติ
+    ids.forEach(function (id, i) {
+      var w = document.getElementById(id);
+      var n = document.getElementById('n' + (i + 1));
+      var active = activeId === null || id === activeId;
+      if (w) {
+        w.setAttribute('opacity', active ? '1' : '0.3');
+        w.setAttribute('stroke-width', id === activeId ? '7' : '4');
+      }
+      if (n) {
+        n.setAttribute('opacity', active ? '1' : '0.3');
+        n.setAttribute('r', id === activeId ? '12' : '9');
+        n.style.filter = (id === activeId) ? 'drop-shadow(0 0 8px currentColor)' : '';
+        if (id === activeId) n.style.color = getComputedStyle(n).fill;
+      }
+    });
+  }
+  // สลับเส้นที่ขอบรอบ animation (repeatEvent) ให้เฟสล็อกกับพัลส์ ไม่วาร์ปกลางทาง
+  var cycle = 0;
+  var anim = pulse ? pulse.querySelector('animate') : null;
+  if (anim) anim.addEventListener('repeatEvent', function () {
+    if (held) return;
+    cycle = (cycle + 1) % ids.length;
+    route(ids[cycle]);
+  });
+  document.querySelectorAll('.panel[data-wire]').forEach(function (p) {
+    var id = p.getAttribute('data-wire');
+    function on() { held = id; route(id); setDim(id); }
+    function off() { held = null; setDim(null); }
+    p.addEventListener('mouseenter', on);
+    p.addEventListener('mouseleave', off);
+    p.addEventListener('focusin', on);
+    p.addEventListener('focusout', off);
+  });
+})();
 </script>
 </body>
 </html>
