@@ -122,7 +122,8 @@
   .plinks { align-self: end; width: 100%; }
   .doclink { display: block; width: 100%; text-align: left; background: none; border: 0;
              border-top: 1px solid var(--rule); margin-top: 12px; padding: 10px 0 0;
-             cursor: pointer; font: inherit; font-size: .85rem; font-weight: 700; color: var(--c-lap); }
+             cursor: pointer; font: inherit; font-size: .85rem; font-weight: 700; color: var(--c-lap);
+             overflow-wrap: anywhere; }
   .doclink::before { content: '▸ '; color: var(--wire-off); }
   .doclink:hover { color: var(--ink); }
   .docdlg { background: #0a0d12; color: var(--ink); border: 2px solid var(--pc, var(--rule));
@@ -521,9 +522,9 @@
       <div class="dochead"><h3>ความสามารถ (Rotary Indexer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <p>หมุนไปองศาที่ต้องการ · แบ่งวงเป็น N ช่อง กดไปช่องถัดไปทีละปุ่ม · สเต็ปสัมบูรณ์ไม่มีเศษองศาสะสม · ramp ความเร็วกันหลุดสเต็ป · OTA</p>
     </dialog>
-    <button class="doclink" type="button">การต่อสาย (Rotary — ไดรเวอร์ A4988/DRV8825/TMC2208)</button>
+    <button class="doclink" type="button">การต่อสาย (Rotary Indexer)</button>
     <dialog class="docdlg">
-      <div class="dochead"><h3>การต่อสาย (Rotary — ไดรเวอร์ A4988/DRV8825/TMC2208)</h3><button class="docx" type="button">✕ ปิด</button></div>
+      <div class="dochead"><h3>การต่อสาย (Rotary Indexer)</h3><button class="docx" type="button">✕ ปิด</button></div>
       <table class="pin">
         <tr><th>ไดรเวอร์</th><th>ต่อกับ</th></tr>
         <tr><td>STEP</td><td>CYD <b>IO27</b> (CN1)</td></tr>
@@ -721,15 +722,11 @@ function loadReleaseMeta(prefix, manifestFile) {
     .then(function (m) {
       var el = document.getElementById(prefix + 'Ver');
       if (el) el.textContent = 'v' + m.version;
-    })
-    .catch(function () {});
-  fetch('https://api.github.com/repos/KungrcKMK/CYD-firmware/commits?path=' + manifestFile + '&per_page=1')
-    .then(function (r) { return r.json(); })
-    .then(function (arr) {
-      var el = document.getElementById(prefix + 'Date');
-      if (!el || !arr || !arr[0]) return;
-      var d = new Date(arr[0].commit.committer.date);
-      el.textContent = 'อัปเดตล่าสุด ' + d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+      var de = document.getElementById(prefix + 'Date');
+      if (de && m.updated) {
+        var d = new Date(m.updated + 'T00:00:00');
+        de.textContent = 'อัปเดตล่าสุด ' + d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
     })
     .catch(function () {});
 }
