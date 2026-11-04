@@ -16,6 +16,7 @@
   .lap h2 { color: #f2b705; }
   .boat h2 { color: #37e6c9; }
   .cnc h2 { color: #f95867; }
+  .rotary h2 { color: #c77dff; }
   ol li { margin: 6px 0; }
   esp-web-install-button { --esp-tools-button-color: #05c7f2; }
   .muted { color: #8a93a8; font-size: 0.9em; }
@@ -272,6 +273,47 @@
 
 </div>
 
+<div class="card rotary">
+  <h2>🔄 KungRC ROTARY INDEXER</h2>
+  <p>แท่นหมุนแบ่งองศาคุมสเต็ปมอเตอร์ — หมุนไปองศาที่ต้องการ / แบ่งวงเป็น N ช่อง
+     กดไปช่องถัดไปทีละปุ่ม ใช้คู่เครื่อง CNC (กัดเฟือง เจาะรูวงกลม) หรือถ่ายรูปสินค้า 360° ·
+     แบ่งแบบสเต็ปสัมบูรณ์ไม่มีเศษองศาสะสม · ramp ความเร็วกันหลุดสเต็ป · OTA</p>
+  <esp-web-install-button id="rotaryBtn" manifest="manifest_rotary.json"></esp-web-install-button>
+  <div class="meta">
+    <span><b id="rotaryVer">v…</b></span>
+    <span id="rotaryDate">อัปเดตล่าสุด: …</span>
+    <span><img id="rotaryHits" alt="click count" src=""></span>
+  </div>
+  <p class="muted">ยังไม่ต่อมอเตอร์ก็ลอง UI ได้ทันที (สั่งหมุนลอย ๆ ไม่มีผลอะไร)</p>
+  <details>
+    <summary><b>📌 การต่อสาย (Rotary Indexer — ไดรเวอร์ A4988/DRV8825/TMC2208)</b></summary>
+    <table class="pin">
+      <tr><th>ไดรเวอร์</th><th>ต่อกับ</th></tr>
+      <tr><td>STEP</td><td>CYD <b>IO27</b> (CN1)</td></tr>
+      <tr><td>DIR</td><td>CYD <b>IO22</b> (CN1)</td></tr>
+      <tr><td>EN</td><td><b>GND ถาวร</b> — ให้มอเตอร์ล็อกแท่นต้านแรงกัดตลอด</td></tr>
+      <tr><td>MS1/MS2/MS3</td><td>HIGH ทั้งสาม = microstep 1/16 (ตรงค่าเริ่มบนจอ)</td></tr>
+      <tr><td>VMOT + GND</td><td>ไฟมอเตอร์ 12V + <b>คาปาซิเตอร์ 100µF คร่อมใกล้ไดรเวอร์</b></td></tr>
+      <tr><td>VDD + GND</td><td>3.3V จาก CYD (ลอจิก) · GND ร่วมกันทุกฝั่ง</td></tr>
+      <tr><td>1A 1B 2A 2B</td><td>ขดลวด NEMA17 (ขดเดียวกันวัดได้ ~2-3Ω)</td></tr>
+    </table>
+    <p class="muted">⚠ ก่อนใช้จริงต้องปรับ Vref บนไดรเวอร์จำกัดกระแสตามสเปคมอเตอร์ ไม่งั้นร้อนจัด</p>
+  </details>
+  <details>
+    <summary><b>📖 วิธีใช้งาน (Rotary Indexer)</b></summary>
+    <ol>
+      <li><b>Settings</b> — ตั้งค่ามอเตอร์ครั้งแรก: STEPS/REV (NEMA17 = 200), microstep ตาม jumper,
+        GEAR อัตราทดเฟือง (ขับตรง = 1), SPEED องศา/วินาที · ทุกค่าใส่ผ่าน NUM PAD จำถาวร</li>
+      <li><b>Rotary</b> — jog ด้วยปุ่ม &lt; &gt; (STEP วน 0.1-90°) · หมุนถึงจุดอ้างอิงแล้วกด
+        <b>ZERO HERE</b> · <b>GO TO</b> พิมพ์องศาเป้าหมายตรง ๆ</li>
+      <li><b>Divide</b> — ตั้ง N ช่อง (เช่น เฟือง 12 ฟัน = 12) → กด <b>NEXT</b> ทีละช่อง
+        เดินหน้าทางเดียวตลอด (กัน backlash) ไม่มีเศษองศาสะสมกี่รอบก็ตาม</li>
+      <li>ปุ่มกลางแถบล่าง = <b>STOP ฉุกเฉิน</b> ระหว่างหมุน · จอสีเพี้ยน → หน้า Display กด COLORS</li>
+    </ol>
+  </details>
+
+</div>
+
 <div class="card">
   <h2 style="color:#05c7f2">🛒 อุปกรณ์ที่ใช้ (ลิงก์ร้านแนะนำ)</h2>
   <table style="width:100%;border-collapse:collapse">
@@ -419,6 +461,7 @@ loadReleaseMeta('vario', 'manifest_vario.json');
 loadReleaseMeta('lap', 'manifest_laptimer.json');
 loadReleaseMeta('boat', 'manifest_boat.json');
 loadReleaseMeta('cnc', 'manifest_cnc.json');
+loadReleaseMeta('rotary', 'manifest_rotary.json');
 
 // ---- ยอดความสนใจ (เข้าชม+กดปุ่ม): hits.sh ไม่มีโหมด view-only จริง (ทดสอบแล้ว)
 // เลยเลือกให้ตัวเลขนี้ "จำได้เสมอ" ทุกครั้งที่เปิดหน้า แทนที่จะซ่อนไว้จนกว่าจะกด —
@@ -438,6 +481,7 @@ wireClickCounter('varioBtn', 'varioHits', 'vario');
 wireClickCounter('lapBtn', 'lapHits', 'lap');
 wireClickCounter('boatBtn', 'boatHits', 'boat');
 wireClickCounter('cncBtn', 'cncHits', 'cnc');
+wireClickCounter('rotaryBtn', 'rotaryHits', 'rotary');
 </script>
 </body>
 </html>
