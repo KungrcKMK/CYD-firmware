@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-ไฟล์เดียว `index.html` static บน GitHub Pages (โดเมน kungrc.dev, HTTPS บังคับ) — ไม่มี build step, ไม่มี framework; JS ภายนอกได้เฉพาะ ESP Web Tools (unpkg module) ที่ใช้อยู่เดิม
+ไฟล์เดียว `index.html` static บน GitHub Pages (โดเมน kungrc.dev, HTTPS บังคับ) — ไม่มี build step, ไม่มี framework; JS ภายนอกได้เฉพาะ ESP Web Tools (unpkg module) ที่ใช้อยู่เดิม · **PWA (2026-11-05 ผู้ใช้สั่ง)**: `manifest.webmanifest` + `sw.js` + `icons/` — ติดตั้งเป็นแอปได้, ออฟไลน์เปิดหน้า/คู่มือ/ผังพินได้ แต่**ไม่เก็บเฟิร์มแวร์** (.bin/ota เน็ตอย่างเดียว ผู้ใช้เลือก) · หน้า/เลขรุ่นดึงเน็ตก่อนเสมอ · เพิ่มไฟล์ใน SHELL ของ sw.js ต้องขยับเลข CACHE
 
 ## Users
 

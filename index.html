@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KungRC Firmware Installer</title>
 <meta name="description" content="แฟลชเฟิร์มแวร์จอ ESP32-2432S028R (CYD) ผ่านเบราว์เซอร์ — Variometer, GPS Lap Timer, Autopilot, CNC Pendant, Rotary Indexer, HUD Nav, ELRS Checker">
+<meta name="theme-color" content="#101318">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 <style>
   @font-face {
@@ -749,6 +754,9 @@ loadReleaseMeta('cnc', 'manifest_cnc.json');
 loadReleaseMeta('rotary', 'manifest_rotary.json');
 loadReleaseMeta('hud', 'manifest_hud.json');
 loadReleaseMeta('chk', 'manifest_checker.json');
+
+// ---- PWA: ติดตั้งเป็นแอปได้ + เปิดหน้า/คู่มือ/ผังพินได้ตอนไม่มีเน็ต (เฟิร์มแวร์ยังต้องใช้เน็ต) ----
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 
 // ---- คู่มือแบบหน้าต่าง ----
 document.querySelectorAll('.doclink').forEach(function (btn) {

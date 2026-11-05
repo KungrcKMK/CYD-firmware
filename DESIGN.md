@@ -152,7 +152,7 @@ Flat at rest. Depth is tonal (well < bg < card) plus 1px hairlines; shadows exis
 
 ## Shapes
 
-Rectangles with a three-step radius scale: 4px (code chips, `.use` chips, inline images), 6px (buttons, dialog close), 10px (cards, frames, dialogs). Every container is bounded by a 1px `--line` hairline — the thin-border-plus-wide-hover-shadow pairing is the canon card grammar, not a defect. Step numbers are the one circle (24px, hairline ring). Icons are inline stroke SVGs (project icons at 26px, square caps) or masked-SVG glyphs (chevron, close X, warning triangle); no icon fonts, no emoji.
+Rectangles with a three-step radius scale: 4px (code chips, `.use` chips, inline images), 6px (buttons, dialog close), 10px (cards, frames, dialogs). Every container is bounded by a 1px `--line` hairline — the thin-border-plus-wide-hover-shadow pairing is the canon card grammar, not a defect. Step numbers are the one circle (24px, hairline ring). The site/app icon (2026-11-05, user's pick) is the Orbitron K in ink white with a small "RC" in brand orange #FF8C00 at lower right on the #101318 ground (KungRC brand rule: Kung white, RC orange); at 16px the RC becomes an orange bar. Rasters in `icons/` are rendered from orbitron.ttf by `gen_icons.py` (kept in the private CYD-source repo). In-page icons are inline stroke SVGs (project icons at 26px, square caps) or masked-SVG glyphs (chevron, close X, warning triangle); no icon fonts, no emoji.
 
 ## Components
 
