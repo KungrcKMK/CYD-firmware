@@ -1,29 +1,30 @@
 ---
-name: KungRC Firmware Installer
-description: แผนผังวงจรนีออนแผ่นเดียวที่มีกระแสไฟไหลจริง — สถานีแฟลชเฟิร์มแวร์ CYD บน kungrc.dev
+name: KungRC CYD Firmware Station
+description: Particle-collider event display — one flash is one collision event; six firmware tracks spray from one CYD board.
 colors:
-  schematic-black: "#060709"
-  grid-hairline: "#10141c"
-  panel-surface: "#0a0d12"
-  well-surface: "#0d1119"
-  rule: "#1d2431"
-  wire-off: "#2a3140"
-  ink: "#e8ecf2"
-  dim: "#8a94a2"
-  dim-floor: "#768192"
-  signal-vario: "#07e86a"
-  signal-lap: "#05c7f2"
-  signal-boat: "#ffa02e"
-  signal-cnc: "#f95867"
-  signal-rotary: "#c77dff"
-- `--c-hud` `#e8f4ff` — Signal Ice: HUD NAV (โปรเจกต์ที่ 6, เพิ่ม 2026-11-05) — ขาวน้ำแข็งโทนเย็น สื่อ 'แสงบนกระจก' ของตัวผลิตภัณฑ์เอง
+  vacuum: "#070b12"
+  vacuum-top: "#0b1220"
+  detector-steel: "#223244"
+  steel-bright: "#35506b"
+  steel-accent: "#4e739c"
+  panel-surface: "#0b1018"
+  well-surface: "#0e1521"
+  ink: "#e9eef5"
+  text-steel: "#a7b3c2"
+  text-faint: "#6d7a8c"
+  track-vario: "#07e86a"
+  track-lap: "#05c7f2"
+  track-boat: "#ffa02e"
+  track-cnc: "#f95867"
+  track-rotary: "#c77dff"
+  track-hud: "#e8f4ff"
 typography:
   display:
     fontFamily: "Orbitron, sans-serif"
-    fontSize: "clamp(2.4rem, 7vw, 5.2rem)"
-    fontWeight: 800
+    fontSize: "clamp(2.2rem, 5.5vw, 3.6rem)"
+    fontWeight: 700
     lineHeight: 1
-    letterSpacing: "0.28em"
+    letterSpacing: "0.3em"
   headline:
     fontFamily: "Orbitron, sans-serif"
     fontSize: "1.05rem"
@@ -41,182 +42,181 @@ typography:
     lineHeight: 1.55
   label:
     fontFamily: "Orbitron, sans-serif"
-    fontSize: "0.82rem"
+    fontSize: "0.8rem"
     fontWeight: 700
-    letterSpacing: "0.22em"
-  data:
+    letterSpacing: "0.18em"
+  mono:
     fontFamily: "Consolas, monospace"
     fontSize: "0.78rem"
-    fontWeight: 400
+    fontVariation: "tabular-nums"
 rounded:
-  none: "0"
+  chip: "2px"
+  code: "3px"
+  control: "4px"
+  panel: "5px"
+  frame: "6px"
 spacing:
-  module: "40px"
-  gutter: "22px"
-  frame-pad: "20px"
-  panel-gap: "18px"
   panel-pad: "16px"
+  grid-gap: "16px"
+  frame-pad: "20px"
+  wrap-pad: "22px"
+  section-gap: "72px"
 components:
   button-install:
-    backgroundColor: "transparent"
-    textColor: "{colors.signal-vario}"
+    backgroundColor: "color-mix(in srgb, var(--pc) 9%, transparent)"
+    textColor: "var(--pc)"
     typography: "{typography.label}"
-    rounded: "{rounded.none}"
+    rounded: "{rounded.control}"
     padding: "13px 10px"
+    width: "100%"
   button-install-hover:
-    backgroundColor: "{colors.signal-vario}"
-    textColor: "{colors.schematic-black}"
-  panel:
+    backgroundColor: "var(--pc)"
+    textColor: "{colors.vacuum}"
+  panel-card:
     backgroundColor: "{colors.panel-surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
+    rounded: "{rounded.panel}"
     padding: "{spacing.panel-pad}"
-  station:
-    backgroundColor: "{colors.schematic-black}"
-    textColor: "{colors.dim}"
-    rounded: "{rounded.none}"
-    padding: "9px 18px"
-  station-lit:
-    backgroundColor: "{colors.schematic-black}"
-    textColor: "{colors.ink}"
-  link-frame:
-    backgroundColor: "transparent"
-    textColor: "{colors.dim}"
-    rounded: "{rounded.none}"
-    padding: "9px 16px"
+  chip-use:
+    textColor: "currentColor"
+    rounded: "{rounded.chip}"
+    padding: "2px 6px"
+  nav-ghost:
+    textColor: "{colors.text-steel}"
+    rounded: "{rounded.control}"
+    padding: "10px 16px"
 ---
 
-# Design System: KungRC Firmware Installer
+# Design System: KungRC CYD Firmware Station
 
 ## Overview
 
-**Creative North Star: "Kraftwerk Man-Machine — the live wiring schematic"**
+**Creative North Star: "The Collider Event Display"**
 
-ทั้งหน้าเว็บคือแผนผังวงจรนีออนแผ่นเดียวบนกระดาษดำสนิท: กริดโมดูลาร์ 40px มองเห็นทั้งหน้า, บัสเทาเส้นเดียวแตกเป็นสายสัญญาณ 5 สีลงโหนดหลอดไฟ แล้วไหลต่อเป็น flowline ผ่านทุกหมวดจนจบที่ขั้ว GND ท้ายหน้า ไม่มีการ์ดใดลอยอิสระ — ทุกแผงถูกเดินสายถึงกัน หมึกเดียวของระบบคือเส้นอีนาเมลเรียบ (flat สนิท ไม่มี texture, ไม่มี gradient บนขอบ UI): เทาสำหรับสายดับ, สีสัญญาณประจำโปรเจกต์สำหรับสายมีไฟ
+The whole page is the event display of a particle detector: the ESP32-2432S028R board is the collision point at the center of layered steel detector rings, and the six firmwares are six colored particle tracks spraying out of it, each terminating at its own instrument-readout panel. Flashing a firmware once is one collision event. Everything structural — rings, rules, borders, tables — is neutral blue steel; everything that carries a signal (a project name, its track, its INSTALL button, its live version number) wears that project's one committed color.
 
-บุคลิกคือเครื่องมือช่าง ไม่ใช่โบรชัวร์: ป้าย Orbitron tracked-caps กับเลขหมวดแบบปกอัลบั้ม (02, 03, 04), ตัวเลข/รหัสเป็น Consolas, เนื้อหาไทยเป็น sans สะอาดอ่านง่าย ทุก state เปลี่ยนแบบ "ไฟติด" — สว่างทันทีไม่มี fade โลกนี้ปฏิเสธผัง hero + การ์ดกริดลอยของหมวด dev-tool โดยตรง (ยืนยันใน direction contract)
+The atmosphere is a near-black blue vacuum with no grid, no texture, and no decoration at rest. This world explicitly replaced and rejects the old Kraftwerk neon-schematic world: no 40px modular grid, no neon right-angle frames, no lamp-like ambient glow. Light exists only as signal response — the one-time track draw on load and the isolation highlight on hover/focus. Thai prose does the explaining in a quiet humanist voice; short English labels are machine inscriptions in tracked-caps Orbitron; every live number is a tabular Consolas readout.
 
 **Key Characteristics:**
-- พื้นดำสนิท (#060709) + กริดแฮร์ไลน์ 40px มองเห็นตลอด
-- สีสัญญาณ 5 สีประจำโปรเจกต์ = เอกลักษณ์แบรนด์ (brand commitment ใน PRODUCT.md)
-- มุมฉากทั้งระบบ ยกเว้นวงกลมหลอดสัญญาณ
-- เงาเดียวที่มีคือแสงนีออนเรือง (glow) จากตัว element สีของมันเอง
-- ไม่มี transition — ทุก state สลับแบบสวิตช์ไฟ
+- One dark vacuum ground (#070b12) with a single subtle top gradient from #0b1220; no grid, no pattern.
+- Steel for structure, signal color for meaning — six project colors, one per firmware, never swapped.
+- Instrument-readout panels: 1px steel border, 2px project-color left stripe, subgrid-aligned rows.
+- A hand-built SVG event display is the hero signature; panels and tracks are wired together by hover/focus isolation.
+- All icons are drawn inline SVG strokes; no glyph characters, no icon fonts, no raster icons.
 
 ## Colors
 
-พาเลตคือหมึกนีออนบนกระดาษแบบวงจร: ดำเกือบสนิทสามชั้น + เทาสายไฟ + สีสัญญาณอิ่ม 5 สี
+A neutral blue-steel structure palette carrying six saturated project signal colors against a blue-black vacuum.
 
-### Primary (สีสัญญาณประจำโปรเจกต์ — ห้ามสลับเจ้าของ)
-- **Signal Green / Vario** (`{colors.signal-vario}`): สายและแผง Variometer · และรับบทสีแอคทีฟของระบบ: `::selection`, `:focus-visible` outline, สถานีที่ผ่านแล้ว (.st.lit), ลิงก์ SHOPEE
-- **Signal Cyan / Lap Timer** (`{colors.signal-lap}`): สายและแผง GPS Lap Timer · และเป็นสีลิงก์ข้อความกับ summary ทั่วทั้งหน้า
-- **Signal Amber / Autopilot** (`{colors.signal-boat}`): สายและแผง Autopilot · และเป็นสีตัวอักษรใน `code`
-- **Signal Red-Pink / CNC** (`{colors.signal-cnc}`): สายและแผง CNC Pendant
-- **Signal Violet / Rotary** (`{colors.signal-rotary}`): สายและแผง Rotary Indexer
+### Primary (project signal colors — brand commitments, one per project)
+- **Vario Green** (#07e86a): Variometer's track, panel stripe, icon, name, INSTALL button; also the Shopee link color in the parts table.
+- **Lap Cyan** (#05c7f2): GPS Lap Timer's signal — and the system interaction color: links, text selection, focus-visible outline, doclink text all use it.
+- **Boat Amber** (#ffa02e): Autopilot's signal — also inline `code` text and the drawn warning-triangle icon.
+- **CNC Signal Red** (#f95867): CNC Pendant's signal.
+- **Rotary Violet** (#c77dff): Rotary Indexer's signal.
+- **HUD Ice White** (#e8f4ff): HUD Nav's signal — near-white, distinguished from ink by context (stripe, track, button border).
 
-### Neutral
-- **Schematic Black** (#060709): พื้นทั้งหน้า และสีตัวอักษรบนปุ่มที่ไฟเข้า (hover fill)
-- **Grid Hairline** (#10141c): เส้นกริด 40px — จางกว่าทุกอย่าง มองเห็นแต่ไม่แย่งสายตา
-- **Panel Surface** (#0a0d12): พื้นแผง/กรอบ — ทึบ บังกริดใต้แผง
-- **Well Surface** (#0d1119): พื้นลึกสุดของ `code` และหัวตาราง
-- **Rule** (#1d2431): เส้นกรอบพัก (แผงด้านที่ไม่ใช่สีสัญญาณ, เส้นตาราง, เส้นคั่น)
-- **Wire Off** (#2a3140): สายดับ — บัสหลัก, st-wire, flowline, กรอบปุ่มรองที่ยังไม่ hover
-- **Ink** (#e8ecf2): ตัวอักษรหลัก
-- **Dim** (#8a94a2): ตัวอักษรรอง (tagline, meta, muted, หัวตาราง)
-- **Dim Floor** (#768192): หรี่สุดที่ยังอ่านออก — เลขหมวดและ ⏚ GND เท่านั้น
+### Neutral (vacuum + detector steel)
+- **Vacuum** (#070b12): page ground. **Vacuum Top** (#0b1220): start of the single 430px top linear-gradient.
+- **Detector Steel** (#223244): every structural 1px border, rule, table border, ring segment.
+- **Bright Steel** (#35506b): brighter structure — shop table head rule, leader lines, chevron masks, scrollbar. **Accent Steel** (#4e739c): the brightest steel, inner detector rings only.
+- **Panel Surface** (#0b1018): panels, dialogs, frames, RUN strip. **Well Surface** (#0e1521): table heads, code background — the recessed layer.
+- **Ink** (#e9eef5): primary text. **Text Steel** (#a7b3c2): secondary text, labels. **Faint Steel** (#6d7a8c): tertiary annotations.
 
 ### Named Rules
-**The One-Project-One-Color Rule.** สีสัญญาณ 5 สีผูกกับโปรเจกต์ของตัวเองผ่าน `--pc` ต่อแผง ห้ามเอาสีของโปรเจกต์หนึ่งไปแต่งอีกโปรเจกต์ · บทระบบกลางที่ยืมสีไปใช้มีแค่ที่ build ใช้จริง: เขียว = active/focus/selection, ฟ้า = ลิงก์, อำพัน = code
-**The Dead-Wire Rule.** ทุกอย่างที่ยังไม่มีไฟใช้ Wire Off (#2a3140) หรือ Rule (#1d2431) — สีสัญญาณปรากฏเฉพาะจุดที่ "มีไฟ": หัวแผง, สาย, โหนด, ปุ่ม, state ที่แอคทีฟ
+**The Signal Rule.** Steel carries structure; signal color carries meaning. Any element that belongs to a project — track, stripe, icon, name, button, chip, dialog border — wears that project's exact hex, inherited via the panel's `--pc` custom property. Signal colors are never swapped, tinted into new roles, or used decoratively.
+
+**The Cyan System Rule.** Lap Cyan (#05c7f2) doubles as the whole-page interaction color: links, ::selection, :focus-visible, doclinks. No second interaction color exists.
+
+**The Amber Code Rule.** Boat Amber (#ffa02e) doubles as the color of inline `code` and the warning icon. Warnings are amber, never red — red belongs to CNC.
 
 ## Typography
 
-**Display Font:** Orbitron (self-hosted `orbitron.ttf`, weight 400–900, `font-display: swap`) with sans-serif fallback
-**Body Font:** Segoe UI / Noto Sans Thai / Tahoma, sans-serif
-**Label/Mono Font:** Consolas, monospace
+**Display Font:** Orbitron (self-hosted `orbitron.ttf`, weight range 400–900, swap)
+**Body Font:** Segoe UI (with Noto Sans Thai, Tahoma fallback)
+**Label/Mono Font:** Consolas (tabular-nums for live data)
 
-**Character:** Orbitron tracked-caps คือเสียงเครื่องจักรของป้ายวงจร ใช้กับป้ายภาษาอังกฤษสั้นๆ เท่านั้น · เนื้อหาไทยทั้งหมดเป็น sans ระบบที่อ่านสบาย · ตัวเลขและรหัส (เวอร์ชัน, วันที่, พิน) เป็น Consolas
+**Character:** Three strictly separated voices — Orbitron tracked-caps for short English machine inscriptions only, a quiet humanist Thai body for all explanation, and tabular Consolas for every live number. Orbitron never sets Thai text and never sets a paragraph.
 
 ### Hierarchy
-- **Display** (800, clamp(2.4rem, 7vw, 5.2rem), line-height 1, tracking .28em): KUNGRC masthead เท่านั้น
-- **Headline** (700, 1.05rem, tracking .22em, caps): ชื่อหมวดใน `.shead` คู่เลขหมวด Dim Floor
-- **Title** (700, 0.95rem, tracking .14em, caps, สี `--pc`): ชื่อโปรเจกต์บนแผง
-- **Body** (400, 16px, 1.55): เนื้อหาไทย · ใน `.frame` จำกัด 70ch
-- **Label** (700, 0.82rem, tracking .22em, caps): ปุ่ม INSTALL · ป้ายรองลดหลั่น .7–.8rem tracking .07–.3em (gh, use-chip, loom label)
-- **Data** (400, 0.78rem, Consolas, `tabular-nums`): แถว meta เวอร์ชัน/วันที่, คอลัมน์พินในตาราง, ⏚ GND
+- **Display** (700, clamp(2.2rem, 5.5vw, 3.6rem), lh 1, ls .3em): the KUNGRC wordmark only.
+- **Headline** (700, 1.05rem, ls .22em): section heads (BOARD PINOUT, PARTS, 3D CASE) in `.shead`.
+- **Title** (700, .95rem, ls .14em): panel names, colored in the panel's `--pc`.
+- **Body** (400, 16px, lh 1.55): all Thai prose; dialog body at .92rem / 1.75; prose capped at 70ch inside frames.
+- **Label** (700, .8rem, ls .18em): INSTALL buttons; smaller Orbitron labels step down (.78 RUN numbers, .74 tagline, .72 GITHUB, .7 chips/shop links) with tracking .07–.26em.
+- **Mono** (.78rem, tabular-nums): version + date readouts in `.meta`; Consolas also sets pin-table data columns (.8rem) and SVG sublabels (11px).
 
 ### Named Rules
-**The Tracked-Caps Label Rule.** Orbitron ใช้ได้เฉพาะตัวพิมพ์ใหญ่ภาษาอังกฤษแบบ tracked (≥ .07em) ความยาวสั้น ห้ามใช้พิมพ์ข้อความไทยหรือย่อหน้า
-**The Live-Number Rule.** เลขที่มาจากข้อมูลจริง (เวอร์ชัน วันที่ ตัวนับ) อยู่ใน Consolas + tabular-nums เสมอ
+**The Three Voices Rule.** English labels = Orbitron tracked caps; Thai content = Segoe/Noto body; live numbers = Consolas tabular. A string never borrows another voice.
+
+**The Live Readout Rule.** Every number that comes from data (version, date) renders in Consolas with tabular-nums and is loaded live from the manifest `version`/`updated` fields — never hard-coded in markup.
 
 ## Layout
 
-กระดาษวงจรแผ่นเดียว: `.wrap` กว้างสุด 1180px, gutter 22px, บนกริดพื้นหลัง 40px ที่มองเห็นทั้งหน้า · ลำดับแนวตั้ง: masthead → แถบสถานี 1-2-3 ร้อยด้วย `st-wire` → SVG loom (บัส→สาย 5 เส้นไล่เฉดหรี่→สว่าง→โหนด) → แผงโปรเจกต์ 5 คอลัมน์ gap 18px → หมวดถัดไปเชื่อมด้วย `flowline` (เส้นตั้ง 2px สูง 54px กึ่งกลาง) ลงถึง ⏚ GND ท้ายหน้า
+A single centered column (`.wrap`, max-width 1180px, 22px side padding). First viewport at 1440×900: masthead (wordmark + tagline + GITHUB ghost link), the RUN strip of 3 numbered steps in one 1px steel bar, the SVG event display (viewBox 1136×300), then the six-panel row — all six INSTALL buttons above the fold.
 
-Responsive: ≤1150px แผงเป็น 2 คอลัมน์ · ≤920px ซ่อน loom แล้วแต่ละแผงงอกสายหยด + โหนดของตัวเองด้านบน (`::before`/`::after`) แทน — metaphor ไม่ขาด · ≤640px คอลัมน์เดียว · ตารางกว้างอยู่ใน `.tablewrap` เลื่อนแนวนอนได้ ไม่ดันหน้า
+- **Panels grid:** 6 columns (gap 18px 16px) → 3 at ≤1150px (row-gap 40px) → 2 at ≤880px → 1 at ≤640px. Panels use `grid-template-rows: subgrid` spanning 6 rows (name / desc / install / meta / note / links) so rows align across the whole row; flex-column fallback under `@supports not`.
+- **Event display:** hidden at ≤1150px. In its place each panel grows a 26px top margin with a centered 2px × 17px tick and a 9px dot marker in its own `--pc` — the track terminal reattaches to the panel.
+- **Sections** sit 72px apart, each headed by `.shead` (Orbitron caps left, Thai descriptor right-aligned) over a 1px steel rule, content inside a `.frame` (1px steel, radius 6px, 20px padding). Wide tables live in `.tablewrap` with horizontal scroll; the page itself never overflows at 390px.
+- **No section numbering.** Numbers appear only where sequence is real: the RUN strip's 01/02/03.
 
 ## Elevation & Depth
 
-ไม่มี drop shadow ในระบบนี้เลย ความลึกมาจากชั้นความทึบของพื้น (Schematic Black → Panel Surface → Well Surface) และความสว่างของเส้น `box-shadow`/`drop-shadow` ปรากฏเฉพาะบทเดียว: **แสงนีออนเรือง** — เบลอรอบตัว offset ศูนย์ สีเดียวกับ element ที่เปล่ง
+Flat by default. Depth at rest is tonal: vacuum → panel surface (#0b1018) → well surface (#0e1521), separated by 1px steel borders, plus the one fixed top gradient. Shadows exist only as state response.
 
 ### Shadow Vocabulary
-- **station-lit glow** (`box-shadow: 0 0 12px #07e86a33`): สถานีที่ผ่านแล้ว
-- **panel hover glow** (`box-shadow: 0 0 18px color-mix(in srgb, var(--pc) 22%, transparent)`): แผงถูกชี้/โฟกัส
-- **button power-on glow** (`box-shadow: 0 0 20px var(--pc)`): ปุ่ม INSTALL ตอน hover/focus
-- **lamp glow** (`filter: drop-shadow(0 0 4–10px var(--pc))`): ไอคอนแผงและโหนดหลอดสัญญาณ
+- **Panel lift** (`box-shadow: 0 10px 28px rgba(2, 5, 11, .55)`): on panel hover/focus-within, paired with the border tinting toward the panel color via `color-mix(in srgb, var(--pc) 60%, var(--rule))`.
+- **Track isolation glow** (`filter: drop-shadow(0 0 6px currentColor)`): only on the isolated SVG track while its panel is hovered/focused.
+- **Dialog backdrop** (`rgba(4, 6, 10, .86)`): near-opaque vacuum behind open dialogs.
 
 ### Named Rules
-**The Lamp-Light Rule.** เงาทุกตัวคือแสงที่ element เปล่งออกมาเอง: offset 0 0, สีตามสีสัญญาณของเจ้าของ ห้ามมีเงาเทา เงาเฉียง หรือเงาบอกความสูง
+**The Vacuum Rule.** Nothing glows at rest. Light — glow, lift, full-opacity color — is always a response to an event: page load (tracks draw once) or hover/focus (isolation). This is signal glow, not the banned Kraftwerk lamp glow.
 
 ## Shapes
 
-มุมฉากทั้งระบบ — ไม่มี border-radius บนกล่อง ปุ่ม ตาราง หรือกรอบใดๆ เส้นกรอบหลักหนา 2px (แผง, ปุ่ม, สถานี, frame, หัวตาราง shop) เส้นรอง 1px (เซลล์ตาราง, use-chip, code) · แผงโปรเจกต์มีขอบบนเป็นสีสัญญาณของตัวเอง ที่เหลือเป็น Rule จนกว่าจะ hover · SVG icon ใช้ `stroke-linecap="square"` รักษาภาษามุมฉากถึงปลายเส้น · ข้อยกเว้นเดียวของโลกนี้: **วงกลมหลอดสัญญาณ** (โหนด r9→12 บน loom และจุดหยดบนจอแคบ) — วงกลมคือหลอดไฟ ไม่ใช่การ์ดมน
-
-**The Right-Angle Rule.** กล่องทุกใบมุมฉาก วงกลมใช้ได้บทเดียวคือหลอดสัญญาณ/โหนดไฟ
+Hard-edged instrument hardware with barely-softened corners: every container is a 1px Detector Steel border with a small radius that scales with the container — 2px chips, 3px code/close buttons, 4px buttons and the RUN strip, 5px panels, 6px frames and dialogs. Panels carry a 2px solid left stripe in the project color (the committed stand-in for the catalog's side-tab device — recorded in `.impeccable/config.json` ignoreRules). Detector geometry is circular and segmented: rings via `stroke-dasharray`, round-capped 2.5px tracks, dot-plus-leader-line label anchors. Drawn SVG strokes use round caps on tracks/chevrons and square caps on panel icons.
 
 ## Components
 
-### Buttons (INSTALL)
-- **Shape:** มุมฉาก กรอบนีออน 2px สีสัญญาณประจำแผง เต็มความกว้างแผง
-- **Primary:** พื้นโปร่ง ตัวอักษร Orbitron 700 / .82rem / tracking .22em สี `--pc`, padding 13px 10px, ข้อความ `INSTALL ▸`
-- **Hover / Focus:** "ไฟเข้า" — เติมพื้นเป็น `--pc`, ตัวอักษรกลับเป็น Schematic Black, glow 0 0 20px · เปลี่ยนทันที ไม่มี transition
-- **Secondary (`.gh` / link-frame):** กรอบ 2px Wire Off ตัวอักษร Dim → hover เปลี่ยนเป็นฟ้าทั้งกรอบและตัวอักษร (ไม่เติมพื้น)
+### Buttons (INSTALL, `.inst`)
+- **Character:** an armed instrument control — outlined in the project's signal color, charged at 9%.
+- **Shape:** full-width, 13px 10px padding, 4px radius, 1px solid `var(--pc)` border.
+- **Fill:** `color-mix(in srgb, var(--pc) 9%, transparent)`; text in `var(--pc)`, Orbitron label voice, with an inline SVG chevron (stroke currentColor).
+- **Hover / Focus-visible:** inverts — solid `var(--pc)` fill, Vacuum (#070b12) text.
+- **Ghost (GITHUB `.gh`):** 1px steel border, 4px radius, 10px 16px, dim Orbitron .72rem; hover turns border and text Lap Cyan.
+- **Close (`.docx`):** 1px steel border, 3px radius, dim text, masked SVG X icon; hover brightens to ink / panel color.
 
-### Chips
-- **use-chip (`.use`):** กรอบ 1px `currentColor` สีสัญญาณของโปรเจกต์ Orbitron .7rem — ป้ายบอกว่าอะไหล่ใช้กับโปรเจกต์ไหนในตาราง PARTS
-- **station (`.st`):** กรอบ 2px Wire Off ตัว Dim พื้นทึบ · state `.lit`: กรอบเขียว ตัว Ink เลขเขียว + glow — สถานะค้าง ไม่ใช่ hover
+### Chips (`.use`)
+- **Style:** Orbitron .7rem ls .07em, 1px `currentColor` border, 2px radius, 2px 6px padding; colored per project via `u-*` class. Used only in the parts table to mark which projects use a part.
 
-### Cards / Containers (แผงโปรเจกต์ `.panel`, กรอบหมวด `.frame`)
-- **Corner Style:** มุมฉาก (0)
-- **Background:** Panel Surface (#0a0d12) ทึบบนกริด
-- **Border:** 2px Rule รอบตัว + ขอบบน 2px สีสัญญาณ (`--pc`) · hover/focus-within: กรอบทั้งใบเป็น `--pc` + panel glow และสาย+โหนดของแผงนั้นบน loom สว่างเต็ม เส้นอื่นหรี่ (opacity .3)
-- **Internal Padding:** 16px (แผง) / 20px (frame)
-- **Row Discipline (2026-11-05):** แผงเป็น subgrid 6 แถว (ชื่อ/คำโปรย/ปุ่ม INSTALL/เวอร์ชัน/โน้ต/ลิงก์พับ) — แถวเดียวกันตั้งตรงกันทุกแผงในแถบเดียวกัน · track ใช้ minmax(0,1fr) กันเนื้อหาดันแผงล้น · คำโปรยสั้นหนึ่งประโยค รายละเอียดอยู่ใน details "ความสามารถ"
-- **แผงบนจอแคบ:** งอกสายหยด 3px + หลอดกลม 10px สี `--pc` เหนือแผงแทน loom
+### Cards / Containers (`.panel`, `.frame`, RUN strip)
+- **Panel:** Panel Surface bg, 1px steel border + 2px `--pc` left stripe, 5px radius, 16px padding, subgrid rows. Hover/focus-within: border tinted 60% toward `--pc` + panel-lift shadow.
+- **Frame:** 1px steel, 6px radius, 20px padding, Panel Surface.
+- **RUN strip:** panels-surface bar, steps divided by 1px steel left borders, Orbitron step numbers.
 
 ### Inputs / Fields
-ไม่มีในระบบ — หน้าเดียวไม่มีฟอร์ม (ละไว้ตามจริง)
+None exist. If one is ever needed: well-surface bg, 1px steel border, 3–4px radius, focus per the system `:focus-visible` (2px Lap Cyan outline, 3px offset).
 
-### Navigation (`.shead` + disclosure)
-- หัวหมวด: เลขหมวด Orbitron สี Dim Floor (02, 03, 04) + ชื่อหมวดคาปส์ tracked + คำอธิบายไทย Dim ชิดขวา ใต้เส้น 2px Rule
-- **Disclosure (`details`/`summary`):** ลูกศร `▸`/`▾` สี Wire Off นำหน้าข้อความฟ้า, เส้นคั่นบน 1px Rule — รายละเอียดเชิงช่างพับเก็บได้ ไม่บังทางแฟลช
+### Doclinks & Dialogs
+- **Doclink:** borderless full-width text button above a 1px steel top rule; Lap Cyan bold text with an 8×9px masked chevron in Bright Steel; hover → ink.
+- **Dialog (`.docdlg`):** Panel Surface, 1px border in the owning panel's `--pc` (inherited custom property), 6px radius, 22px 26px padding, min(680px, 100vw−32px), max-height 82vh; h3 1.25rem in `--pc`; closes via ปิด button, backdrop click, or ESC.
+- **Tables (`.pin`, `.shop`):** 1px steel collapsed borders; heads on Well Surface in Text Steel; data columns in Consolas.
 
-### Signature: Loom + Current Pulse
-SVG บัสเทา 4px แตกเป็นสายตั้ง 5 เส้น stroke เป็น linearGradient หรี่→สว่าง (จากเฉดมืดของสีตัวเองสู่สีเต็ม) ลงโหนด r9 · พัลส์แสง (`.pulse`, เส้นขาวนวล #eafff2 2px, `stroke-dasharray 26 600`) วิ่งด้วย `stroke-dashoffset` SMIL 3.2s วนเปลี่ยนสายทีละเส้นที่ขอบรอบ (`repeatEvent` — ไม่วาร์ปกลางทาง) · hover/focus แผง: พัลส์ล็อกที่สายนั้น เส้นหนาขึ้น 4→7 โหนด 9→12 + drop-shadow, เส้นอื่น opacity .3 · `prefers-reduced-motion: reduce` ซ่อนพัลส์ ทุกเส้นสว่างนิ่ง
-
-**The Power-On Rule.** ไม่มี transition/slide/fade ที่ไหนเลยในระบบ — ทุก state เปลี่ยนแบบไฟติด (สลับค่าทันที) การเคลื่อนไหวเดียวที่อนุญาตคือพัลส์กระแสบนเส้น SVG
+### Event Display (signature)
+Inline SVG (viewBox 1136×300, `aria-hidden`): segmented steel detector rings around the collision core at (568,112); faint colored vertex spray + steel debris curls; dashed beam pipe; one leader line + dot anchoring the Orbitron label "ESP32-2432S028R CORE"; six 2.5px round-capped tracks curving from the core to 4.5px terminal nodes with 2px drop lines into the panel row. Tracks draw once on load via `pathLength="1"` + stroke-dashoffset animation (1.1s, cubic-bezier(.2,.7,.2,1), staggered .08s delays; nodes pop in after). `prefers-reduced-motion: reduce` disables all of it — fully drawn, static. Hovering/focusing a panel sets `.evd.iso`: other tracks and nodes dim to .16 opacity; the active track goes 4px wide with the isolation glow. Hidden ≤1150px (panel tick+dot markers take over).
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** ตีกรอบทุกแผง/ปุ่ม/สถานีด้วยเส้น 2px มุมฉาก และเดินสาย (st-wire / flowline / loom / สายหยด) เชื่อมทุกส่วนเข้าหากัน — ของใหม่ต้องต่อเข้าวงจร ไม่ลอย
-- **Do** ใช้ `--pc` ของแผงเป็นแหล่งสีเดียวของ element ภายในแผงนั้น (หัว, ไอคอน, ปุ่ม, สายหยด)
-- **Do** ให้ตัวเลขสด (เวอร์ชัน/วันที่/ตัวนับ) เป็น Consolas tabular-nums และปล่อยให้ JS เติมจากแหล่งจริง
-- **Do** เขียนป้ายอังกฤษเป็น Orbitron tracked-caps + เลขหมวดสองหลัก และคำอธิบายไทยเป็น body sans ข้างกัน
+- **Do** route every project-owned element through the panel's `--pc` custom property so dialogs, icons, buttons, and markers inherit the right signal color automatically.
+- **Do** draw every icon as inline SVG strokes (stroke `currentColor` or `var(--pc)`; masked data-URI SVG for ::before icons) at icon sizes of 8–26px.
+- **Do** set every live number in Consolas tabular-nums and load it from the manifest (`version`, `updated`) at runtime.
+- **Do** keep hover economy: border tint via `color-mix` + one lift shadow on panels; full fill inversion on buttons; nothing else moves.
+- **Do** honor `prefers-reduced-motion`: the only animations in the system (track draw, node pop) switch off to a static fully-drawn state.
 
 ### Don't:
-- **Don't** ใช้ border-radius บนกล่องหรือปุ่มใดๆ — วงกลมสงวนไว้ให้หลอดสัญญาณ/โหนดเท่านั้น (The Right-Angle Rule)
-- **Don't** ใส่เงาเทา เงาเฉียง หรือเงายกความสูง — box-shadow ต้อง offset 0 0 สีสัญญาณของเจ้าของเท่านั้น (The Lamp-Light Rule)
-- **Don't** ใส่ transition, fade, slide หรือ easing — state สลับทันทีแบบสวิตช์ (The Power-On Rule)
-- **Don't** สลับสีสัญญาณข้ามโปรเจกต์ หรือเพิ่มสี accent ที่หก (The One-Project-One-Color Rule — brand commitment)
-- **Don't** วางการ์ดลอยอิสระแบบ hero + grid ของเว็บ dev-tool ทั่วไป — โลกนี้ปฏิเสธผังนั้นโดยสัญญา
+- **Don't** reintroduce the dead Kraftwerk grammar: no visible modular/40px grid, no neon right-angle frames, no ambient lamp glow at rest. Glow is permitted only as the track-isolation response.
+- **Don't** set Thai text in Orbitron, or any paragraph in Orbitron — it is for short tracked-caps English inscriptions only.
+- **Don't** use unicode glyphs or icon fonts for icons (the sole glyph exception is the ↗ external-link arrow inside Orbitron link labels).
+- **Don't** number section headings — numbers mark real sequence only (RUN 01–03).
+- **Don't** add interest/visitor counters anywhere (permanent product decision, PRODUCT.md 2026-11-05), and don't hard-code version numbers in markup.
+- **Don't** repurpose a project signal color for a new meaning, except the two committed double-duties: Lap Cyan as the system interaction color and Boat Amber as code/warning.
