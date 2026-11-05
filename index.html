@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KungRC Firmware Installer</title>
-<meta name="description" content="แฟลชเฟิร์มแวร์จอ ESP32-2432S028R (CYD) ผ่านเบราว์เซอร์ — Variometer, GPS Lap Timer, Autopilot, CNC Pendant, Rotary Indexer">
+<meta name="description" content="แฟลชเฟิร์มแวร์จอ ESP32-2432S028R (CYD) ผ่านเบราว์เซอร์ — Variometer, GPS Lap Timer, Autopilot, CNC Pendant, Rotary Indexer, HUD Nav">
 <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 <style>
   @font-face {
@@ -27,6 +27,7 @@
     --c-boat: #ffa02e;
     --c-cnc: #f95867;
     --c-rotary: #c77dff;
+    --c-hud: #e8f4ff;
     /* ชื่อเดิมที่ inline style ในเนื้อหายังอ้างถึง */
     --rule: #262c36;
   }
@@ -71,7 +72,7 @@
   .run-note { color: var(--dim); font-size: .85rem; margin: 16px 0 0; }
 
   /* ---------- การ์ดเฟิร์มแวร์ ---------- */
-  .panels { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+  .panels { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
   @media (max-width: 1150px) { .panels { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 880px) { .panels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .panels { grid-template-columns: 1fr; } }
@@ -85,6 +86,7 @@
   .panel.boat   { --pc: var(--c-boat); }
   .panel.cnc    { --pc: var(--c-cnc); }
   .panel.rotary { --pc: var(--c-rotary); }
+  .panel.hud    { --pc: var(--c-hud); }
   .panel:hover, .panel:focus-within { border-color: #39414d; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
   .pname { display: flex; align-items: center; gap: 10px; }
   .pname svg { flex: 0 0 26px; stroke: var(--pc); stroke-linecap: round; }
@@ -157,7 +159,7 @@
   .use { display: inline-block; font-family: Consolas, monospace; font-size: .72rem; letter-spacing: .03em;
          border: 1px solid; border-radius: 4px; padding: 2px 6px; margin: 1px 2px 1px 0; white-space: nowrap; }
   .u-vario { color: var(--c-vario); } .u-lap { color: var(--c-lap); } .u-boat { color: var(--c-boat); }
-  .u-cnc { color: var(--c-cnc); } .u-rotary { color: var(--c-rotary); }
+  .u-cnc { color: var(--c-cnc); } .u-rotary { color: var(--c-rotary); } .u-hud { color: var(--c-hud); }
   .tablewrap { overflow-x: auto; }
 
   /* ---------- footer ---------- */
@@ -181,7 +183,7 @@
 
   <div class="hero">
     <h1>ติดตั้งเฟิร์มแวร์ ESP32 CYD ผ่านเบราว์เซอร์</h1>
-    <p class="sub">เฟิร์มแวร์พร้อมใช้ 5 ตัวสำหรับบอร์ดจอสัมผัส ESP32-2432S028R —
+    <p class="sub">เฟิร์มแวร์พร้อมใช้ 6 ตัวสำหรับบอร์ดจอสัมผัส ESP32-2432S028R —
       ติดตั้งผ่านสาย USB ได้ทันที ไม่ต้องลงโปรแกรม รองรับ Chrome และ Edge</p>
     <div class="run" aria-label="ขั้นตอนการติดตั้ง 3 ขั้น">
       <span class="rs"><b>1</b><span>เสียบบอร์ดกับคอมด้วยสาย USB แบบส่งข้อมูลได้</span></span>
@@ -509,6 +511,52 @@
     </div>
   </div>
 
+
+  <!-- HUD NAV -->
+  <div class="panel hud">
+    <div class="pname">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
+        <path d="M3 16 Q12 11 21 16"/><path d="M3 16 V20 M21 16 V20"/>
+        <path d="M12 3 V9 M12 3 L9 6 M12 3 L15 6"/>
+      </svg>
+      <h2>HUD NAV</h2>
+    </div>
+    <p class="pdesc">จอนำทาง Google Maps สะท้อนกระจกหน้ารถ — ไอคอนเลี้ยว + ระยะถึงทางเลี้ยว</p>
+    <esp-web-install-button id="hudBtn" manifest="manifest_hud.json">
+      <button slot="activate" class="inst">ติดตั้ง <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </esp-web-install-button>
+    <div class="meta">
+      <span><b id="hudVer">v…</b></span>
+      <span id="hudDate">อัปเดตล่าสุด: …</span>
+    </div>
+    <p class="pnote">บอร์ดเปล่า + สาย USB จากรถ ไม่ต่อเซ็นเซอร์ใด ๆ · เฉพาะ Android (iPhone ใช้ไม่ได้)</p>
+    <div class="plinks">
+    <button class="doclink" type="button">ความสามารถ (HUD NAV)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>ความสามารถ (HUD NAV)</h3><button class="docx" type="button">ปิด</button></div>
+      <p>รับจาก Google Maps ผ่านแอป <b>KungRC HUD Link</b> (BLE, เฉพาะ Android) · ลูกศรเลี้ยว + ระยะถึงทางเลี้ยว + ETA + นาฬิกา + แถบคำสั่งภาษาไทย ·
+        สีจอเลือกได้ เขียว/อำพัน/ขาว · โหมดจอตรงใช้กลางวัน · หมุนจอ 180° (ย้ายฝั่งสาย USB) · DEMO ลูกศร 13 แบบ ลองได้ไม่ต้องมีมือถือ · OTA</p>
+    </dialog>
+    <button class="doclink" type="button">การติดตั้ง + ตั้งค่ามือถือ (HUD NAV)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>การติดตั้ง + ตั้งค่ามือถือ (HUD NAV)</h3><button class="docx" type="button">ปิด</button></div>
+      <ol>
+        <li>แฟลชเฟิร์มแวร์ปุ่มบน → เปิดเครื่อง จอขึ้นโหมด DEMO ลูกศรวนให้เห็นหน้าตาเลย</li>
+        <li>มือถือ Android ติดตั้งแอป <b>KungRC HUD Link</b> (ยังไม่เปิดให้ดาวน์โหลดสาธารณะ)</li>
+        <li>ในแอป: กด <b>เปิดสิทธิ์อ่านการแจ้งเตือน</b> → กด <b>ค้นหาบอร์ด HUD</b> (อนุญาตบลูทูธ) →
+          แอปจำบอร์ดไว้ ต่อเองทุกครั้งที่บอร์ดเปิด</li>
+        <li>เปิดนำทางใน Google Maps แล้วพับ Maps ไปเบื้องหลังหรือปิดจอมือถือ →
+          ลูกศร ระยะ ETA และคำสั่งภาษาไทยขึ้นจอเอง (Maps ส่งข้อมูลเฉพาะตอนอยู่เบื้องหลัง)</li>
+        <li>วางจอนอนบนคอนโซลหงายขึ้น เปิด <b>MIRROR</b> ใน Settings (แตะจอหนึ่งครั้ง) →
+          ภาพสะท้อนบนกระจกอ่านถูกด้าน · กลางวันแดดจัดสลับเป็นโหมดจอตรงได้ ·
+          สาย USB อยู่ผิดฝั่งให้กด <b>ROTATE</b></li>
+      </ol>
+      <p class="muted">สีจอกด HUD: GREEN/AMBER/WHITE ใน Settings · แนะนำติดฟิล์ม HUD ใสบนกระจกช่วยให้ชัดขึ้นมาก ·
+        ระยะขึ้นเฉพาะช่วงใกล้ทางเลี้ยว (ไกลกว่านั้นจอขึ้น "--" ตามที่ Maps ส่งมา)</p>
+    </dialog>
+    </div>
+  </div>
+
 </div><!-- /panels -->
 
 <section id="pinout">
@@ -531,7 +579,7 @@
     <tr>
       <td><b>บอร์ด ESP32 CYD 2.8" จอสัมผัส TFT</b><br>
         <span class="muted">ตัวเครื่องหลัก — ต้องมี</span></td>
-      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span><span class="use u-cnc">CNC</span><span class="use u-rotary">ROTARY</span></td>
+      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span><span class="use u-cnc">CNC</span><span class="use u-rotary">ROTARY</span><span class="use u-hud">HUD</span></td>
       <td><a href="https://s.shopee.co.th/5foDlJPUiU?share_channel_code=6" target="_blank">SHOPEE ↗</a><br>
           <a href="https://s.shopee.co.th/40g0IqAmN3?share_channel_code=6" target="_blank">อีกร้าน ↗</a></td>
     </tr>
@@ -637,6 +685,7 @@ loadReleaseMeta('lap', 'manifest_laptimer.json');
 loadReleaseMeta('boat', 'manifest_boat.json');
 loadReleaseMeta('cnc', 'manifest_cnc.json');
 loadReleaseMeta('rotary', 'manifest_rotary.json');
+loadReleaseMeta('hud', 'manifest_hud.json');
 
 // ---- คู่มือแบบหน้าต่าง ----
 document.querySelectorAll('.doclink').forEach(function (btn) {
