@@ -1,0 +1,1 @@
+{"name":"KungRC ELRS CHECKER","version":"1.0.0","updated":"2026-11-05","new_install_prompt_erase":true,"builds":[{"chipFamily":"ESP32","parts":[{"path":"web_checker.bin","offset":0}]}]}

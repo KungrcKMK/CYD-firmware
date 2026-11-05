@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KungRC Firmware Installer</title>
-<meta name="description" content="แฟลชเฟิร์มแวร์จอ ESP32-2432S028R (CYD) ผ่านเบราว์เซอร์ — Variometer, GPS Lap Timer, Autopilot, CNC Pendant, Rotary Indexer, HUD Nav">
+<meta name="description" content="แฟลชเฟิร์มแวร์จอ ESP32-2432S028R (CYD) ผ่านเบราว์เซอร์ — Variometer, GPS Lap Timer, Autopilot, CNC Pendant, Rotary Indexer, HUD Nav, ELRS Checker">
 <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 <style>
   @font-face {
@@ -28,6 +28,7 @@
     --c-cnc: #f95867;
     --c-rotary: #c77dff;
     --c-hud: #e8f4ff;
+    --c-chk: #ffd23f;
     /* ชื่อเดิมที่ inline style ในเนื้อหายังอ้างถึง */
     --rule: #262c36;
   }
@@ -72,8 +73,8 @@
   .run-note { color: var(--dim); font-size: .85rem; margin: 16px 0 0; }
 
   /* ---------- การ์ดเฟิร์มแวร์ ---------- */
-  .panels { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
-  @media (max-width: 1150px) { .panels { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .panels { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+  @media (max-width: 1150px) { .panels { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   @media (max-width: 880px) { .panels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .panels { grid-template-columns: 1fr; } }
   .panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
@@ -87,10 +88,13 @@
   .panel.cnc    { --pc: var(--c-cnc); }
   .panel.rotary { --pc: var(--c-rotary); }
   .panel.hud    { --pc: var(--c-hud); }
+  .panel.chk    { --pc: var(--c-chk); }
   .panel:hover, .panel:focus-within { border-color: #39414d; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
   .pname { display: flex; align-items: center; gap: 10px; }
   .pname svg { flex: 0 0 26px; stroke: var(--pc); stroke-linecap: round; }
   .pname h2 { font-size: 1rem; font-weight: 700; color: var(--pc); margin: 0; letter-spacing: .02em; }
+  /* 7 คอลัมน์ การ์ดกว้าง ~155px — ชื่อคำเดียวยาว (VARIOMETER) ไม่พอข้างไอคอน จึงวางไอคอนเหนือชื่อทุกใบ */
+  @media (min-width: 1151px) { .pname { flex-direction: column; align-items: flex-start; gap: 8px; } }
   .pdesc { font-size: .86rem; color: var(--dim); margin: 10px 0 12px; align-self: start; }
   .inst {
     font: inherit; font-size: .95rem; font-weight: 700;
@@ -159,7 +163,7 @@
   .use { display: inline-block; font-family: Consolas, monospace; font-size: .72rem; letter-spacing: .03em;
          border: 1px solid; border-radius: 4px; padding: 2px 6px; margin: 1px 2px 1px 0; white-space: nowrap; }
   .u-vario { color: var(--c-vario); } .u-lap { color: var(--c-lap); } .u-boat { color: var(--c-boat); }
-  .u-cnc { color: var(--c-cnc); } .u-rotary { color: var(--c-rotary); } .u-hud { color: var(--c-hud); }
+  .u-cnc { color: var(--c-cnc); } .u-rotary { color: var(--c-rotary); } .u-hud { color: var(--c-hud); } .u-chk { color: var(--c-chk); }
   .tablewrap { overflow-x: auto; }
 
   /* ---------- footer ---------- */
@@ -183,7 +187,7 @@
 
   <div class="hero">
     <h1>ติดตั้งเฟิร์มแวร์ ESP32 CYD ผ่านเบราว์เซอร์</h1>
-    <p class="sub">เฟิร์มแวร์พร้อมใช้ 6 ตัวสำหรับบอร์ดจอสัมผัส ESP32-2432S028R —
+    <p class="sub">เฟิร์มแวร์พร้อมใช้ 7 ตัวสำหรับบอร์ดจอสัมผัส ESP32-2432S028R —
       ติดตั้งผ่านสาย USB ได้ทันที ไม่ต้องลงโปรแกรม รองรับ Chrome และ Edge</p>
     <div class="run" aria-label="ขั้นตอนการติดตั้ง 3 ขั้น">
       <span class="rs"><b>1</b><span>เสียบบอร์ดกับคอมด้วยสาย USB แบบส่งข้อมูลได้</span></span>
@@ -373,11 +377,11 @@
           (SERVO+ESC หรือ 2 มอเตอร์) — โหมดที่ใช้ได้จะกรองตามแพลตฟอร์มเอง</li>
         <li>หน้า Sensors → <b>CAL COMPASS</b> หมุนตัวเรือ/รถช้า ๆ เป็นวงกลม 20 วิ →
           หันหัวไปทิศเหนือจริงแล้วกด <b>ALIGN BOW</b></li>
-        <li>หน้า RC Monitor → เลือก <b>RC:SBUS/CRSF</b> ตามวิทยุ, <b>CH5:3POS/6POS</b>
+        <li>หน้า RC Monitor → เลือก <b>RC:SBUS/CRSF</b> ตามวิทยุ (รีซีฟเวอร์ ELRS ให้ใช้ CRSF), <b>3POS/6POS</b> ของสวิตช์โหมด
           (6POS = หมุน knob เลือกครบทุกโหมด ค้าง 3 วิยืนยัน), <b>FS:</b> เลือกท่าตอนสัญญาณขาด (RTH/ANCHOR/STOP/CONT)</li>
         <li>ก่อนออกทุกครั้ง: รอ GPS ติด แล้วกดปุ่ม <b>HOME</b> (แถบล่าง) ตั้งจุดกลับบ้าน — สีฟ้า = ตั้งแล้ว</li>
       </ol>
-      <p><b>โหมดขับ (ปุ่ม MODE หรือสวิตช์ CH5):</b> MANUAL บังคับเอง · <b>GOTO</b> วิ่งไปจุดที่เลือกแล้วหยุดรอ ·
+      <p><b>โหมดขับ (ปุ่ม MODE หรือสวิตช์โหมด — SBUS ใช้ CH5, ELRS/CRSF ใช้ CH6):</b> MANUAL บังคับเอง · <b>GOTO</b> วิ่งไปจุดที่เลือกแล้วหยุดรอ ·
         <b>MISSION</b> ไล่ทุกจุดตามลำดับ จุดที่ติ๊ก DROP เปิดกระบะเหยื่อ 3 วิ เสร็จกลับบ้านเอง ·
         <b>FIELD</b> (ตัดหญ้า) SPOT1-4 = สี่มุมแปลง วิ่งซิกแซกเต็มแปลงตามหน้ากว้าง SWATH ·
         CIRCLE วนรอบจุด · ANCHOR ล็อกตำแหน่งสู้ลม/กระแสน้ำ · RTH กลับบ้าน</p>
@@ -387,6 +391,8 @@
         (รหัส 12345678) เปิด 192.168.4.1 = แผนที่สด + สั่งโหมด/เลือกจุด/ตั้ง HOME จากมือถือ ·
         <b>SD Card:</b> บันทึกเที่ยว (trip) อัตโนมัติ, คลังหมายไม่จำกัด spots.csv, แผนภารกิจ mission.csv
         (บรรทัดละ lat,lon,GO/DROP/HOLD,วินาที), สำรอง config · ELRS ได้ telemetry ขึ้นจอวิทยุ</p>
+      <p class="muted warn"><b>ELRS (v2.4.0 ขึ้นไป):</b> CH5 คือ Arm ของ ELRS: DISARM แล้วมอเตอร์ดับในโหมด MANUAL (สัญญาณหายยังทำ failsafe ตามที่ตั้ง) ·
+        ย้ายสวิตช์โหมดบนวิทยุไป CH6 · หน้า RC บอก LQ และบี๊บเตือนเมื่อ LQ ต่ำกว่า 30% · ตรวจสายและช่องก่อนลงเรือด้วย ELRS Checker</p>
     </dialog>
     </div>
   </div>
@@ -557,6 +563,62 @@
     </div>
   </div>
 
+  <!-- ELRS CHECKER -->
+  <div class="panel chk">
+    <div class="pname">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
+        <path d="M4 13 H20 V21 H4 Z"/><path d="M8 13 V5"/><path d="M11.5 4 Q14 6.5 11.5 9 M14.5 2 Q19 6.5 14.5 11"/>
+        <path d="M9 17.5 L11 19 L15 15.5"/>
+      </svg>
+      <h2>ELRS CHECKER</h2>
+    </div>
+    <p class="pdesc">ตรวจช่องสัญญาณจากรีซีฟเวอร์ ExpressLRS ทุกช่อง เช็กไฟล์โมเดลบนโต๊ะก่อนลงเครื่องจริง</p>
+    <esp-web-install-button id="chkBtn" manifest="manifest_checker.json">
+      <button slot="activate" class="inst">ติดตั้ง <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </esp-web-install-button>
+    <div class="meta">
+      <span><b id="chkVer">v…</b></span>
+      <span id="chkDate">อัปเดตล่าสุด: …</span>
+    </div>
+    <p class="pnote">บอร์ด + รีซีฟเวอร์ ELRS ต่อสาย 4 เส้น · ไม่ต้องมีโมเดล มอเตอร์ หรือใบพัด</p>
+    <div class="plinks">
+    <button class="doclink" type="button">ความสามารถ (ELRS Checker)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>ความสามารถ (ELRS Checker)</h3><button class="docx" type="button">ปิด</button></div>
+      <p>อ่าน CRSF จากรีซีฟเวอร์ ELRS โดยตรง · หน้า CH: 16 ช่องเป็นแถบ + ค่า µs + ขีดค่าต่ำสุด/สูงสุดที่เคยไปถึง (เช็ก end point) ·
+        CH5 บอกสถานะ ARM ของ ELRS เป็นสี · หน้า LINK: LQ, RSSI, SNR, เสาที่ใช้, กำลังส่ง, จำนวนเฟรมต่อวินาที, เฟรมเสีย ·
+        จับ FAILSAFE พร้อมเวลาที่หลุด · ส่งข้อความ <b>CHECKER</b> ขึ้นช่อง FM บนวิทยุ = ทาง telemetry ใช้ได้ · เสียงตอน ARM และ FAILSAFE ·
+        หมุนจอ 180° · OTA</p>
+      <p class="muted">ใช้คู่กับ <a href="https://wizard.kungrc.dev" target="_blank">Radiomaster Wizard</a>: ส่งออกไฟล์โมเดล ลงวิทยุ แล้วโยกทุกสวิตช์ดูว่าช่องขยับตรงจอสรุปของวิซาร์ด</p>
+    </dialog>
+    <button class="doclink" type="button">การต่อสาย (ELRS Checker)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>การต่อสาย (ELRS Checker)</h3><button class="docx" type="button">ปิด</button></div>
+      <table class="pin">
+        <tr><th>รีซีฟเวอร์ ELRS</th><th>ต่อที่บอร์ด (ขั้ว P1)</th></tr>
+        <tr><td>TX</td><td>IO3 (RX)</td></tr>
+        <tr><td>RX</td><td>IO1 (TX)</td></tr>
+        <tr><td>5V</td><td>5V</td></tr>
+        <tr><td>GND</td><td>GND</td></tr>
+      </table>
+      <p class="muted warn">รีซีฟเวอร์ต้องตั้งโปรโตคอลเป็น CRSF 420000 (ค่าเริ่มต้นของ ELRS) ไม่ใช่ SBUS ·
+        TX ไขว้กับ RX · สายเส้นเดียวกับที่ต่อ Autopilot ใช้ได้ทันที</p>
+    </dialog>
+    <button class="doclink" type="button">วิธีใช้งาน (ELRS Checker)</button>
+    <dialog class="docdlg">
+      <div class="dochead"><h3>วิธีใช้งาน (ELRS Checker)</h3><button class="docx" type="button">ปิด</button></div>
+      <ol>
+        <li>ต่อรีซีฟเวอร์ตามตาราง เปิดวิทยุ bind ให้ไฟรีซีฟเวอร์ติดค้าง — มุมขวาบนของจอเปลี่ยนจาก <b>NO RX</b> เป็น <b>LQ</b></li>
+        <li>หน้า <b>CH</b>: โยกทุกสติ๊ก สวิตช์ และปุ่มหมุน แล้วดูว่าขยับช่องที่ตั้งใจไว้ · แตะ <b>RST</b> เพื่อเริ่มเก็บค่าต่ำสุด/สูงสุดใหม่</li>
+        <li>CH5 คือ Arm ของ ELRS: สีเขียว = ARM, แดง = DISARM · โหมด Hybrid/Wide ส่ง CH5 ได้แค่สองค่า สวิตช์สามทางบน CH5 ใช้ไม่ได้</li>
+        <li>ปิดวิทยุ: จอต้องขึ้น <b>FAILSAFE</b> พร้อมเสียงยาว · เปิดใหม่ต้องกลับมาเอง</li>
+        <li>ช่อง FM บนวิทยุขึ้น <b>CHECKER</b> = telemetry กลับถึงวิทยุ (ถ้าไม่ขึ้น ตรวจว่า Telem Ratio ไม่ได้ตั้งเป็น Off หรือ Race)</li>
+      </ol>
+      <p class="muted">จอขึ้น <b>BAD DATA</b> = มีข้อมูลเข้าแต่อ่านไม่ได้: ตรวจว่ารีซีฟเวอร์เป็น CRSF 420000 และ TX/RX ไม่สลับ</p>
+    </dialog>
+    </div>
+  </div>
+
 </div><!-- /panels -->
 
 <section id="pinout">
@@ -579,7 +641,7 @@
     <tr>
       <td><b>บอร์ด ESP32 CYD 2.8" จอสัมผัส TFT</b><br>
         <span class="muted">ตัวเครื่องหลัก — ต้องมี</span></td>
-      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span><span class="use u-cnc">CNC</span><span class="use u-rotary">ROTARY</span><span class="use u-hud">HUD</span></td>
+      <td><span class="use u-vario">VARIO</span><span class="use u-lap">LAP</span><span class="use u-boat">BOAT</span><span class="use u-cnc">CNC</span><span class="use u-rotary">ROTARY</span><span class="use u-hud">HUD</span><span class="use u-chk">ELRS</span></td>
       <td><a href="https://s.shopee.co.th/5foDlJPUiU?share_channel_code=6" target="_blank">SHOPEE ↗</a><br>
           <a href="https://s.shopee.co.th/40g0IqAmN3?share_channel_code=6" target="_blank">อีกร้าน ↗</a></td>
     </tr>
@@ -686,6 +748,7 @@ loadReleaseMeta('boat', 'manifest_boat.json');
 loadReleaseMeta('cnc', 'manifest_cnc.json');
 loadReleaseMeta('rotary', 'manifest_rotary.json');
 loadReleaseMeta('hud', 'manifest_hud.json');
+loadReleaseMeta('chk', 'manifest_checker.json');
 
 // ---- คู่มือแบบหน้าต่าง ----
 document.querySelectorAll('.doclink').forEach(function (btn) {
