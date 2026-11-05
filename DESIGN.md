@@ -1,6 +1,6 @@
 ---
 name: KungRC Firmware Installer
-description: Category-standard dark download page — six brand-color install buttons on a quiet GitHub-dark ground.
+description: Category-standard dark download page — five brand-color install buttons on a quiet GitHub-dark ground.
 colors:
   page-bg: "#101318"
   card-surface: "#161b22"
@@ -16,7 +16,6 @@ colors:
   signal-boat: "#ffa02e"
   signal-cnc: "#f95867"
   signal-rotary: "#c77dff"
-  signal-hud: "#e8f4ff"
 typography:
   display:
     fontFamily: "Orbitron, sans-serif"
@@ -80,22 +79,22 @@ components:
 
 **Creative North Star: "The Official Download Page"**
 
-This is the third visual world (replacing the collider-event-display world) and it is deliberately ordinary: a formal, category-standard firmware download page in the register of the VS Code and Chrome download pages, per the user's standing "ทางการกว่านี้" decision (2026-11-05) and PRODUCT.md's brand commitment "แนวหน้าเว็บ = ทางการ/มาตรฐานหมวด". The ground is GitHub-dark neutrals — near-black page, slightly lifted card surface, 1px hairlines — and the page spends its entire color budget in one place: the row of six solid brand-color install buttons, one per firmware. Everything else (Thai prose, tables, dialogs, footer) stays in grayscale restraint.
+This is the third visual world (replacing the collider-event-display world) and it is deliberately ordinary: a formal, category-standard firmware download page in the register of the VS Code and Chrome download pages, per the user's standing "ทางการกว่านี้" decision (2026-11-05) and PRODUCT.md's brand commitment "แนวหน้าเว็บ = ทางการ/มาตรฐานหมวด". The ground is GitHub-dark neutrals — near-black page, slightly lifted card surface, 1px hairlines — and the page spends its entire color budget in one place: the row of five solid brand-color install buttons, one per firmware. Everything else (Thai prose, tables, dialogs, footer) stays in grayscale restraint.
 
 No themed devices survive from the old world. The only inscription of brand character is the Orbitron wordmark in the navbar; the rest of the page uses the system Thai sans at one body size with a deliberately flat heading ramp (accepted advisory: flat-type-hierarchy, corporate restraint). There is no decorative motion of any kind — no @keyframes, no transitions beyond browser defaults.
 
 **Key Characteristics:**
 - Dark neutral ground, 1px hairline borders, wide soft shadows only on hover/open state (accepted canon grammar: thin border + wide shadow)
-- Six per-project signal colors routed through a single `--pc` custom property per card
+- Five per-project signal colors routed through a single `--pc` custom property per card
 - Flat type hierarchy in system sans; Consolas tabular-nums reserved for machine data
 - Static page: zero animation, hover states only
 
 ## Colors
 
-A grayscale GitHub-dark ground carrying six saturated project signals.
+A grayscale GitHub-dark ground carrying five saturated project signals.
 
 ### Primary
-- **Signal Six** (#07e86a / #05c7f2 / #ffa02e / #f95867 / #c77dff / #e8f4ff): one color per firmware project (vario / lap / boat / cnc / rotary / hud), each routed into its card via the `--pc` custom property. It colors the card's icon stroke, the card title, the solid install button, and the project's `.use` chip in the parts table. These are the page's entire color identity.
+- **Project Signals** (#07e86a / #05c7f2 / #ffa02e / #f95867 / #c77dff): one color per firmware project (vario / lap / boat / cnc / rotary; HUD's #e8f4ff retired with the card 2026-11-05), each routed into its card via the `--pc` custom property. It colors the card's icon stroke, the card title, the solid install button, and the project's `.use` chip in the parts table. These are the page's entire color identity.
 - **Link Cyan** (#05c7f2): all hyperlinks, selection background, and `:focus-visible` outlines. Shares a hex with the lap signal but is a separate token (`--link`).
 
 ### Neutral
@@ -108,7 +107,7 @@ A grayscale GitHub-dark ground carrying six saturated project signals.
 - **Hover Border** (#39414d): card border on hover/focus-within.
 
 ### Named Rules
-**The Six-Button Rule.** The six solid brand-color install buttons in one row are the page's entire color identity on a neutral ground. Never mute them, gradient them, or unify them to one accent. New surfaces inherit the neutral ground; a project signal appears only via `--pc` on that project's own elements.
+**The Signal-Button Rule.** The solid brand-color install buttons in one row are the page's entire color identity on a neutral ground. Never mute them, gradient them, or unify them to one accent. New surfaces inherit the neutral ground; a project signal appears only via `--pc` on that project's own elements.
 
 **The Amber Exception Rule.** Outside the cards, saturated color appears only as: link cyan, amber `code` text, and the amber masked-SVG warning triangle on `.warn` notes. Nothing else on the neutral ground gets a hue.
 
@@ -134,7 +133,7 @@ A grayscale GitHub-dark ground carrying six saturated project signals.
 
 ## Layout
 
-A single centered column, max-width 1180px with 22px gutters. Navbar (hairline bottom rule) → hero with three numbered-circle steps in a wrapping flex row (24px circles, flex-basis 300px) → the six-card grid → three framed sections at 64px vertical rhythm → centered single-sentence footer.
+A single centered column, max-width 1180px with 22px gutters. Navbar (hairline bottom rule) → hero with three numbered-circle steps in a wrapping flex row (24px circles, flex-basis 300px) → the five-card grid (repeat(5) on desktop) → three framed sections at 64px vertical rhythm → centered single-sentence footer.
 
 The card grid uses `grid-template-rows: subgrid` with each card spanning 6 rows (name / desc / install / meta / note / links), so rows align across cards; a flex-column fallback covers non-subgrid browsers. Columns step 6 → 3 (≤1150px) → 2 (≤880px) → 1 (≤640px) with a 16px gap. Nav anchor links hide at ≤640px (logo + GitHub button remain). Wide tables live in `.tablewrap` with horizontal scroll; the page itself has no horizontal overflow down to 390px.
 
@@ -184,7 +183,7 @@ Seventeen native `<dialog>` manuals share one neutral recipe: card surface, hair
 
 ### Do:
 - **Do** route a project's color exclusively through `--pc` on its own card, chip, and icon; add a new project by adding one `--c-*` token and one panel class.
-- **Do** keep all six install buttons solid, saturated, and side by side — The Six-Button Rule.
+- **Do** keep every install button solid, saturated, and side by side — The Signal-Button Rule.
 - **Do** use masked-SVG or inline-stroke SVG for every glyph, sized 8–26px, stroke-based.
 - **Do** keep new containers on the recipe: #161b22 surface, 1px #262c36 border, 10px radius, shadow only on state.
 
