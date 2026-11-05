@@ -1,222 +1,195 @@
 ---
-name: KungRC CYD Firmware Station
-description: Particle-collider event display — one flash is one collision event; six firmware tracks spray from one CYD board.
+name: KungRC Firmware Installer
+description: Category-standard dark download page — six brand-color install buttons on a quiet GitHub-dark ground.
 colors:
-  vacuum: "#070b12"
-  vacuum-top: "#0b1220"
-  detector-steel: "#223244"
-  steel-bright: "#35506b"
-  steel-accent: "#4e739c"
-  panel-surface: "#0b1018"
-  well-surface: "#0e1521"
-  ink: "#e9eef5"
-  text-steel: "#a7b3c2"
-  text-faint: "#6d7a8c"
-  track-vario: "#07e86a"
-  track-lap: "#05c7f2"
-  track-boat: "#ffa02e"
-  track-cnc: "#f95867"
-  track-rotary: "#c77dff"
-  track-hud: "#e8f4ff"
+  page-bg: "#101318"
+  card-surface: "#161b22"
+  hairline: "#262c36"
+  well: "#0d1117"
+  ink: "#e6e9ee"
+  dim: "#98a1ad"
+  dim-2: "#6c7683"
+  link: "#05c7f2"
+  hover-border: "#39414d"
+  signal-vario: "#07e86a"
+  signal-lap: "#05c7f2"
+  signal-boat: "#ffa02e"
+  signal-cnc: "#f95867"
+  signal-rotary: "#c77dff"
+  signal-hud: "#e8f4ff"
 typography:
   display:
     fontFamily: "Orbitron, sans-serif"
-    fontSize: "clamp(2.2rem, 5.5vw, 3.6rem)"
+    fontSize: "1.02rem"
     fontWeight: 700
-    lineHeight: 1
-    letterSpacing: "0.3em"
+    letterSpacing: "0.18em"
   headline:
-    fontFamily: "Orbitron, sans-serif"
-    fontSize: "1.05rem"
+    fontFamily: "'Segoe UI', 'Noto Sans Thai', Tahoma, sans-serif"
+    fontSize: "clamp(1.5rem, 3.4vw, 1.95rem)"
     fontWeight: 700
-    letterSpacing: "0.22em"
+    letterSpacing: "-0.01em"
   title:
-    fontFamily: "Orbitron, sans-serif"
-    fontSize: "0.95rem"
+    fontFamily: "'Segoe UI', 'Noto Sans Thai', Tahoma, sans-serif"
+    fontSize: "1.2rem"
     fontWeight: 700
-    letterSpacing: "0.14em"
   body:
     fontFamily: "'Segoe UI', 'Noto Sans Thai', Tahoma, sans-serif"
     fontSize: "16px"
     fontWeight: 400
-    lineHeight: 1.55
+    lineHeight: 1.6
   label:
-    fontFamily: "Orbitron, sans-serif"
-    fontSize: "0.8rem"
-    fontWeight: 700
-    letterSpacing: "0.18em"
-  mono:
     fontFamily: "Consolas, monospace"
     fontSize: "0.78rem"
-    fontVariation: "tabular-nums"
+    fontWeight: 400
 rounded:
-  chip: "2px"
-  code: "3px"
-  control: "4px"
-  panel: "5px"
-  frame: "6px"
+  sm: "4px"
+  md: "6px"
+  lg: "10px"
 spacing:
-  panel-pad: "16px"
-  grid-gap: "16px"
-  frame-pad: "20px"
-  wrap-pad: "22px"
-  section-gap: "72px"
+  card-gap: "16px"
+  card-pad: "18px 16px"
+  section: "64px"
+  gutter: "22px"
 components:
   button-install:
-    backgroundColor: "color-mix(in srgb, var(--pc) 9%, transparent)"
-    textColor: "var(--pc)"
-    typography: "{typography.label}"
-    rounded: "{rounded.control}"
-    padding: "13px 10px"
-    width: "100%"
-  button-install-hover:
     backgroundColor: "var(--pc)"
-    textColor: "{colors.vacuum}"
-  panel-card:
-    backgroundColor: "{colors.panel-surface}"
-    rounded: "{rounded.panel}"
-    padding: "{spacing.panel-pad}"
+    textColor: "{colors.well}"
+    rounded: "{rounded.md}"
+    padding: "11px 10px"
+  button-ghost:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.md}"
+    padding: "8px 14px"
+  button-ghost-hover:
+    backgroundColor: "{colors.card-surface}"
+  card:
+    backgroundColor: "{colors.card-surface}"
+    rounded: "{rounded.lg}"
+    padding: "{spacing.card-pad}"
   chip-use:
-    textColor: "currentColor"
-    rounded: "{rounded.chip}"
+    textColor: "var(--pc)"
+    rounded: "{rounded.sm}"
     padding: "2px 6px"
-  nav-ghost:
-    textColor: "{colors.text-steel}"
-    rounded: "{rounded.control}"
-    padding: "10px 16px"
+    typography: "{typography.label}"
 ---
 
-# Design System: KungRC CYD Firmware Station
+# Design System: KungRC Firmware Installer
 
 ## Overview
 
-**Creative North Star: "The Collider Event Display"**
+**Creative North Star: "The Official Download Page"**
 
-The whole page is the event display of a particle detector: the ESP32-2432S028R board is the collision point at the center of layered steel detector rings, and the six firmwares are six colored particle tracks spraying out of it, each terminating at its own instrument-readout panel. Flashing a firmware once is one collision event. Everything structural — rings, rules, borders, tables — is neutral blue steel; everything that carries a signal (a project name, its track, its INSTALL button, its live version number) wears that project's one committed color.
+This is the third visual world (replacing the collider-event-display world) and it is deliberately ordinary: a formal, category-standard firmware download page in the register of the VS Code and Chrome download pages, per the user's standing "ทางการกว่านี้" decision (2026-11-05) and PRODUCT.md's brand commitment "แนวหน้าเว็บ = ทางการ/มาตรฐานหมวด". The ground is GitHub-dark neutrals — near-black page, slightly lifted card surface, 1px hairlines — and the page spends its entire color budget in one place: the row of six solid brand-color install buttons, one per firmware. Everything else (Thai prose, tables, dialogs, footer) stays in grayscale restraint.
 
-The atmosphere is a near-black blue vacuum with no grid, no texture, and no decoration at rest. This world explicitly replaced and rejects the old Kraftwerk neon-schematic world: no 40px modular grid, no neon right-angle frames, no lamp-like ambient glow. Light exists only as signal response — the one-time track draw on load and the isolation highlight on hover/focus. Thai prose does the explaining in a quiet humanist voice; short English labels are machine inscriptions in tracked-caps Orbitron; every live number is a tabular Consolas readout.
+No themed devices survive from the old world. The only inscription of brand character is the Orbitron wordmark in the navbar; the rest of the page uses the system Thai sans at one body size with a deliberately flat heading ramp (accepted advisory: flat-type-hierarchy, corporate restraint). There is no decorative motion of any kind — no @keyframes, no transitions beyond browser defaults.
 
 **Key Characteristics:**
-- One dark vacuum ground (#070b12) with a single subtle top gradient from #0b1220; no grid, no pattern.
-- Steel for structure, signal color for meaning — six project colors, one per firmware, never swapped.
-- Instrument-readout panels: 1px steel border, 2px project-color left stripe, subgrid-aligned rows.
-- A hand-built SVG event display is the hero signature; panels and tracks are wired together by hover/focus isolation.
-- All icons are drawn inline SVG strokes; no glyph characters, no icon fonts, no raster icons.
+- Dark neutral ground, 1px hairline borders, wide soft shadows only on hover/open state (accepted canon grammar: thin border + wide shadow)
+- Six per-project signal colors routed through a single `--pc` custom property per card
+- Flat type hierarchy in system sans; Consolas tabular-nums reserved for machine data
+- Static page: zero animation, hover states only
 
 ## Colors
 
-A neutral blue-steel structure palette carrying six saturated project signal colors against a blue-black vacuum.
+A grayscale GitHub-dark ground carrying six saturated project signals.
 
-### Primary (project signal colors — brand commitments, one per project)
-- **Vario Green** (#07e86a): Variometer's track, panel stripe, icon, name, INSTALL button; also the Shopee link color in the parts table.
-- **Lap Cyan** (#05c7f2): GPS Lap Timer's signal — and the system interaction color: links, text selection, focus-visible outline, doclink text all use it.
-- **Boat Amber** (#ffa02e): Autopilot's signal — also inline `code` text and the drawn warning-triangle icon.
-- **CNC Signal Red** (#f95867): CNC Pendant's signal.
-- **Rotary Violet** (#c77dff): Rotary Indexer's signal.
-- **HUD Ice White** (#e8f4ff): HUD Nav's signal — near-white, distinguished from ink by context (stripe, track, button border).
+### Primary
+- **Signal Six** (#07e86a / #05c7f2 / #ffa02e / #f95867 / #c77dff / #e8f4ff): one color per firmware project (vario / lap / boat / cnc / rotary / hud), each routed into its card via the `--pc` custom property. It colors the card's icon stroke, the card title, the solid install button, and the project's `.use` chip in the parts table. These are the page's entire color identity.
+- **Link Cyan** (#05c7f2): all hyperlinks, selection background, and `:focus-visible` outlines. Shares a hex with the lap signal but is a separate token (`--link`).
 
-### Neutral (vacuum + detector steel)
-- **Vacuum** (#070b12): page ground. **Vacuum Top** (#0b1220): start of the single 430px top linear-gradient.
-- **Detector Steel** (#223244): every structural 1px border, rule, table border, ring segment.
-- **Bright Steel** (#35506b): brighter structure — shop table head rule, leader lines, chevron masks, scrollbar. **Accent Steel** (#4e739c): the brightest steel, inner detector rings only.
-- **Panel Surface** (#0b1018): panels, dialogs, frames, RUN strip. **Well Surface** (#0e1521): table heads, code background — the recessed layer.
-- **Ink** (#e9eef5): primary text. **Text Steel** (#a7b3c2): secondary text, labels. **Faint Steel** (#6d7a8c): tertiary annotations.
+### Neutral
+- **Page Night** (#101318): page background.
+- **Card Surface** (#161b22): cards, section frames, dialogs, ghost-button hover fill.
+- **Hairline** (#262c36): every border — nav rule, card borders, table cells, dialog heads. The CSS also keeps the alias `--rule` at the same value for inline-style back-compat; new code uses `--line`.
+- **Well** (#0d1117): inset surfaces — `code` background, table heads — and the dark text on solid install buttons.
+- **Ink** (#e6e9ee): primary text.
+- **Dim** (#98a1ad) / **Dim-2** (#6c7683): secondary prose / faintest marks (chevron glyphs, shop-table head rule).
+- **Hover Border** (#39414d): card border on hover/focus-within.
 
 ### Named Rules
-**The Signal Rule.** Steel carries structure; signal color carries meaning. Any element that belongs to a project — track, stripe, icon, name, button, chip, dialog border — wears that project's exact hex, inherited via the panel's `--pc` custom property. Signal colors are never swapped, tinted into new roles, or used decoratively.
+**The Six-Button Rule.** The six solid brand-color install buttons in one row are the page's entire color identity on a neutral ground. Never mute them, gradient them, or unify them to one accent. New surfaces inherit the neutral ground; a project signal appears only via `--pc` on that project's own elements.
 
-**The Cyan System Rule.** Lap Cyan (#05c7f2) doubles as the whole-page interaction color: links, ::selection, :focus-visible, doclinks. No second interaction color exists.
-
-**The Amber Code Rule.** Boat Amber (#ffa02e) doubles as the color of inline `code` and the warning icon. Warnings are amber, never red — red belongs to CNC.
+**The Amber Exception Rule.** Outside the cards, saturated color appears only as: link cyan, amber `code` text, and the amber masked-SVG warning triangle on `.warn` notes. Nothing else on the neutral ground gets a hue.
 
 ## Typography
 
-**Display Font:** Orbitron (self-hosted `orbitron.ttf`, weight range 400–900, swap)
-**Body Font:** Segoe UI (with Noto Sans Thai, Tahoma fallback)
-**Label/Mono Font:** Consolas (tabular-nums for live data)
+**Display Font:** Orbitron (self-hosted TTF, weight range 400–900) — wordmark only
+**Body Font:** Segoe UI / Noto Sans Thai (Tahoma, sans-serif fallback)
+**Label/Mono Font:** Consolas (monospace fallback)
 
-**Character:** Three strictly separated voices — Orbitron tracked-caps for short English machine inscriptions only, a quiet humanist Thai body for all explanation, and tabular Consolas for every live number. Orbitron never sets Thai text and never sets a paragraph.
+**Character:** Corporate and quiet. One system sans at 16px/1.6 does all the prose work in Thai; the ramp between heading levels is intentionally shallow (accepted advisory). Orbitron is a logo material, not a typesetting face.
 
 ### Hierarchy
-- **Display** (700, clamp(2.2rem, 5.5vw, 3.6rem), lh 1, ls .3em): the KUNGRC wordmark only.
-- **Headline** (700, 1.05rem, ls .22em): section heads (BOARD PINOUT, PARTS, 3D CASE) in `.shead`.
-- **Title** (700, .95rem, ls .14em): panel names, colored in the panel's `--pc`.
-- **Body** (400, 16px, lh 1.55): all Thai prose; dialog body at .92rem / 1.75; prose capped at 70ch inside frames.
-- **Label** (700, .8rem, ls .18em): INSTALL buttons; smaller Orbitron labels step down (.78 RUN numbers, .74 tagline, .72 GITHUB, .7 chips/shop links) with tracking .07–.26em.
-- **Mono** (.78rem, tabular-nums): version + date readouts in `.meta`; Consolas also sets pin-table data columns (.8rem) and SVG sublabels (11px).
+- **Display** (700, 1.02rem, letter-spacing .18em, Orbitron): the KUNGRC navbar wordmark — the only place Orbitron appears.
+- **Headline** (700, clamp(1.5rem, 3.4vw, 1.95rem), letter-spacing -.01em): the single page h1.
+- **Title** (700, 1.2rem): section h2 (ผังพิน / อุปกรณ์ / เคส 3D). Card h2 is a smaller variant (700, 1rem, letter-spacing .02em, colored `--pc`); dialog h3 sits between (700, 1.15rem, ink).
+- **Body** (400, 16px/1.6): all Thai prose; dialog body runs .92rem/1.75; prose inside frames capped at 70ch, hero sub at 72ch.
+- **Label** (400, .72–.78rem, Consolas, tabular-nums): machine data only — live version/date meta, pin-table data columns, `.use` chips.
 
 ### Named Rules
-**The Three Voices Rule.** English labels = Orbitron tracked caps; Thai content = Segoe/Noto body; live numbers = Consolas tabular. A string never borrows another voice.
+**The One Wordmark Rule.** Orbitron appears on the `.logo` and nowhere else. Headings, buttons, and labels never borrow it.
 
-**The Live Readout Rule.** Every number that comes from data (version, date) renders in Consolas with tabular-nums and is loaded live from the manifest `version`/`updated` fields — never hard-coded in markup.
+**The Machine Data Rule.** Consolas with tabular-nums is reserved for values a machine produced: versions, dates, pin names, project chips. Thai prose never sets in it.
 
 ## Layout
 
-A single centered column (`.wrap`, max-width 1180px, 22px side padding). First viewport at 1440×900: masthead (wordmark + tagline + GITHUB ghost link), the RUN strip of 3 numbered steps in one 1px steel bar, the SVG event display (viewBox 1136×300), then the six-panel row — all six INSTALL buttons above the fold.
+A single centered column, max-width 1180px with 22px gutters. Navbar (hairline bottom rule) → hero with three numbered-circle steps in a wrapping flex row (24px circles, flex-basis 300px) → the six-card grid → three framed sections at 64px vertical rhythm → centered single-sentence footer.
 
-- **Panels grid:** 6 columns (gap 18px 16px) → 3 at ≤1150px (row-gap 40px) → 2 at ≤880px → 1 at ≤640px. Panels use `grid-template-rows: subgrid` spanning 6 rows (name / desc / install / meta / note / links) so rows align across the whole row; flex-column fallback under `@supports not`.
-- **Event display:** hidden at ≤1150px. In its place each panel grows a 26px top margin with a centered 2px × 17px tick and a 9px dot marker in its own `--pc` — the track terminal reattaches to the panel.
-- **Sections** sit 72px apart, each headed by `.shead` (Orbitron caps left, Thai descriptor right-aligned) over a 1px steel rule, content inside a `.frame` (1px steel, radius 6px, 20px padding). Wide tables live in `.tablewrap` with horizontal scroll; the page itself never overflows at 390px.
-- **No section numbering.** Numbers appear only where sequence is real: the RUN strip's 01/02/03.
+The card grid uses `grid-template-rows: subgrid` with each card spanning 6 rows (name / desc / install / meta / note / links), so rows align across cards; a flex-column fallback covers non-subgrid browsers. Columns step 6 → 3 (≤1150px) → 2 (≤880px) → 1 (≤640px) with a 16px gap. Nav anchor links hide at ≤640px (logo + GitHub button remain). Wide tables live in `.tablewrap` with horizontal scroll; the page itself has no horizontal overflow down to 390px.
 
 ## Elevation & Depth
 
-Flat by default. Depth at rest is tonal: vacuum → panel surface (#0b1018) → well surface (#0e1521), separated by 1px steel borders, plus the one fixed top gradient. Shadows exist only as state response.
+Flat at rest. Depth is tonal (well < bg < card) plus 1px hairlines; shadows exist only as state responses.
 
 ### Shadow Vocabulary
-- **Panel lift** (`box-shadow: 0 10px 28px rgba(2, 5, 11, .55)`): on panel hover/focus-within, paired with the border tinting toward the panel color via `color-mix(in srgb, var(--pc) 60%, var(--rule))`.
-- **Track isolation glow** (`filter: drop-shadow(0 0 6px currentColor)`): only on the isolated SVG track while its panel is hovered/focused.
-- **Dialog backdrop** (`rgba(4, 6, 10, .86)`): near-opaque vacuum behind open dialogs.
+- **Hover lift** (`box-shadow: 0 8px 24px rgba(0,0,0,.35)`): on card `:hover` / `:focus-within`, paired with the #39414d border.
+- **Dialog float** (`box-shadow: 0 16px 48px rgba(0,0,0,.5)`): on open `.docdlg`, over an rgba(8,10,14,.7) backdrop.
 
 ### Named Rules
-**The Vacuum Rule.** Nothing glows at rest. Light — glow, lift, full-opacity color — is always a response to an event: page load (tracks draw once) or hover/focus (isolation). This is signal glow, not the banned Kraftwerk lamp glow.
+**The Flat-By-Default Rule.** Surfaces carry no shadow at rest. A shadow means the user did something: hover, focus, or an open dialog. Both shadows are soft and offset-down; no hard offset shadows anywhere.
 
 ## Shapes
 
-Hard-edged instrument hardware with barely-softened corners: every container is a 1px Detector Steel border with a small radius that scales with the container — 2px chips, 3px code/close buttons, 4px buttons and the RUN strip, 5px panels, 6px frames and dialogs. Panels carry a 2px solid left stripe in the project color (the committed stand-in for the catalog's side-tab device — recorded in `.impeccable/config.json` ignoreRules). Detector geometry is circular and segmented: rings via `stroke-dasharray`, round-capped 2.5px tracks, dot-plus-leader-line label anchors. Drawn SVG strokes use round caps on tracks/chevrons and square caps on panel icons.
+Rectangles with a three-step radius scale: 4px (code chips, `.use` chips, inline images), 6px (buttons, dialog close), 10px (cards, frames, dialogs). Every container is bounded by a 1px `--line` hairline — the thin-border-plus-wide-hover-shadow pairing is the canon card grammar, not a defect. Step numbers are the one circle (24px, hairline ring). Icons are inline stroke SVGs (project icons at 26px, square caps) or masked-SVG glyphs (chevron, close X, warning triangle); no icon fonts, no emoji.
 
 ## Components
 
-### Buttons (INSTALL, `.inst`)
-- **Character:** an armed instrument control — outlined in the project's signal color, charged at 9%.
-- **Shape:** full-width, 13px 10px padding, 4px radius, 1px solid `var(--pc)` border.
-- **Fill:** `color-mix(in srgb, var(--pc) 9%, transparent)`; text in `var(--pc)`, Orbitron label voice, with an inline SVG chevron (stroke currentColor).
-- **Hover / Focus-visible:** inverts — solid `var(--pc)` fill, Vacuum (#070b12) text.
-- **Ghost (GITHUB `.gh`):** 1px steel border, 4px radius, 10px 16px, dim Orbitron .72rem; hover turns border and text Lap Cyan.
-- **Close (`.docx`):** 1px steel border, 3px radius, dim text, masked SVG X icon; hover brightens to ink / panel color.
+### Buttons
+- **Install (primary):** solid `--pc` fill, dark #0d1117 text, 700 weight .95rem, full card width, 11px 10px padding, 6px radius, borderless. Hover/focus: `filter: brightness(1.12)` only. Wraps an `esp-web-install-button` web component. Trailing inline chevron SVG in currentColor.
+- **Ghost (GitHub):** transparent, 1px hairline, 6px radius, 8px 14px, ink text .88rem/600. Hover fills with card surface.
+- **Doclink (tertiary):** full-width text button in link cyan .85rem/600, top hairline rule, masked-SVG chevron prefix in dim-2. Hover turns ink.
+- **Dialog close (`.docx`):** small hairline-bordered button, dim text .8rem, masked-SVG X prefix; hover brightens border, glyph, and text to ink.
 
-### Chips (`.use`)
-- **Style:** Orbitron .7rem ls .07em, 1px `currentColor` border, 2px radius, 2px 6px padding; colored per project via `u-*` class. Used only in the parts table to mark which projects use a part.
+### Chips
+- **`.use` chips:** Consolas .72rem, letter-spacing .03em, 1px border in currentColor, 4px radius, 2px 6px; color = the project's signal. Static labels, no states.
 
-### Cards / Containers (`.panel`, `.frame`, RUN strip)
-- **Panel:** Panel Surface bg, 1px steel border + 2px `--pc` left stripe, 5px radius, 16px padding, subgrid rows. Hover/focus-within: border tinted 60% toward `--pc` + panel-lift shadow.
-- **Frame:** 1px steel, 6px radius, 20px padding, Panel Surface.
-- **RUN strip:** panels-surface bar, steps divided by 1px steel left borders, Orbitron step numbers.
+### Cards / Containers
+- **Corner Style:** 10px.
+- **Background:** card surface #161b22 on 1px hairline; section `.frame` uses the identical recipe at 20px padding.
+- **Shadow Strategy:** flat at rest; hover lift + #39414d border (see Elevation).
+- **Internal Padding:** 18px 16px; six subgrid rows keep siblings aligned.
 
-### Inputs / Fields
-None exist. If one is ever needed: well-surface bg, 1px steel border, 3–4px radius, focus per the system `:focus-visible` (2px Lap Cyan outline, 3px offset).
+### Tables
+- **Pin tables:** full hairline cell borders, .82rem; heads on well background, dim 600; last column Consolas .8rem.
+- **Shop table:** row rules only (head rule in dim-2), 11px 6px cells, nowrap cyan links.
 
-### Doclinks & Dialogs
-- **Doclink:** borderless full-width text button above a 1px steel top rule; Lap Cyan bold text with an 8×9px masked chevron in Bright Steel; hover → ink.
-- **Dialog (`.docdlg`):** Panel Surface, 1px border in the owning panel's `--pc` (inherited custom property), 6px radius, 22px 26px padding, min(680px, 100vw−32px), max-height 82vh; h3 1.25rem in `--pc`; closes via ปิด button, backdrop click, or ESC.
-- **Tables (`.pin`, `.shop`):** 1px steel collapsed borders; heads on Well Surface in Text Steel; data columns in Consolas.
+### Navigation
+- Single hairline-ruled row: Orbitron wordmark, dim .92rem anchor links (hover: ink, no underline), ghost GitHub button pushed right. Links hidden ≤640px.
 
-### Event Display (signature)
-Inline SVG (viewBox 1136×300, `aria-hidden`): segmented steel detector rings around the collision core at (568,112); faint colored vertex spray + steel debris curls; dashed beam pipe; one leader line + dot anchoring the Orbitron label "ESP32-2432S028R CORE"; six 2.5px round-capped tracks curving from the core to 4.5px terminal nodes with 2px drop lines into the panel row. Tracks draw once on load via `pathLength="1"` + stroke-dashoffset animation (1.1s, cubic-bezier(.2,.7,.2,1), staggered .08s delays; nodes pop in after). `prefers-reduced-motion: reduce` disables all of it — fully drawn, static. Hovering/focusing a panel sets `.evd.iso`: other tracks and nodes dim to .16 opacity; the active track goes 4px wide with the isolation glow. Hidden ≤1150px (panel tick+dot markers take over).
+### Dialogs (signature)
+Seventeen native `<dialog>` manuals share one neutral recipe: card surface, hairline border, 10px radius, 22px 26px padding, `min(680px, 100vw - 32px)` wide, 82vh max with scroll, dialog-float shadow, dark backdrop. Head row: 1.15rem/700 ink h3 + `.docx` close over a hairline rule. Cautions use `.warn` — amber masked-SVG triangle prefix on dim text. Dialogs never take the project's signal color; the card behind them already said which project this is.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** route every project-owned element through the panel's `--pc` custom property so dialogs, icons, buttons, and markers inherit the right signal color automatically.
-- **Do** draw every icon as inline SVG strokes (stroke `currentColor` or `var(--pc)`; masked data-URI SVG for ::before icons) at icon sizes of 8–26px.
-- **Do** set every live number in Consolas tabular-nums and load it from the manifest (`version`, `updated`) at runtime.
-- **Do** keep hover economy: border tint via `color-mix` + one lift shadow on panels; full fill inversion on buttons; nothing else moves.
-- **Do** honor `prefers-reduced-motion`: the only animations in the system (track draw, node pop) switch off to a static fully-drawn state.
+- **Do** route a project's color exclusively through `--pc` on its own card, chip, and icon; add a new project by adding one `--c-*` token and one panel class.
+- **Do** keep all six install buttons solid, saturated, and side by side — The Six-Button Rule.
+- **Do** use masked-SVG or inline-stroke SVG for every glyph, sized 8–26px, stroke-based.
+- **Do** keep new containers on the recipe: #161b22 surface, 1px #262c36 border, 10px radius, shadow only on state.
 
 ### Don't:
-- **Don't** reintroduce the dead Kraftwerk grammar: no visible modular/40px grid, no neon right-angle frames, no ambient lamp glow at rest. Glow is permitted only as the track-isolation response.
-- **Don't** set Thai text in Orbitron, or any paragraph in Orbitron — it is for short tracked-caps English inscriptions only.
-- **Don't** use unicode glyphs or icon fonts for icons (the sole glyph exception is the ↗ external-link arrow inside Orbitron link labels).
-- **Don't** number section headings — numbers mark real sequence only (RUN 01–03).
-- **Don't** add interest/visitor counters anywhere (permanent product decision, PRODUCT.md 2026-11-05), and don't hard-code version numbers in markup.
-- **Don't** repurpose a project signal color for a new meaning, except the two committed double-duties: Lap Cyan as the system interaction color and Boat Amber as code/warning.
+- **Don't** reintroduce themed world devices (collider tracks, beamlines, side-tabs) or any @keyframes/decorative motion; this world is static by decision.
+- **Don't** set anything but the wordmark in Orbitron, or any Thai prose in Consolas.
+- **Don't** add rest-state shadows, hard offset shadows, or gradients anywhere.
+- **Don't** inflate the heading ramp; the flat hierarchy (1rem card h2 → 1.95rem h1 max) is deliberate corporate restraint, not an omission.

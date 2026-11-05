@@ -7,20 +7,20 @@ related_targets: []
 
 ## Scope
 
-หน้าเดียว `index.html` (kungrc.dev) — โหมด Persuade: ผู้มาใหม่ต้องแฟลชสำเร็จเร็วสุด · คงฟังก์ชันเดิมครบ: esp-web-install-button ×6, เวอร์ชัน/วันที่จาก manifest, คู่มือแบบ dialog ×17, ตารางต่อสาย, ร้านค้า Shopee, ผังพิน, เคส 3D · ไม่มีตัวนับ interest (ผู้ใช้สั่งถอดถาวร 2026-11-05)
+หน้าเดียว `index.html` (kungrc.dev) — โหมด Persuade: ผู้มาใหม่ต้องแฟลชสำเร็จเร็วสุด · คงฟังก์ชันเดิมครบ: esp-web-install-button ×6, เวอร์ชัน/วันที่จาก manifest, คู่มือแบบ dialog ×17, ตารางต่อสาย, ร้านค้า Shopee, ผังพิน, เคส 3D · ไม่มีตัวนับ interest (ถอดถาวร) · footer ไม่มีประโยค "ไม่ต้องกลับมาหน้านี้อีก" และไม่มีลิงก์ GitHub ซ้ำ (ผู้ใช้สั่งตัด 2026-11-05)
 
 ## Direction contract
 
-THESIS: ทั้งหน้าคือจอแสดงเหตุการณ์ชนอนุภาค (collider event display) ของสถานีแฟลช KungRC — การแฟลชเฟิร์มแวร์หนึ่งครั้งคือหนึ่ง "เหตุการณ์ชน": บอร์ด CYD คือจุดชนกลางวงแหวน detector, เฟิร์มแวร์ 6 ตัวคือ track 6 สีที่พุ่งออกมา · ปฏิเสธ hero+การ์ดกริดลอยของหมวด dev-tool และปฏิเสธผังวงจรนีออน Kraftwerk เดิม (anti-reference — ไม่มีกริด 40px, ไม่มีกรอบนีออนมุมฉาก, ไม่มี glow แบบหลอดไฟ)
+THESIS: หน้า installer แบบมาตรฐานหมวด เล่นตรง ๆ เต็มฝีมือ (standing exit — ผู้ใช้ขอ "ทางการกว่านี้" 2026-11-05) — เทียบชั้นหน้า Download ของเว็บบริษัทซอฟต์แวร์ (VS Code / Chrome) · ปฏิเสธลูกเล่นเชิงโลกทุกชนิด: ไม่มี event display, ไม่มีผังวงจร, ไม่มี stencil/นีออน — ความน่าเชื่อถือมาจากความเรียบ สะอาด และระเบียบ
 
-OWN-WORLD: สุญญากาศน้ำเงินดำ #070b12 ไร้กริด · โครง detector เป็นเหล็กน้ำเงินนิวทรัล #223244/#3a5a7a (วงแหวน, เส้นแบ่ง, กรอบแผง 1px) · track และทุกจุด "มีสัญญาณ" ใช้สีประจำโปรเจกต์ 6 สี (เขียว/ฟ้า/อำพัน/แดงชมพู/ม่วง/ขาวน้ำแข็ง) · ตัวรอง text-steel #a7b3c2 · Orbitron tracked-caps สำหรับป้ายอังกฤษ, Segoe/Noto Thai สำหรับเนื้อไทย, Consolas tabular สำหรับเลขสดทุกตัว · ป้ายข้อมูลตรึงด้วย leader line จุดกลม · แผงเป็น instrument readout: พื้น #0b1018 กรอบ 1px เหล็ก มุมเหลี่ยมเล็กน้อย แถบสี track ด้านซ้าย
+OWN-WORLD: พื้นมืดนิวทรัล #101318, การ์ด #161b22, เส้น hairline #262c36, well #0d1117, ตัวอักษร #e6e9ee/#98a1ad · สีประจำ 6 โปรเจกต์ (brand commitment) ใช้เป็นจุดระบุตัวตนบนการ์ดและปุ่มติดตั้งแบบ solid fill ตัวอักษรเข้ม · ฟอนต์ระบบ Segoe UI/Noto Sans Thai ทั้งหน้า — Orbitron เหลือบทเดียวคือโลโก้ KUNGRC บน navbar · มุมมน 6-10px เงานุ่มจาง · ลิงก์สีฟ้า #05c7f2 · ไอคอนทุกตัวเป็น SVG เส้นสะอาด
 
-STORY: เข้าใจใน 3 วิ: นี่คือสถานีแฟลชเฟิร์มแวร์ CYD → เห็น track สีพุ่งจากบอร์ดกลางวงแหวนไปยังเฟิร์มแวร์ของตัว → ทำตาม RUN 01-02-03 (เสียบ USB → เลือก → INSTALL) → เชื่อเพราะเลขเวอร์ชัน/วันที่เป็น readout สดจาก manifest → ลึกลงไป ตารางสาย/คู่มือ/ร้านค้าเขียนในภาษา detector เดียวกัน
+STORY: เปิดมาเหมือนหน้าดาวน์โหลดของบริษัทซอฟต์แวร์: navbar โลโก้+เมนู → หัวเรื่องบอกงานในบรรทัดเดียว → ขั้นตอน 1-2-3 แบบสุขุม → การ์ดเฟิร์มแวร์ 6 ใบพร้อมปุ่มติดตั้ง เวอร์ชัน/วันที่สด → ลึกลงไปผังพิน/อุปกรณ์/เคสจัดเป็นหมวดสะอาด
 
-FIRST VIEWPORT (1440×900): ซ้ายบน KUNGRC (Orbitron ใหญ่) + บรรทัดรอง CYD FIRMWARE STATION · ใต้ลงมาแถว RUN 01 เสียบ USB / 02 เลือกเฟิร์มแวร์ / 03 กด INSTALL เป็น readout strip · กลางจอ: SVG event display — วงแหวน detector ซ้อนหลายชั้น จุดชนกลางคือบอร์ด, track 6 สีโค้งออกครบ 6 เส้น แต่ละเส้นมี leader line ชี้ลงหัวแผงของตัว · ใต้ event display: แผง 6 ใบแถวเดียว (ชื่อสี track, เวอร์ชัน+วันที่ tabular, ปุ่ม INSTALL กรอบสีประจำตัว) — ปุ่มทั้ง 6 อยู่เหนือ fold
+FIRST VIEWPORT (1440×900): navbar บาง (KUNGRC ซ้าย · ลิงก์ ผังพิน/อุปกรณ์/เคส · ปุ่ม GitHub ขวา) · hero ชิดซ้าย: h1 "ติดตั้งเฟิร์มแวร์ ESP32 CYD ผ่านเบราว์เซอร์" + คำรองหนึ่งบรรทัด + แถวขั้นตอน 1-2-3 ตัวเลขในวงกลมหม่น + บรรทัดช่วยเหลือไดรเวอร์ · ใต้ลงมาการ์ด 6 ใบแถวเดียว (subgrid เดิม): ไอคอน+ชื่อสีประจำตัว, คำโปรย, ปุ่มติดตั้ง solid สีประจำตัว, เวอร์ชัน/วันที่ mono — ปุ่มทั้ง 6 เหนือ fold
 
-FORM: challenger จากแคตตาล็อก scientific-notation-particle-detector-event-display — ผู้ใช้กด Adopt anyway เหนือใบ assigned (Shadow Board) · seed:a8f4ac69ced8e425
+FORM: canon / มาตรฐานหมวด (standing exit — ไม่ผ่านการจับฉลาก เป็นสิทธิ์เลือกตรงของผู้ใช้) · craft bar = หน้า Download ของ VS Code / Chrome · seed: none (canon)
 
-SIGNATURE INTERACTION + MOTION: hover/focus แผงหรือ track → track นั้น isolate: เส้นหนาขึ้น สว่างเต็ม เส้นอื่นหรี่ opacity .25 และแผงของมันติดขอบสี · โหลดหน้าครั้งแรก track วาดตัวเองออกจากจุดชน (stroke-dashoffset ~1.2s) ครั้งเดียวแล้วนิ่ง · prefers-reduced-motion: ไม่มีวาด ทุกเส้นนิ่งเต็ม
+SIGNATURE INTERACTION + MOTION: น้อยและสุภาพ — hover การ์ดยกเงาเล็กน้อย + ปุ่มสว่างขึ้น, dialog คู่มือเปิดกลางจอแบบ modal สะอาด · ไม่มีแอนิเมชันตกแต่งอื่น · prefers-reduced-motion ไม่ต้องมีอะไรต้องปิดเพราะไม่มี motion ตกแต่งอยู่แล้ว
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

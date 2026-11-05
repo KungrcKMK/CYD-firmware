@@ -14,117 +14,91 @@
     font-display: swap;
   }
   :root {
-    --bg: #070b12;        /* สุญญากาศ */
-    --rule: #223244;      /* เหล็ก detector */
-    --wire-off: #35506b;  /* โครงสว่าง */
-    --panel: #0b1018;
-    --well: #0e1521;
-    --ink: #e9eef5;
-    --dim: #a7b3c2;
-    --dim2: #6d7a8c;
+    --bg: #101318;
+    --card: #161b22;
+    --line: #262c36;
+    --well: #0d1117;
+    --ink: #e6e9ee;
+    --dim: #98a1ad;
+    --dim2: #6c7683;
+    --link: #05c7f2;
     --c-vario: #07e86a;
     --c-lap: #05c7f2;
     --c-boat: #ffa02e;
     --c-cnc: #f95867;
     --c-rotary: #c77dff;
     --c-hud: #e8f4ff;
+    /* ชื่อเดิมที่ inline style ในเนื้อหายังอ้างถึง */
+    --rule: #262c36;
   }
   * { box-sizing: border-box; }
-  html { scrollbar-color: var(--wire-off) var(--bg); }
+  html { scrollbar-color: var(--line) var(--bg); scroll-behavior: smooth; }
   body {
     margin: 0; background: var(--bg); color: var(--ink);
     font-family: 'Segoe UI', 'Noto Sans Thai', Tahoma, sans-serif;
-    font-size: 16px; line-height: 1.55;
-    background-image: linear-gradient(180deg, #0b1220 0%, #070b12 430px);
-    background-repeat: no-repeat;
+    font-size: 16px; line-height: 1.6;
   }
-  ::selection { background: var(--c-lap); color: var(--bg); }
-  a { color: var(--c-lap); text-decoration: none; border-bottom: 1px solid currentColor; }
-  a:hover { color: var(--ink); }
-  :focus-visible { outline: 2px solid var(--c-lap); outline-offset: 3px; }
-  code { font-family: Consolas, monospace; background: var(--well); border: 1px solid var(--rule);
-         border-radius: 3px; padding: 1px 7px; color: var(--c-boat); }
+  ::selection { background: var(--link); color: var(--bg); }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  :focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  code { font-family: Consolas, monospace; background: var(--well); border: 1px solid var(--line);
+         border-radius: 4px; padding: 1px 7px; color: var(--c-boat); }
   .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
 
-  /* ---------- masthead ---------- */
-  header { padding: 34px 0 0; }
-  header .row { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  h1 {
-    font-family: 'Orbitron', sans-serif; font-weight: 700;
-    font-size: clamp(2.2rem, 5.5vw, 3.6rem); letter-spacing: .3em;
-    margin: 0; line-height: 1; padding-left: .05em;
-  }
-  .tagline { color: var(--dim); font-size: .9rem; margin: 12px 0 0; }
-  .tagline .en { font-family: 'Orbitron', sans-serif; letter-spacing: .26em; font-size: .74rem; }
-  .gh { font-family: 'Orbitron', sans-serif; font-size: .72rem; letter-spacing: .2em;
-        border: 1px solid var(--rule); border-radius: 4px; padding: 10px 16px; color: var(--dim); }
-  .gh:hover { border-color: var(--c-lap); color: var(--c-lap); }
+  /* ---------- navbar ---------- */
+  .nav { display: flex; align-items: center; gap: 24px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .logo { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.02rem;
+          letter-spacing: .18em; color: var(--ink); }
+  .logo:hover { text-decoration: none; }
+  .nav .links { display: flex; gap: 20px; }
+  .nav .links a { color: var(--dim); font-size: .92rem; }
+  .nav .links a:hover { color: var(--ink); text-decoration: none; }
+  .gh { margin-left: auto; border: 1px solid var(--line); border-radius: 6px; padding: 8px 14px;
+        color: var(--ink); font-size: .88rem; font-weight: 600; }
+  .gh:hover { background: var(--card); text-decoration: none; }
+  @media (max-width: 640px) { .nav .links { display: none; } }
 
-  /* ---------- RUN strip (ขั้นตอน 3 ขั้น) ---------- */
-  .run { display: flex; margin-top: 26px; border: 1px solid var(--rule); border-radius: 4px;
-         background: var(--panel); flex-wrap: wrap; overflow: hidden; }
-  .rs { flex: 1 1 280px; padding: 12px 18px; color: var(--dim); font-size: .92rem;
-        display: flex; gap: 12px; align-items: baseline; border-left: 1px solid var(--rule);
-        margin-left: -1px; }
-  .rs b { font-family: 'Orbitron', sans-serif; font-size: .78rem; letter-spacing: .08em; color: var(--ink); }
-  .run-note { color: var(--dim); font-size: .85rem; margin: 10px 0 0; }
+  /* ---------- hero + ขั้นตอน ---------- */
+  .hero { padding: 40px 0 6px; }
+  h1 { margin: 0; font-size: clamp(1.5rem, 3.4vw, 1.95rem); font-weight: 700; letter-spacing: -.01em; }
+  .sub { color: var(--dim); margin: 10px 0 0; font-size: 1.02rem; max-width: 72ch; }
+  .run { display: flex; gap: 30px; margin-top: 24px; flex-wrap: wrap; }
+  .rs { display: flex; gap: 11px; align-items: flex-start; color: var(--dim); font-size: .92rem;
+        flex: 0 1 300px; }
+  .rs b { flex: 0 0 24px; height: 24px; border: 1px solid var(--line); border-radius: 50%;
+          color: var(--ink); font-size: .82rem; font-weight: 600;
+          display: flex; align-items: center; justify-content: center; }
+  .run-note { color: var(--dim); font-size: .85rem; margin: 16px 0 0; }
 
-  /* ---------- event display ---------- */
-  .evd { display: block; width: 100%; height: auto; margin-top: 10px; }
-  .evd .lab { font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 2px; fill: var(--dim); }
-  .evd .lab2 { font-family: Consolas, monospace; font-size: 11px; fill: var(--dim2); }
-  .evd .track { fill: none; stroke-width: 2.5; stroke-linecap: round;
-                stroke-dasharray: 1; stroke-dashoffset: 0;
-                animation: draw 1.1s cubic-bezier(.2, .7, .2, 1) backwards; }
-  .evd .node { animation: pop .4s ease-out backwards; }
-  @keyframes draw { from { stroke-dashoffset: 1; } }
-  @keyframes pop { from { opacity: 0; } }
-  .evd.iso .track { opacity: .16; }
-  .evd.iso .track.on { opacity: 1; stroke-width: 4; filter: drop-shadow(0 0 6px currentColor); }
-  .evd.iso .node { opacity: .16; }
-  .evd.iso .node.on { opacity: 1; }
-  .evd.iso .node.on circle { r: 6.5; }
-  @media (max-width: 1150px) { .evd { display: none; } }
-  @media (prefers-reduced-motion: reduce) { .evd .track, .evd .node { animation: none; } }
-
-  /* ---------- project panels ---------- */
-  .panels { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px 16px; }
-  @media (max-width: 1150px) { .panels { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 40px; } }
+  /* ---------- การ์ดเฟิร์มแวร์ ---------- */
+  .panels { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+  @media (max-width: 1150px) { .panels { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 880px) { .panels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .panels { grid-template-columns: 1fr; } }
-  .panel { border: 1px solid var(--rule); border-left: 2px solid var(--pc); border-radius: 5px;
-           background: var(--panel); padding: 16px; position: relative;
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+           padding: 18px 16px; position: relative;
            display: grid; grid-template-rows: subgrid; grid-row: span 6; align-items: start;
            min-width: 0; }
-  .panel:hover, .panel:focus-within { border-left-color: var(--pc); }
   @supports not (grid-template-rows: subgrid) { .panel { display: flex; flex-direction: column; } }
-  @media (max-width: 1150px) {
-    /* จอแคบไม่มี event display — แผงงอกโหนด track ของตัวเองแทน */
-    .panel { margin-top: 26px; }
-    .panel::before { content: ''; position: absolute; top: -26px; left: 50%; width: 2px; height: 17px;
-                     transform: translateX(-50%); background: var(--pc); }
-    .panel::after { content: ''; position: absolute; top: -9px; left: 50%; width: 9px; height: 9px;
-                    transform: translateX(-50%); border-radius: 50%; background: var(--pc); }
-  }
   .panel.vario  { --pc: var(--c-vario); }
   .panel.lap    { --pc: var(--c-lap); }
   .panel.boat   { --pc: var(--c-boat); }
   .panel.cnc    { --pc: var(--c-cnc); }
   .panel.rotary { --pc: var(--c-rotary); }
   .panel.hud    { --pc: var(--c-hud); }
-  .panel:hover, .panel:focus-within { border-color: color-mix(in srgb, var(--pc) 60%, var(--rule));
-                                      box-shadow: 0 10px 28px rgba(2, 5, 11, .55); }
+  .panel:hover, .panel:focus-within { border-color: #39414d; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
   .pname { display: flex; align-items: center; gap: 10px; }
   .pname svg { flex: 0 0 26px; stroke: var(--pc); stroke-linecap: round; }
-  .pname h2 { font-family: 'Orbitron', sans-serif; font-size: .95rem; letter-spacing: .14em; color: var(--pc); margin: 0; font-weight: 700; }
-  .pdesc { font-size: .86rem; color: var(--ink); margin: 10px 0 12px; align-self: start; }
+  .pname h2 { font-size: 1rem; font-weight: 700; color: var(--pc); margin: 0; letter-spacing: .02em; }
+  .pdesc { font-size: .86rem; color: var(--dim); margin: 10px 0 12px; align-self: start; }
   .inst {
-    font-family: 'Orbitron', sans-serif; font-size: .8rem; letter-spacing: .18em; font-weight: 700;
-    width: 100%; padding: 13px 10px; cursor: pointer; border-radius: 4px;
-    background: color-mix(in srgb, var(--pc) 9%, transparent); color: var(--pc); border: 1px solid var(--pc);
+    font: inherit; font-size: .95rem; font-weight: 700;
+    width: 100%; padding: 11px 10px; cursor: pointer; border-radius: 6px;
+    background: var(--pc); color: #0d1117; border: 0;
   }
-  .inst:hover, .inst:focus-visible { background: var(--pc); color: var(--bg); }
-  .inst svg { vertical-align: -1px; margin-left: 3px; }
+  .inst:hover, .inst:focus-visible { filter: brightness(1.12); }
+  .inst svg { vertical-align: -1px; margin-left: 4px; }
   esp-web-install-button { width: 100%; display: block; }
   .meta { display: grid; gap: 5px; justify-items: start; margin: 12px 0 2px;
           font-size: .78rem; color: var(--dim); font-family: Consolas, monospace; font-variant-numeric: tabular-nums; }
@@ -134,62 +108,62 @@
   /* ---------- คู่มือ (dialog) / ตาราง ---------- */
   .plinks { align-self: end; width: 100%; }
   .doclink { display: block; width: 100%; text-align: left; background: none; border: 0;
-             border-top: 1px solid var(--rule); margin-top: 12px; padding: 10px 0 0;
-             cursor: pointer; font: inherit; font-size: .85rem; font-weight: 700; color: var(--c-lap);
+             border-top: 1px solid var(--line); margin-top: 12px; padding: 10px 0 0;
+             cursor: pointer; font: inherit; font-size: .85rem; font-weight: 600; color: var(--link);
              overflow-wrap: anywhere; }
   .doclink::before { content: ''; display: inline-block; width: 8px; height: 9px; margin-right: 8px;
-    background: var(--wire-off);
+    background: var(--dim2);
     -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 10'><path d='M1.5 1.5 L6.5 5 L1.5 8.5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
     mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 10'><path d='M1.5 1.5 L6.5 5 L1.5 8.5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat; }
   .doclink:hover { color: var(--ink); }
-  .docdlg { background: var(--panel); color: var(--ink); border: 1px solid var(--pc, var(--rule));
-            border-radius: 6px; padding: 22px 26px; width: min(680px, calc(100vw - 32px)); max-height: 82vh;
-            overflow-y: auto; overflow-wrap: anywhere; }
-  .docdlg::backdrop { background: rgba(4, 6, 10, .86); }
+  .docdlg { background: var(--card); color: var(--ink); border: 1px solid var(--line);
+            border-radius: 10px; padding: 22px 26px; width: min(680px, calc(100vw - 32px)); max-height: 82vh;
+            overflow-y: auto; overflow-wrap: anywhere; box-shadow: 0 16px 48px rgba(0, 0, 0, .5); }
+  .docdlg::backdrop { background: rgba(8, 10, 14, .7); }
   .dochead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
-             border-bottom: 1px solid var(--rule); padding-bottom: 10px; margin-bottom: 12px; }
-  .dochead h3 { margin: 0; font-size: 1.25rem; letter-spacing: .02em; color: var(--pc, var(--c-lap)); }
+             border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 12px; }
+  .dochead h3 { margin: 0; font-size: 1.15rem; font-weight: 700; letter-spacing: 0; color: var(--ink); }
   .docdlg p, .docdlg li { font-size: .92rem; line-height: 1.75; }
-  .docx { background: none; border: 1px solid var(--rule); border-radius: 3px; color: var(--dim); font: inherit;
+  .docx { background: none; border: 1px solid var(--line); border-radius: 6px; color: var(--dim); font: inherit;
           font-size: .8rem; padding: 4px 10px; cursor: pointer; flex-shrink: 0; }
   .docx::before { content: ''; display: inline-block; width: 9px; height: 9px; margin-right: 6px;
     background: var(--dim);
     -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M1.5 1.5 l7 7 M8.5 1.5 l-7 7' stroke='black' stroke-width='1.8' stroke-linecap='round'/></svg>") center/contain no-repeat;
     mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M1.5 1.5 l7 7 M8.5 1.5 l-7 7' stroke='black' stroke-width='1.8' stroke-linecap='round'/></svg>") center/contain no-repeat; }
-  .docx:hover { border-color: var(--pc, var(--ink)); color: var(--ink); }
+  .docx:hover { border-color: var(--dim); color: var(--ink); }
   .docx:hover::before { background: var(--ink); }
   .warn::before { content: ''; display: inline-block; width: 14px; height: 13px; margin-right: 7px; vertical-align: -2px;
     background: var(--c-boat);
     -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 13'><path d='M7 1.5 L13 11.5 H1 Z' fill='none' stroke='black' stroke-width='1.6' stroke-linejoin='round'/><path d='M7 5v3' stroke='black' stroke-width='1.6'/><circle cx='7' cy='10' r='.9' fill='black'/></svg>") center/contain no-repeat;
     mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 13'><path d='M7 1.5 L13 11.5 H1 Z' fill='none' stroke='black' stroke-width='1.6' stroke-linejoin='round'/><path d='M7 5v3' stroke='black' stroke-width='1.6'/><circle cx='7' cy='10' r='.9' fill='black'/></svg>") center/contain no-repeat; }
   .pin { border-collapse: collapse; margin-top: 10px; width: 100%; }
-  .pin td, .pin th { border: 1px solid var(--rule); padding: 6px 9px; font-size: .82rem; }
+  .pin td, .pin th { border: 1px solid var(--line); padding: 6px 9px; font-size: .82rem; }
   .pin th { color: var(--dim); text-align: left; font-weight: 600; background: var(--well); }
   .pin td:last-child { font-family: Consolas, monospace; font-size: .8rem; }
   .muted { color: var(--dim); font-size: .85rem; }
   ol { padding-left: 22px; } ol li { margin: 7px 0; }
 
   /* ---------- sections ---------- */
-  section { margin-top: 72px; }
+  section { margin-top: 64px; }
   .frame p, .frame li { max-width: 70ch; }
-  .shead { display: flex; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--rule); padding-bottom: 10px; }
-  .shead h2 { font-family: 'Orbitron', sans-serif; font-size: 1.05rem; letter-spacing: .22em; margin: 0; font-weight: 700; }
+  .shead { display: flex; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+  .shead h2 { font-size: 1.2rem; letter-spacing: 0; margin: 0; font-weight: 700; }
   .shead .thai { color: var(--dim); font-size: .85rem; margin-left: auto; }
-  .frame { border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); padding: 20px; margin-top: 20px; }
+  .frame { border: 1px solid var(--line); border-radius: 10px; background: var(--card); padding: 20px; margin-top: 18px; }
 
   /* ---------- shop ---------- */
-  .shop { width: 100%; border-collapse: collapse; margin-top: 20px; }
-  .shop th { text-align: left; color: var(--dim); font-size: .8rem; padding: 8px 6px; border-bottom: 1px solid var(--wire-off); }
-  .shop td { padding: 11px 6px; border-bottom: 1px solid var(--rule); vertical-align: top; font-size: .9rem; }
-  .shop a { color: var(--c-vario); font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .12em; white-space: nowrap; }
-  .use { display: inline-block; font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .07em;
-         border: 1px solid; border-radius: 2px; padding: 2px 6px; margin: 1px 2px 1px 0; white-space: nowrap; }
+  .shop { width: 100%; border-collapse: collapse; margin-top: 18px; }
+  .shop th { text-align: left; color: var(--dim); font-size: .8rem; padding: 8px 6px; border-bottom: 1px solid var(--dim2); }
+  .shop td { padding: 11px 6px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: .9rem; }
+  .shop a { color: var(--link); font-size: .85rem; font-weight: 600; white-space: nowrap; }
+  .use { display: inline-block; font-family: Consolas, monospace; font-size: .72rem; letter-spacing: .03em;
+         border: 1px solid; border-radius: 4px; padding: 2px 6px; margin: 1px 2px 1px 0; white-space: nowrap; }
   .u-vario { color: var(--c-vario); } .u-lap { color: var(--c-lap); } .u-boat { color: var(--c-boat); }
   .u-cnc { color: var(--c-cnc); } .u-rotary { color: var(--c-rotary); } .u-hud { color: var(--c-hud); }
   .tablewrap { overflow-x: auto; }
 
   /* ---------- footer ---------- */
-  footer { margin: 84px 0 0; border-top: 1px solid var(--rule); padding: 24px 0 56px; text-align: center; }
+  footer { margin: 72px 0 0; border-top: 1px solid var(--line); padding: 22px 0 48px; text-align: center; }
   footer p { color: var(--dim); font-size: .85rem; max-width: 620px; margin: 0 auto; }
 </style>
 </head>
@@ -197,95 +171,36 @@
 <div class="wrap">
 
 <header>
-  <div class="row">
-    <div>
-      <h1>KUNGRC</h1>
-      <p class="tagline"><span class="en">CYD FIRMWARE STATION · ESP32-2432S028R</span>
-        — แฟลชเฟิร์มแวร์จอ CYD ผ่านเบราว์เซอร์ ไม่ต้องลงโปรแกรม</p>
+  <nav class="nav" aria-label="เมนูหลัก">
+    <a class="logo" href="#">KUNGRC</a>
+    <span class="links">
+      <a href="#pinout">ผังพิน</a>
+      <a href="#shop">อุปกรณ์</a>
+      <a href="#case">เคส 3D</a>
+    </span>
+    <a class="gh" href="https://github.com/KungrcKMK/CYD-firmware">GitHub</a>
+  </nav>
+
+  <div class="hero">
+    <h1>ติดตั้งเฟิร์มแวร์ ESP32 CYD ผ่านเบราว์เซอร์</h1>
+    <p class="sub">เฟิร์มแวร์พร้อมใช้ 6 ตัวสำหรับบอร์ดจอสัมผัส ESP32-2432S028R —
+      ติดตั้งผ่านสาย USB ได้ทันที ไม่ต้องลงโปรแกรม รองรับ Chrome และ Edge</p>
+    <div class="run" aria-label="ขั้นตอนการติดตั้ง 3 ขั้น">
+      <span class="rs"><b>1</b><span>เสียบบอร์ดกับคอมด้วยสาย USB แบบส่งข้อมูลได้</span></span>
+      <span class="rs"><b>2</b><span>เลือกเฟิร์มแวร์ที่ต้องการจากการ์ดข้างล่าง</span></span>
+      <span class="rs"><b>3</b><span>กดติดตั้ง → เลือกพอร์ต → รอจนเสร็จ</span></span>
     </div>
-    <a class="gh" href="https://github.com/KungrcKMK/CYD-firmware">GITHUB ↗</a>
+    <p class="run-note">ต่อไม่ติด: กดปุ่ม <code>BOOT</code> บนบอร์ดค้างไว้ตอนกดติดตั้ง ·
+      ไม่เห็นพอร์ตเลย: ลงไดรเวอร์ก่อน —
+      <a href="https://www.wch-ic.com/downloads/CH341SER_EXE.html" target="_blank">CH340 สำหรับ Windows</a> ·
+      <a href="https://www.wch-ic.com/downloads/CH34XSER_MAC_ZIP.html" target="_blank">macOS</a> (Linux มีในตัว)</p>
   </div>
-
-  <div class="run" aria-label="ขั้นตอนการแฟลช 3 ขั้น">
-    <span class="rs"><b>01</b><span>เสียบบอร์ดกับคอมด้วยสาย USB แบบส่งข้อมูลได้</span></span>
-    <span class="rs"><b>02</b><span>เลือกเฟิร์มแวร์ข้างล่าง (Chrome / Edge เท่านั้น)</span></span>
-    <span class="rs"><b>03</b><span>กด INSTALL → เลือกพอร์ต → รอจนเสร็จ</span></span>
-  </div>
-  <p class="run-note">ต่อไม่ติด: กดปุ่ม <code>BOOT</code> บนบอร์ดค้างไว้ตอนกด INSTALL ·
-    ไม่เห็นพอร์ตเลย: ลงไดรเวอร์ก่อน —
-    <a href="https://www.wch-ic.com/downloads/CH341SER_EXE.html" target="_blank">CH340 สำหรับ Windows</a> ·
-    <a href="https://www.wch-ic.com/downloads/CH34XSER_MAC_ZIP.html" target="_blank">macOS</a> (Linux มีในตัว)</p>
 </header>
-
-<!-- event display: จุดชนกลางวงแหวน detector — track 6 สีพุ่งไปยังแผงเฟิร์มแวร์ของตัว (ซ่อนบนจอแคบ) -->
-<svg class="evd" viewBox="0 0 1136 300" aria-hidden="true">
-  <!-- วงแหวน detector -->
-  <g fill="none">
-    <circle cx="568" cy="112" r="14" stroke="#4e739c" stroke-width="2"/>
-    <circle cx="568" cy="112" r="24" stroke="var(--wire-off)" stroke-width="1.5" stroke-dasharray="10 5"/>
-    <circle cx="568" cy="112" r="36" stroke="var(--wire-off)" stroke-width="1"/>
-    <circle cx="568" cy="112" r="48" stroke="var(--wire-off)" stroke-width="7" stroke-dasharray="18 8" opacity=".85"/>
-    <circle cx="568" cy="112" r="62" stroke="#4e739c" stroke-width="1.5" opacity=".8"/>
-    <circle cx="568" cy="112" r="76" stroke="var(--wire-off)" stroke-width="12" stroke-dasharray="30 11" opacity=".7"/>
-    <circle cx="568" cy="112" r="92" stroke="var(--wire-off)" stroke-width="1"/>
-    <circle cx="568" cy="112" r="104" stroke="var(--rule)" stroke-width="16" stroke-dasharray="40 14"/>
-    <circle cx="568" cy="112" r="118" stroke="var(--wire-off)" stroke-width="1" opacity=".7"/>
-  </g>
-  <!-- สเปรย์ hit รอบจุดชน — สีจากพาเลต track แบบจาง ยาวพ้นวงใน -->
-  <g stroke-width="1.6" opacity=".55" fill="none" stroke-linecap="round">
-    <path stroke="var(--c-vario)"  d="M568 112 C 556 98, 544 88, 528 80"/>
-    <path stroke="var(--c-lap)"    d="M568 112 C 582 100, 596 92, 612 88"/>
-    <path stroke="var(--c-boat)"   d="M568 112 C 580 126, 590 138, 604 146"/>
-    <path stroke="var(--c-cnc)"    d="M568 112 C 554 122, 540 130, 524 134"/>
-    <path stroke="var(--c-rotary)" d="M568 112 C 572 96, 574 82, 572 68"/>
-    <path stroke="var(--c-hud)"    d="M568 112 C 560 128, 554 142, 552 156"/>
-  </g>
-  <g fill="var(--dim)" opacity=".55">
-    <circle cx="596" cy="96" r="1.7"/><circle cx="542" cy="128" r="1.7"/><circle cx="606" cy="128" r="1.7"/>
-    <circle cx="552" cy="88" r="1.7"/><circle cx="528" cy="104" r="1.7"/><circle cx="590" cy="140" r="1.7"/>
-  </g>
-  <!-- beam pipe -->
-  <line x1="0" y1="112" x2="1136" y2="112" stroke="var(--rule)" stroke-width="1" opacity=".45" stroke-dasharray="1 7"/>
-  <!-- เศษ track พื้นหลังของเหตุการณ์ -->
-  <g fill="none" stroke="var(--wire-off)" stroke-width="1" opacity=".4">
-    <path d="M568 112 C 540 60, 600 40, 640 58"/>
-    <path d="M568 112 C 610 150, 640 190, 620 225"/>
-    <path d="M568 112 C 520 140, 470 160, 450 150"/>
-    <path d="M568 112 C 600 90, 650 95, 680 120"/>
-    <path d="M568 112 C 556 64, 500 36, 452 40"/>
-    <path d="M568 112 C 596 58, 648 30, 700 34"/>
-    <path d="M568 112 C 520 92, 478 66, 470 36"/>
-  </g>
-  <!-- ป้ายตรึงจุดชน -->
-  <line x1="585" y1="95" x2="730" y2="30" stroke="var(--wire-off)" stroke-width="1"/>
-  <circle cx="585" cy="95" r="2.5" fill="var(--wire-off)"/>
-  <text class="lab" x="738" y="33">ESP32-2432S028R CORE</text>
-  <text class="lab" x="8" y="18">EVENT DISPLAY</text>
-  <text class="lab2" x="8" y="34">6 TRACKS · 1 BOARD</text>
-  <!-- track 6 สี = เฟิร์มแวร์ 6 ตัว -->
-  <g>
-    <path id="t1" class="track" pathLength="1" style="animation-delay:.00s" stroke="var(--c-vario)"  d="M568 112 C 430 94, 210 108, 95 268"/>
-    <path id="t2" class="track" pathLength="1" style="animation-delay:.08s" stroke="var(--c-lap)"    d="M568 112 C 470 142, 330 152, 284 268"/>
-    <path id="t3" class="track" pathLength="1" style="animation-delay:.16s" stroke="var(--c-boat)"   d="M568 112 C 520 172, 455 202, 473 268"/>
-    <path id="t4" class="track" pathLength="1" style="animation-delay:.24s" stroke="var(--c-cnc)"    d="M568 112 C 620 176, 685 206, 663 268"/>
-    <path id="t5" class="track" pathLength="1" style="animation-delay:.32s" stroke="var(--c-rotary)" d="M568 112 C 680 142, 800 152, 852 268"/>
-    <path id="t6" class="track" pathLength="1" style="animation-delay:.40s" stroke="var(--c-hud)"    d="M568 112 C 712 94, 940 108, 1041 268"/>
-  </g>
-  <g>
-    <g id="nt1" class="node" style="animation-delay:.9s"><circle cx="95" cy="276" r="4.5" fill="var(--c-vario)"/><line x1="95" y1="282" x2="95" y2="300" stroke="var(--c-vario)" stroke-width="2"/></g>
-    <g id="nt2" class="node" style="animation-delay:.98s"><circle cx="284" cy="276" r="4.5" fill="var(--c-lap)"/><line x1="284" y1="282" x2="284" y2="300" stroke="var(--c-lap)" stroke-width="2"/></g>
-    <g id="nt3" class="node" style="animation-delay:1.06s"><circle cx="473" cy="276" r="4.5" fill="var(--c-boat)"/><line x1="473" y1="282" x2="473" y2="300" stroke="var(--c-boat)" stroke-width="2"/></g>
-    <g id="nt4" class="node" style="animation-delay:1.14s"><circle cx="663" cy="276" r="4.5" fill="var(--c-cnc)"/><line x1="663" y1="282" x2="663" y2="300" stroke="var(--c-cnc)" stroke-width="2"/></g>
-    <g id="nt5" class="node" style="animation-delay:1.22s"><circle cx="852" cy="276" r="4.5" fill="var(--c-rotary)"/><line x1="852" y1="282" x2="852" y2="300" stroke="var(--c-rotary)" stroke-width="2"/></g>
-    <g id="nt6" class="node" style="animation-delay:1.3s"><circle cx="1041" cy="276" r="4.5" fill="var(--c-hud)"/><line x1="1041" y1="282" x2="1041" y2="300" stroke="var(--c-hud)" stroke-width="2"/></g>
-  </g>
-  <circle cx="568" cy="112" r="4" fill="var(--ink)"/>
-</svg>
 
 <div class="panels">
 
   <!-- VARIOMETER -->
-  <div class="panel vario" data-wire="w1">
+  <div class="panel vario">
     <div class="pname">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
         <path d="M3 8 Q12 2 21 8"/><path d="M5 8.6 L11 17 M19 8.6 L13 17"/><circle cx="12" cy="19" r="1.6"/>
@@ -294,7 +209,7 @@
     </div>
     <p class="pdesc">เครื่องวัดอัตราไต่ระดับ (วาริโอ) สำหรับร่มร่อน / พารามอเตอร์</p>
     <esp-web-install-button id="varioBtn" manifest="manifest_vario.json">
-      <button slot="activate" class="inst">INSTALL <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button slot="activate" class="inst">ติดตั้ง <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="varioVer">v…</b></span>
@@ -346,7 +261,7 @@
   </div>
 
   <!-- LAP TIMER -->
-  <div class="panel lap" data-wire="w2">
+  <div class="panel lap">
     <div class="pname">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
         <path d="M6 21 V3 H19 L16 7.5 L19 12 H6"/>
@@ -355,7 +270,7 @@
     </div>
     <p class="pdesc">จับเวลาต่อรอบในสนามด้วยประตู GPS ไม่ต้องวางเซ็นเซอร์ข้างแทร็ก</p>
     <esp-web-install-button id="lapBtn" manifest="manifest_laptimer.json">
-      <button slot="activate" class="inst">INSTALL <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button slot="activate" class="inst">ติดตั้ง <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="lapVer">v…</b></span>
@@ -403,7 +318,7 @@
   </div>
 
   <!-- AUTOPILOT -->
-  <div class="panel boat" data-wire="w3">
+  <div class="panel boat">
     <div class="pname">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
         <path d="M3 14 H21 L17 19 H7 Z"/><path d="M12 14 V4 L17 11"/><path d="M2 21.5 Q6 19.5 9 21.5 T16 21.5 T22 21.5"/>
@@ -412,7 +327,7 @@
     </div>
     <p class="pdesc">ระบบนำร่อง GPS สำหรับเรือตกปลา / รถ / รถตัดหญ้า</p>
     <esp-web-install-button id="boatBtn" manifest="manifest_boat.json">
-      <button slot="activate" class="inst">INSTALL <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button slot="activate" class="inst">ติดตั้ง <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="boatVer">v…</b></span>
@@ -477,7 +392,7 @@
   </div>
 
   <!-- CNC PENDANT -->
-  <div class="panel cnc" data-wire="w4">
+  <div class="panel cnc">
     <div class="pname">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
         <path d="M8 3 H16 V8 L12 13 L8 8 Z"/><path d="M12 13 V18"/><path d="M5 21 H19 M12 18 L10 21 M12 18 L14 21"/>
@@ -486,7 +401,7 @@
     </div>
     <p class="pdesc">จอสั่งงานเครื่อง CNC GRBL (3018 ฯลฯ) แบบไม่ต้องใช้คอม</p>
     <esp-web-install-button id="cncBtn" manifest="manifest_cnc.json">
-      <button slot="activate" class="inst">INSTALL <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button slot="activate" class="inst">ติดตั้ง <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="cncVer">v…</b></span>
@@ -543,7 +458,7 @@
   </div>
 
   <!-- ROTARY INDEXER -->
-  <div class="panel rotary" data-wire="w5">
+  <div class="panel rotary">
     <div class="pname">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
         <circle cx="12" cy="12" r="8"/><path d="M12 4 V7 M20 12 H17 M12 20 V17 M4 12 H7"/><path d="M15 6 L18.5 4.5 L17 8"/>
@@ -552,7 +467,7 @@
     </div>
     <p class="pdesc">แท่นหมุนแบ่งองศาคุมสเต็ปมอเตอร์ — คู่เครื่อง CNC หรือถ่ายรูปสินค้า 360°</p>
     <esp-web-install-button id="rotaryBtn" manifest="manifest_rotary.json">
-      <button slot="activate" class="inst">INSTALL <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button slot="activate" class="inst">ติดตั้ง <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="rotaryVer">v…</b></span>
@@ -598,7 +513,7 @@
 
 
   <!-- HUD NAV -->
-  <div class="panel hud" data-wire="w6">
+  <div class="panel hud">
     <div class="pname">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square">
         <path d="M3 16 Q12 11 21 16"/><path d="M3 16 V20 M21 16 V20"/>
@@ -608,7 +523,7 @@
     </div>
     <p class="pdesc">จอนำทาง Google Maps สะท้อนกระจกหน้ารถ — ไอคอนเลี้ยว + ระยะถึงทางเลี้ยว</p>
     <esp-web-install-button id="hudBtn" manifest="manifest_hud.json">
-      <button slot="activate" class="inst">INSTALL <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button slot="activate" class="inst">ติดตั้ง <svg aria-hidden="true" width="9" height="10" viewBox="0 0 8 10"><path d="M1.5 1.5 L6.5 5 L1.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </esp-web-install-button>
     <div class="meta">
       <span><b id="hudVer">v…</b></span>
@@ -644,8 +559,8 @@
 </div><!-- /panels -->
 
 <section id="pinout">
-  <div class="shead"><h2>BOARD PINOUT</h2>
-    <span class="thai">ผังพินบอร์ด CYD ฉบับเต็ม</span></div>
+  <div class="shead"><h2>ผังพินบอร์ด CYD</h2>
+    <span class="thai">ฉบับเต็ม — ใช้ร่วมกันได้ทุกโปรเจกต์</span></div>
   <div class="frame">
     <p class="muted" style="margin-top:0">ใช้ร่วมกันได้ทุกโปรเจกต์ — จุดต่อขยาย (Expansion IO1/IO2)
       คือคอนเนกเตอร์ P3 และ CN1 ที่อ้างถึงในตารางต่อสายของแต่ละแผงด้านบน</p>
@@ -655,8 +570,8 @@
 </section>
 
 <section id="shop">
-  <div class="shead"><h2>PARTS</h2>
-    <span class="thai">อุปกรณ์ที่ใช้ (ลิงก์ร้านแนะนำ)</span></div>
+  <div class="shead"><h2>อุปกรณ์ที่ใช้</h2>
+    <span class="thai">ลิงก์ร้านแนะนำ</span></div>
   <div class="tablewrap">
   <table class="shop">
     <tr><th>อุปกรณ์</th><th>ใช้กับ</th><th></th></tr>
@@ -728,8 +643,8 @@
 </section>
 
 <section id="case">
-  <div class="shead"><h2>3D CASE</h2>
-    <span class="thai">เคสพิมพ์เองได้ฟรีจาก Printables</span></div>
+  <div class="shead"><h2>เคสพิมพ์ 3D</h2>
+    <span class="thai">ไฟล์ฟรีจาก Printables</span></div>
   <div class="frame">
     <p class="muted" style="margin-top:0">ไฟล์ STL สำหรับบอร์ด ESP32-2432S028R — ใช้ได้กับทุกโปรเจกต์</p>
     <ul style="margin:6px 0 0 18px;padding:0">
@@ -742,9 +657,7 @@
 </section>
 
 <footer>
-  <p>หลังติดตั้งครั้งแรก: ตั้ง WiFi ในหน้า Settings ของเครื่อง แล้วรับอัปเดตรุ่นถัดไปผ่านปุ่ม
-    OTA/CHECK UPDATE บนจอได้เลย ไม่ต้องกลับมาหน้านี้อีก ·
-    <a href="https://github.com/KungrcKMK/CYD-firmware">GitHub</a></p>
+  <p>หลังติดตั้งครั้งแรก: ตั้ง WiFi ในหน้า Settings ของเครื่อง แล้วรับอัปเดตรุ่นถัดไปผ่านปุ่ม OTA/CHECK UPDATE บนจอได้เลย</p>
 </footer>
 
 </div><!-- /wrap -->
@@ -782,31 +695,6 @@ document.querySelectorAll('.docdlg').forEach(function (dlg) {
   dlg.querySelector('.docx').addEventListener('click', function () { dlg.close(); });
 });
 
-// ---- event display: hover/focus แผงไหน → track ของแผงนั้น isolate (เส้นอื่นหรี่) ----
-(function () {
-  var svg = document.querySelector('.evd');
-  if (!svg) return;
-  var map = { w1: 't1', w2: 't2', w3: 't3', w4: 't4', w5: 't5', w6: 't6' };
-  function iso(tid) {
-    svg.classList.toggle('iso', !!tid);
-    Object.keys(map).forEach(function (k) {
-      var t = document.getElementById(map[k]);
-      var n = document.getElementById('n' + map[k]);
-      var on = map[k] === tid;
-      if (t) t.classList.toggle('on', on);
-      if (n) n.classList.toggle('on', on);
-    });
-  }
-  document.querySelectorAll('.panel[data-wire]').forEach(function (p) {
-    var tid = map[p.getAttribute('data-wire')];
-    function on() { iso(tid); }
-    function off() { iso(null); }
-    p.addEventListener('mouseenter', on);
-    p.addEventListener('mouseleave', off);
-    p.addEventListener('focusin', on);
-    p.addEventListener('focusout', off);
-  });
-})();
 </script>
 </body>
 </html>
